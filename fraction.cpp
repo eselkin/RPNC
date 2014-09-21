@@ -52,8 +52,11 @@ fraction fraction::operator-(const fraction &other)
 fraction fraction::operator^(const fraction &other)
 {
     // (3^3)^1/4 = 2.279507 when passed will become 2
-    // (4^3)^1/4 = 2.828 when passed to int will become 2
+    // (4^3)^1/4 = 2.828427 when passed to int will become 2
+    // Giving a result of 1 when truly it is 0.805927...
     // So you can only do fractional powers that will result in whole number numerator and denominators!
+    // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
+    // That would go on forever
     return reducefrac(pow( pow(num,other.num), (1.0/(1.0*other.denom))),pow(pow(denom,other.num), (1.0/(1.0*other.denom))));
 }
 

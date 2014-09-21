@@ -51,7 +51,10 @@ fraction fraction::operator-(const fraction &other)
 
 fraction fraction::operator^(const fraction &other)
 {
-    return reducefrac(pow( pow(num,other.num), 1.0/other.denom),pow(pow(denom,other.num), 1.0/other.denom));
+    // (3^3)^1/4 = 2.279507 when passed will become 2
+    // (4^3)^1/4 = 2.828 when passed to int will become 2
+    // So you can only do fractional powers that will result in whole number numerator and denominators!
+    return reducefrac(pow( pow(num,other.num), (1.0/(1.0*other.denom))),pow(pow(denom,other.num), (1.0/(1.0*other.denom))));
 }
 
 int GCD(int a, int b)

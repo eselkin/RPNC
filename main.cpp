@@ -15,7 +15,8 @@ int main()
         cout << "Fraction eli: " << eli << endl;
         cin >> eli5;
         cout << "Fraction eli5: " << eli5 << endl;
-        eli = eli^5; // this is interpreted as eli^(new fraction(5,1);
+        eli = eli ^ eli5;
+        // eli = eli^5 // this is interpreted as eli^(new fraction(5,1);
         cout << "Eli to the eli5th power=" << eli;
         cout << endl;
     }

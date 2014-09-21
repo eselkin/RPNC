@@ -1,0 +1,120 @@
+#include "fraction.h"
+#include <cmath>
+
+using namespace std;
+
+fraction::fraction(int n, int d)
+{
+    num = n;
+    denom = d;
+}
+
+fraction::~fraction()
+{
+    // Nothing, because we're making copies... not pointers
+}
+
+fraction::fraction(const fraction &other)
+{
+    copy(other);
+}
+
+fraction& fraction::operator=(const fraction &other)
+{
+    if (this != &other)
+    {
+        nukem();
+        copy(other);
+    }
+    return *this;
+}
+
+fraction fraction::operator/(const fraction &other)
+{
+    return reducefrac(num * other.denom, denom * other.num);
+}
+
+fraction fraction::operator*(const fraction &other)
+{
+    return reducefrac(num*other.num, denom*other.denom);
+}
+
+fraction fraction::operator+(const fraction &other)
+{
+    return reducefrac(num*other.denom + denom*other.num, denom*other.denom);
+}
+
+fraction fraction::operator-(const fraction &other)
+{
+    return reducefrac(num*other.denom - denom*other.num, denom*other.denom);
+}
+
+fraction fraction::operator^(const fraction &other)
+{
+    return reducefrac(pow( pow(num,other.num), 1.0/other.denom),pow(pow(denom,other.num), 1.0/other.denom));
+}
+
+int GCD(int a, int b)
+{
+    return b == 0? a : GCD(b, a%b);
+}
+
+fraction& fraction::reducefrac(int a, int b)
+{
+    int divisor = GCD(a, b);
+    fraction *tempfrac = new fraction(a/divisor, b/divisor);
+    return *tempfrac;
+}
+
+
+void fraction::nukem()
+{
+    // nothing really;
+}
+
+void fraction::copy(const fraction &other)
+{
+    num = other.num;
+    denom = other.denom; // straight copy, since they are simple types
+}
+
+ostream &operator<<(ostream &out, const fraction &frac)
+{
+    // should reduce here... so when outputted as part of RPN
+    if ( frac.num == 0 )
+        out << 0;
+    else
+        if( frac.denom == 0 )
+            throw DIV_BY_ZERO;
+        else out << frac.num << '/' << frac.denom;
+}
+
+istream &operator>>(istream& in, fraction &frac)
+{
+    string line, n, d;
+    stringstream ss;
+    getline(in,line);
+    int pos = line.find('/');
+    if (pos != -1)
+    {
+        n = line.substr(0,pos);
+        d = line.substr(pos+1, string::npos);
+        ss << n;
+        ss >> frac.num;
+        ss.clear();
+        ss << d;
+        ss >> frac.denom;
+    }
+    else
+        if (line.find_first_of("0123456789") != -1){
+        // whole number entered into fraction object
+        ss << line;
+        ss >> frac.num;
+        frac.denom = 1;
+        } else {
+            // has no numerical value
+            throw NOT_A_FRAC;
+    }
+    return in;
+}
+

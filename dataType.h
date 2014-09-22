@@ -8,7 +8,6 @@ union DataType {
     void *vptr;
     int *iptr;
     double *dptr;
-
     // char *cPtr; // why?? For the operator stack it will only contain characters... so not here
     string *sptr; // also irrelevant!
 };

@@ -10,7 +10,7 @@
 
 using namespace std;
 
-enum qERRORS {FULL, EMPTY, BAD_SIZE};
+enum qERRORS {qFULL, qEMPTY, qBAD_SIZE};
 
 template<typename T = DataType>
 class queue
@@ -137,7 +137,7 @@ template<typename T>
 void queue<T>::resize(int s)
 {
     if(s < 1)
-        throw BAD_SIZE;
+        throw qBAD_SIZE;
     quehead->next && nukem(quehead->next);
     cap = s; // changing capacity, nuked the old stuff
     quehead = quetail = NULL;
@@ -148,7 +148,7 @@ template<typename T>
 const T& queue<T>::peek() const
 {
     if(empty())
-        throw EMPTY;
+        throw qEMPTY;
     return *quehead->key;
 }
 
@@ -156,7 +156,7 @@ template<typename T>
 void queue<T>::enqueue(const T &data)
 {
     if(full())
-        throw FULL;
+        throw qFULL;
 
     T* tempdata = new T(data);       // workaround for const data
     node<T>* quepointer = quetail->next = new node<T>(tempdata); // if it's the first element, it is the head!
@@ -174,7 +174,7 @@ template<typename T>
 void queue<T>::dequeue(T &data)
 {
     if(empty())
-        throw EMPTY; // head = tail = NULL
+        throw qEMPTY; // head = tail = NULL
     queue<T>::nodePtr tempholder = quehead;
     quehead = quehead->next; // could point to NULL and make the list empty
     data = *tempholder->key;

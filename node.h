@@ -22,7 +22,7 @@ struct node
     ~node();
     node(const node<T> &n);
     node<T>& operator=(const node<T> &n);
-    copy(const node<T> &n);
+    void copy(const node<T> &other);
 };
 
 
@@ -60,7 +60,8 @@ node<T>& node<T>::operator=(const node<T> &other)
     return *this;
 }
 
-node::copy(const node<T> &n)
+template<typename T>
+void node<T>::copy(const node<T> &other)
 {
     next = NULL;
     key = new T(*other.key);

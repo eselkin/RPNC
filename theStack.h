@@ -9,7 +9,7 @@
 
 using namespace std;
 
-enum ERRORS {INVALID_SIZE, EMPTY, FULL};
+enum ERRORS {sINVALID_SIZE, sEMPTY, sFULL};
 
 template<typename T = char>
 class theStack
@@ -64,7 +64,7 @@ theStack<T>::theStack(int s)
     anchor->next = NULL;
     tos = -1;
     if(s < 1)
-        throw INVALID_SIZE;
+        throw sINVALID_SIZE;
 }
 
 template<typename T>
@@ -75,7 +75,7 @@ theStack<T>::theStack(T data, int s)
     anchor->next = NULL;
     tos = -1;
     if(s<1)
-        throw INVALID_SIZE;
+        throw sINVALID_SIZE;
     push(data);
 }
 
@@ -145,7 +145,7 @@ template<typename T>
 typename theStack<T>::nodePtr theStack<T>::pop()
 {
     if(empty())
-        throw EMPTY;
+        throw sEMPTY;
     --tos;
     nodePtr holder = anchor->next;
     anchor->next = holder->next;
@@ -157,9 +157,12 @@ template<typename T>
 void theStack<T>::push(const T &x)
 {
     if(full())
-        throw FULL;
+        throw sFULL;
     tos++; // we successfully are adding something to the stack
-    node<T> *newNext = new node<T>(&x, anchor->next); // make a nodepointer with a node with key *x
+
+    // switch here
+    node<T> *newNext = new node<T>(&x,'C', anchor->next); // make a nodepointer with a node with key *x
+
     newNext->next = anchor->next; // put it into the head position and keep the others afterward
     anchor->next = newNext; // point anchor to it
 }
@@ -181,7 +184,7 @@ void theStack<T>::resize(int s)
 {
     cap = s;
     if(s < 1)
-        throw INVALID_SIZE;
+        throw sINVALID_SIZE;
     if (anchor->next)
         nukem(anchor->next);// anchor holds no key, so start from its next
     tos = -1;
@@ -192,7 +195,7 @@ void theStack<string>::resize(int s)
 {
     cap = s;
     if(s < 1)
-        throw INVALID_SIZE;
+        throw sINVALID_SIZE;
     tos = -1;
 }
 

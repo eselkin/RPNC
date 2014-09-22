@@ -68,8 +68,10 @@ int GCD(int a, int b)
 fraction& fraction::reducefrac(int a, int b)
 {
     int divisor = GCD(a, b);
-    fraction *tempfrac = new fraction(a/divisor, b/divisor);
-    return *tempfrac;
+    fraction temp = fraction(a/divisor, b/divisor);
+    return temp;
+    //fraction *tempfrac = new fraction(a/divisor, b/divisor);
+    //return *tempfrac;
 }
 
 

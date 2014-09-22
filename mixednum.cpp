@@ -9,7 +9,7 @@ MixedNum::MixedNum(int whole, fraction frac)
 
 MixedNum MixedNum::operator/(const MixedNum &other)
 {
-    return MixedNum(0, fraction(num,denom)/fraction(other.num,other.denom));
+    return MixedNum(0, fraction(num,denom)/fraction(other.num,other.denom)); // in these, let fraction do the work.
 }
 
 MixedNum MixedNum::operator*(const MixedNum &other)
@@ -27,6 +27,10 @@ MixedNum MixedNum::operator-(const MixedNum &other)
     return MixedNum(0, fraction(num,denom)-fraction(other.num,other.denom));
 }
 
+MixedNum MixedNum::operator ^(const MixedNum &other)
+{
+    return MixedNum(0, fraction(num,denom)^fraction(other.num,other.denom));
+}
 
 ostream &operator<<(ostream &out, const MixedNum &mixed)
 {

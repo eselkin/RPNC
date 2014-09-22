@@ -12,6 +12,7 @@ public:
     MixedNum operator*(const MixedNum& other);
     MixedNum operator+(const MixedNum& other);
     MixedNum operator-(const MixedNum& other);
+    MixedNum operator ^ (const MixedNum& other);
 
 
     friend

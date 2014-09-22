@@ -11,3 +11,6 @@ HEADERS += \
     fraction.h \
     mixednum.h
 
+OTHER_FILES += \
+    output-sample.txt
+

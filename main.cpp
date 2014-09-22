@@ -11,8 +11,10 @@ int main()
     //    fraction eli3;
     //    cout << "eli" << eli << endl;
     try {
+        cout << "Enter a fraction:";
         cin >> eli;
         cout << "Fraction eli: " << eli << endl;
+        cout << "Enter another fraction:";
         cin >> eli5;
         cout << "Fraction eli5: " << eli5 << endl;
         eli = eli ^ eli5;
@@ -42,14 +44,22 @@ int main()
     //    cout << eli << "+" << eli2 << "=" << eli + eli2 << endl;
     MixedNum eli2, eli3;
     try {
+        cout << "Enter a mixed number: ";
         cin >> eli2;
         cout << "Mixed number eli2: " << eli2 << endl;
+        cout << "Enter another mixed number: ";
         cin >> eli3;
         cout << "Mixed number eli3: " << eli3 << endl;
         cout << "eli2-eli3 =" << eli2 - eli3 << endl;
         cout << "eli2+eli3 =" << eli2 + eli3 << endl;
         cout << "eli2/eli3 =" << eli2 / eli3 << endl;
         cout << "eli2*eli3 =" << eli2 * eli3 << endl;
+
+        cout << "Enter mixed number as a power: ";
+        cin >> eli3;
+        cout << eli2 << " to the power of " << eli3;
+        eli2 = eli2 ^ eli3;
+        cout << "=" << eli2 << endl;
     }
     catch (FRAC_ERROR f)
     {

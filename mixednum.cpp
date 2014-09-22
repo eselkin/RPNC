@@ -7,29 +7,58 @@ MixedNum::MixedNum(int whole, fraction frac)
     // We are storing as a fraction, input/output will be the only thing to change
 }
 
-MixedNum MixedNum::operator/(const MixedNum &other)
+MixedNum::~MixedNum()
 {
-    return MixedNum(0, fraction(num,denom)/fraction(other.num,other.denom)); // in these, let fraction do the work.
+    nukem();
 }
 
-MixedNum MixedNum::operator*(const MixedNum &other)
+MixedNum& MixedNum::operator=(const MixedNum &other)
 {
-    return MixedNum(0, fraction(num,denom)*fraction(other.num,other.denom));
+    if (this != &other)
+    {
+        nukem();
+        copy(other);
+    }
+    return *this;
 }
 
-MixedNum MixedNum::operator+(const MixedNum &other)
+MixedNum& MixedNum::operator/(const MixedNum &other)
 {
-    return MixedNum(0, fraction(num,denom)+fraction(other.num,other.denom));
+    return *(new MixedNum(0, fraction(num,denom)/fraction(other.num,other.denom))); // in these, let fraction do the work.
 }
 
-MixedNum MixedNum::operator-(const MixedNum &other)
+MixedNum& MixedNum::operator*(const MixedNum &other)
 {
-    return MixedNum(0, fraction(num,denom)-fraction(other.num,other.denom));
+    return *(new MixedNum(0, fraction(num,denom)*fraction(other.num,other.denom)));
 }
 
-MixedNum MixedNum::operator ^(const MixedNum &other)
+MixedNum& MixedNum::operator+(const MixedNum &other)
 {
-    return MixedNum(0, fraction(num,denom)^fraction(other.num,other.denom));
+    return *(new MixedNum(0, fraction(num,denom)+fraction(other.num,other.denom)));
+}
+
+MixedNum& MixedNum::operator-(const MixedNum &other)
+{
+    return *(new MixedNum(0, fraction(num,denom)-fraction(other.num,other.denom)));
+}
+
+MixedNum& MixedNum::operator ^(const MixedNum &other)
+{
+    return *(new MixedNum(0, fraction(num,denom)^fraction(other.num,other.denom)));
+}
+
+void MixedNum::nukem()
+{
+    // no freestore stuff
+    num = 0;
+    denom = 0;
+}
+
+void MixedNum::copy(const MixedNum &other)
+{
+    num = other.num;
+    denom = other.denom;
+
 }
 
 ostream &operator<<(ostream &out, const MixedNum &mixed)

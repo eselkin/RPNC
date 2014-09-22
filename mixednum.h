@@ -8,11 +8,14 @@ class MixedNum : public fraction
 {
 public:
     MixedNum(int whole = 0, fraction frac = fraction(0,1));
-    MixedNum operator/(const MixedNum& other);
-    MixedNum operator*(const MixedNum& other);
-    MixedNum operator+(const MixedNum& other);
-    MixedNum operator-(const MixedNum& other);
-    MixedNum operator ^ (const MixedNum& other);
+    ~MixedNum();
+    MixedNum& operator=(const MixedNum& other);
+
+    MixedNum& operator/(const MixedNum& other);
+    MixedNum& operator*(const MixedNum& other);
+    MixedNum& operator+(const MixedNum& other);
+    MixedNum& operator-(const MixedNum& other);
+    MixedNum& operator ^ (const MixedNum& other);
 
 
     friend
@@ -20,7 +23,9 @@ public:
 
     friend
     istream& operator>>(istream& in, MixedNum &mixed);
-
+private:
+    void nukem();
+    void copy (const MixedNum& other);
 
 };
 

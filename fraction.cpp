@@ -29,27 +29,27 @@ fraction& fraction::operator=(const fraction &other)
     return *this;
 }
 
-fraction fraction::operator/(const fraction &other)
+fraction& fraction::operator/(const fraction &other)
 {
     return reducefrac(num * other.denom, denom * other.num);
 }
 
-fraction fraction::operator*(const fraction &other)
+fraction& fraction::operator*(const fraction &other)
 {
     return reducefrac(num*other.num, denom*other.denom);
 }
 
-fraction fraction::operator+(const fraction &other)
+fraction& fraction::operator+(const fraction &other)
 {
     return reducefrac(num*other.denom + denom*other.num, denom*other.denom);
 }
 
-fraction fraction::operator-(const fraction &other)
+fraction& fraction::operator-(const fraction &other)
 {
     return reducefrac(num*other.denom - denom*other.num, denom*other.denom);
 }
 
-fraction fraction::operator^(const fraction &other)
+fraction& fraction::operator^(const fraction &other)
 {
     // (3^3)^1/4 = 2.279507 when passed will become 2
     // (4^3)^1/4 = 2.828427 when passed to int will become 2

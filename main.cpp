@@ -17,10 +17,8 @@ int main()
         cout << "Enter another fraction:";
         cin >> eli5;
         cout << "Fraction eli5: " << eli5 << endl;
-        eli = eli ^ eli5;
         // eli = eli^5 // this is interpreted as eli^(new fraction(5,1);
-        cout << "Eli to the eli5th power=" << eli;
-        cout << endl;
+        cout << "Eli to the eli5th power=" << (eli ^ eli5) << endl;  // got inline ^ to work, but needs parenthesis, I guess because of odd ^ precedence
     }
     catch (FRAC_ERROR f)
     {
@@ -57,9 +55,7 @@ int main()
 
         cout << "Enter mixed number as a power: ";
         cin >> eli3;
-        cout << eli2 << " to the power of " << eli3;
-        eli2 = eli2 ^ eli3;
-        cout << "=" << eli2 << endl;
+        cout << eli2 << " to the power of " << eli3 << "=" <<  (eli2 ^ eli3) << endl; // got inlining to work, but needs ()
     }
     catch (FRAC_ERROR f)
     {

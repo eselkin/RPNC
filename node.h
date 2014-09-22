@@ -4,49 +4,33 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "dataType.h"
 
 using namespace std;
 
-template<typename T = int>
+// We're really making this special to DataType for the output queue or Char for the operator stack
+template<typename T = DataType>
 struct node
 {
-    T *key;
+    T *key;   // we will really make nodes of DataType type (unions).
+    char data_type; // I, D, C, S, M, F; I think that's all the types I want nodes to be able to manage
+
     node *next;
 
-    node(const T *k = NULL, node<T> *n = NULL);
+
+    node(const T *k = NULL, const char dt = 'I', node<T> *n = NULL);
     ~node();
     node(const node<T> &n);
     node<T>& operator=(const node<T> &n);
-
-    template<typename A>
-    friend
-    ostream& operator<<(ostream &out, const node<A> n );
-
-    template<typename A>
-    friend
-    istream& operator>>(istream &in, node<A> *n );
+    copy(const node<T> &n);
 };
 
 
-template<typename A>
-ostream& operator<<(ostream &out, const node<A> n )
-{
-    out<<"["<<*n.key<<"]";
-    return out;
-}
-
-template<typename A>
-istream& operator>>(istream &in, node<A> *n )
-{
-    // FIX THIS!
-    return in;
-}
-
-
 template<typename T>
-node<T>::node(const T *k, node<T> *n)
+node<T>::node(const T *k, const char dt, node<T> *n)
 {
     key = k ? new T(*k) : NULL;
+    data_type = dt;
     next = n;
 }
 
@@ -60,8 +44,7 @@ node<T>::~node()
 template<typename T>
 node<T>::node(const node<T> &other)
 {
-    next = NULL;
-    key = new T(*other.key);
+    copy(other);
 }
 
 
@@ -70,10 +53,18 @@ node<T>& node<T>::operator=(const node<T> &other)
 {
     if(this != &other)
     {
+        delete key;
         next = NULL;
-        key = new T(*other.key);
+        copy(other);
     }
     return *this;
+}
+
+node::copy(const node<T> &n)
+{
+    next = NULL;
+    key = new T(*other.key);
+    data_type = other.data_type;
 }
 
 

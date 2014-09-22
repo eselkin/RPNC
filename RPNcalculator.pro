@@ -14,7 +14,8 @@ HEADERS += \
     infixtopostfix.h \
     queue.h \
     theStack.h \
-    node.h
+    node.h \
+    dataType.h
 
 OTHER_FILES += \
     output-sample.txt

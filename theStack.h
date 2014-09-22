@@ -11,7 +11,7 @@ using namespace std;
 
 enum ERRORS {INVALID_SIZE, EMPTY, FULL};
 
-template<typename T>
+template<typename T = char>
 class theStack
 {
 public:

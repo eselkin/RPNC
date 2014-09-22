@@ -12,7 +12,7 @@ using namespace std;
 
 enum qERRORS {FULL, EMPTY, BAD_SIZE};
 
-template<typename T = char>
+template<typename T = DataType>
 class queue
 {
 public:

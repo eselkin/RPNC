@@ -31,3 +31,22 @@ eli2*eli3 =-5 15/32
 Enter mixed number as a power: 7/2
  3 1/8 to the power of  3 1/2= 53 1381/1448    // 1 decimal point of correctness 53.94 in Google 53.95... on this
 
+Enter a fraction:3/9
+Fraction eli: 3/9
+Enter another fraction:3
+Fraction eli5: 3/1
+Eli to the eli5th power=1/27
+Enter a mixed number: 3/9
+Mixed number eli2:  1/3
+Enter another mixed number: 1/3
+Mixed number eli3:  1/3
+eli2-eli3 = 0
+eli2+eli3 = 2/3
+eli2/eli3 = 1
+eli2*eli3 = 1/9
+Enter mixed number as a power: 6
+ 1/3 to the power of  6= 1/729
+Hello World!
+Press <RETURN> to close this window...
+// Correct
+

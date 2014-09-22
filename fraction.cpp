@@ -71,10 +71,10 @@ int GCD(int a, int b)
 fraction& fraction::reducefrac(int a, int b)
 {
     int divisor = GCD(a, b);
-    fraction temp = fraction(a/divisor, b/divisor);
-    return temp;
-    //fraction *tempfrac = new fraction(a/divisor, b/divisor);
-    //return *tempfrac;
+    //    fraction temp = fraction(a/divisor, b/divisor);
+    //    return temp;
+    fraction *tempfrac = new fraction(a/divisor, b/divisor);
+    return *tempfrac;
 }
 
 
@@ -125,7 +125,7 @@ istream &operator>>(istream& in, fraction &frac)
         } else {
             // has no numerical value
             throw NOT_A_FRAC;
-    }
+        }
     return in;
 }
 

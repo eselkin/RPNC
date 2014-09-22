@@ -1,5 +1,6 @@
 #ifndef QUEUE_H
 #define QUEUE_H
+// SINGLE DIRECTION NODE VERSION
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -11,7 +12,7 @@ using namespace std;
 
 enum qERRORS {FULL, EMPTY, BAD_SIZE};
 
-template<typename T = char, typename V = int>
+template<typename T = char>
 class queue
 {
 public:
@@ -29,7 +30,7 @@ public:
     int capacity();
     void resize(int s);
     const T& peek() const;
-    void enqueue(const T &data, const V &priority);
+    void enqueue(const T &data);
     void dequeue(T &data);
     queue<T>& operator<<(const T &data);
     queue<T>& operator>>(T &data);
@@ -49,22 +50,21 @@ private:
     nodePtr nukem(nodePtr top);
     nodePtr bye(nodePtr top);
     void copy(const queue<T> &other);
-    nodePtr moveUp(nodePtr moveMe);
 };
 
 template<typename T>
 queue<T>::queue(int s)
 {
     cap = s;
-    quehead = quetail = NULL; // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
+    quehead = quetail = new node<T>; // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
     mySize = -1;
 }
 
 template<typename T>
 queue<T>::~queue()
 {
-    (quehead) && nukem(quehead);
-    quehead = quetail = NULL;
+    (quehead->next) && nukem(quehead->next);
+    quehead = quetail = new node<T>;
     mySize = -1;
 }
 
@@ -82,7 +82,7 @@ queue<T>& queue<T>::operator=(const queue<T>&other)
 {
     if(this != &other)
     {
-        quehead && nukem(quehead);
+        quehead->next && nukem(quehead->next);
         copy(other);
     }
     return *this;
@@ -91,8 +91,8 @@ queue<T>& queue<T>::operator=(const queue<T>&other)
 template<typename T>
 void queue<T>::clear()
 {
-    quehead && nukem(quehead);
-    quehead = quetail = NULL;
+    quehead->next && nukem(quehead);
+    quehead = quetail = new node<T>;
     mySize = -1;
 }
 
@@ -138,7 +138,7 @@ void queue<T>::resize(int s)
 {
     if(s < 1)
         throw BAD_SIZE;
-    quehead && nukem(quehead);
+    quehead->next && nukem(quehead->next);
     cap = s; // changing capacity, nuked the old stuff
     quehead = quetail = NULL;
     mySize = -1;
@@ -153,20 +153,21 @@ const T& queue<T>::peek() const
 }
 
 template<typename T>
-void queue<T>::enqueue(const T &data, const V &priority)
+void queue<T>::enqueue(const T &data)
 {
     if(full())
         throw FULL;
 
-    node<T>* quepointer = new node<T>(data); // if it's the first element, it is the head!
-    quepointer->setpri(priority);
-    mySize == -1 && (quehead = quetail = quepointer); // this moves the head to the first element on that we add
-    quepointer->setPrev(quetail);
-    quetail->setNext(quepointer); // otherwise, quetail will point to the element that we just added, which will be different from the head.
-    quetail = quepointer;
+    T* tempdata = new T(data);       // workaround for const data
+    node<T>* quepointer = quetail->next = new node<T>(tempdata); // if it's the first element, it is the head!
+    delete tempdata;
+
+    quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
+
+    mySize == -1 && (quehead = quepointer); // this moves the head to the first element on that we add
+
+    //cout << "ADDR OF HEAD:" << quehead << " ADDR OF TAIL:" << quetail << endl; // DEBUG
     mySize++;
-    // NOW MOVE UP THE CHAIN
-    moveUp(quetail);
 }
 
 template<typename T>
@@ -175,9 +176,8 @@ void queue<T>::dequeue(T &data)
     if(empty())
         throw EMPTY; // head = tail = NULL
     queue<T>::nodePtr tempholder = quehead;
-    quehead = quehead->getNext(); // could point to NULL and make the list empty
-    quehead->setPrev(NULL);
-    data = tempholder->getkey();
+    quehead = quehead->next; // could point to NULL and make the list empty
+    data = *tempholder->key;
     delete tempholder; // deleting node
     mySize--;
 }
@@ -208,8 +208,8 @@ node<T>* queue<T>::bye(node<T>* top)
 template<typename T>
 node<T>* queue<T>::nukem(node<T>* top)
 {
-    if (top->getNext())
-        nukem(top->getNext());
+    if (top->next)
+        nukem(top->next);
     bye(top); // will delete the head as well
     return NULL;
 }
@@ -220,32 +220,18 @@ void queue<T>::copy(const queue<T> &other)
     cap = other.cap;
     node<T>* quepointer = other.quehead; // not sure I can do this
 
-    quetail = quetail->right; // otherwise, quetail will point to the element that we just added, which will be different from the head.
+    quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
 
     mySize = -1;
     while (quepointer)
     {
         quetail = new node<T>(*quepointer->key);
         mySize == -1 && (quehead = quetail); // this moves the head to the first element on that we add
-        quetail = quetail->right;
-        quepointer = quepointer->right;
+        quetail = quetail->next;
+        quepointer = quepointer->next;
         mySize++;
     }
     //for(int i = other.head; i != tail; i = (++i)%cap)
-}
-
-template<typename T>
-node<T>* queue<T>::moveUp(node<T>* moveMe)
-{
-    node<T>* beforeMe;
-    while (moveMe->getpri() > moveMe->getPrev()->getpri())
-    {
-        beforeMe = moveMe->getPrev();
-        (moveMe == quetail) && (quetail = beforeMe);
-        moveMe->setNext(beforeMe);
-        moveMe->setPrev(beforeMe->getPrev());
-        beforeMe->setNext(NULL); // this may be quetail.
-    }
 }
 
 
@@ -281,14 +267,12 @@ istream& operator>>(istream& in, queue<U> &que)
     }
     que.cap = list.size();
     que.mySize = -1;
-    int i = 0;
-    node<U>* quepointer = new node<U>(list[i]); // if it's the first element, it is the head!
-    que.quehead = que.quetail = quepointer; // this moves the head to the first element on that we add
-    for(++i; i < list.size(); i++)
+    que.quehead = que.quetail = new node<U>;
+    for(int i = 0; i < list.size(); i++)
     {
-        que.quetail->setNext(new node<U>(list[i]));
-        que.quetail->getNext()->setPrev(que.quetail);
-        que.quetail = que.quetail->getNext();
+        que.quetail->next = new node<U>(&list[i]);
+        que.quetail = que.quetail->next; // pointing to that node that we just made. It's next is NULL
+        que.mySize == -1 && (que.quehead = que.quetail); // this moves the head to the first element that we add
         que.mySize++;
     }
     return in;
@@ -305,8 +289,10 @@ istream& operator>>(istream& in, queue<string> &que)
         getline(in,line);
         int pos = line.find(':');
         line = line.substr(pos+1,string::npos); // already puts in npos
+        cout << "LINE:" << line << endl;
         ss << line;
         ss >> que.cap;
+        cout << "QUE CAP: " << que.cap << endl;
     }
     getline(in,line);
     while(line != "")
@@ -314,15 +300,13 @@ istream& operator>>(istream& in, queue<string> &que)
         list.push_back(line);
         getline(in,line);
     }
-    que.mySize = -1;
-    int i = 0;
-    node<string>* quepointer = new node<string>(list[i]); // if it's the first element, it is the head!
-    que.quehead = que.quetail = quepointer; // this moves the head to the first element on that we add
-    for(++i; i < list.size(); i++)
+    que.cap = list.size();
+    que.quehead = que.quetail = new node<string>;
+    for(int i = 0; i < list.size(); i++)
     {
-        que.quetail->setNext(new node<string>(list[i]));
-        que.quetail->getNext()->setPrev(que.quetail);
-        que.quetail = que.quetail->getNext();
+        que.quetail->next = new node<string>(&list[i]);
+        que.quetail = que.quetail->next; // pointing to that node that we just made. It's next is NULL
+        que.mySize == -1 && (que.quehead = que.quetail); // this moves the head to the first element that we add
         que.mySize++;
     }
     return in;
@@ -332,9 +316,9 @@ template<typename U>
 ostream& operator<<(ostream& out, const queue<U> &que)
 {
     node<U>* quepointer = que.quehead;
-    for(; quepointer->getNext() ; quepointer = quepointer->getNext())
-        out<<quepointer->getkey()<<endl;
-    out << quepointer->getkey()<<endl;
+    for(; quepointer->next ; quepointer = quepointer->next)
+        out<<*quepointer->key<<endl;
+    out << *quepointer->key<<endl;
     return out;
 }
 

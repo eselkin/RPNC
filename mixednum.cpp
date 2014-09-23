@@ -94,13 +94,15 @@ istream &operator>>(istream &in, MixedNum &mixed)
         // We either only have a fraction, or we only have a whole number component, or a bad mixed number
         ss << line;
         if ( line.find('/') != -1 )
+        {
             ss >> frac; // We only have a fraction
+        }
         else
             if ( line.find_first_of("0123456789") != -1)
                 ss >> whole;
             else
                 throw BAD_MIXED_NUM; // We only have a BAD number or something else
-        frac = whole < 0? fraction(whole)-frac: frac = fraction(whole)+frac; // This reduces the frac value on add/sub
+        frac = (whole < 0)? fraction(whole)-frac: fraction(whole)+frac; // This reduces the frac value on add/sub
         mixed.num = frac.num;
         mixed.denom = frac.denom;
         return in;

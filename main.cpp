@@ -7,7 +7,7 @@ int main()
 {
     // Fraction tests
     fraction eli, eli5;
-    fraction eli9(9.8359116);
+    fraction eli9(3.141592653);//589793238462643383279502884197169399375105820974944);
     cout << "eli9 is: "<< eli9 << endl;
     //    fraction eli2;
     //    fraction eli3;

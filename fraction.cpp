@@ -11,13 +11,16 @@ fraction::fraction(int n, int d)
 
 fraction::fraction(double nd)
 {
-
-    long long int new_num=0; // just takes the whole part!
-    int i = 0;
-    while (abs(new_num) < 2110000000)
-        new_num = nd * 100 * i++;
-    long long int new_denom = --i*100;
-    fraction new_frac = reducefrac(new_num, new_denom);
+    fraction new_frac;
+    if (nd !=0)
+    {
+        long long int new_num=0; // just takes the whole part!
+        int i = 0;
+        while (abs(new_num) < 210000000)
+            new_num = nd * 100 * i++;
+        long long int new_denom = --i*100;
+        new_frac = reducefrac(new_num, new_denom);
+    }
     num = new_frac.num;
     denom = new_frac.denom;
 }
@@ -70,7 +73,10 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-    return reducefrac(pow( pow(num*1.0,other.num), (1.0/(1.0*other.denom))),pow(pow(denom*1.0,other.num), (1.0/(1.0*other.denom))));
+    double num_dbl = pow( pow(num*1.0,other.num),   (1.0/(1.0*other.denom)));
+    double den_dbl = pow( pow(denom*1.0,other.num), (1.0/(1.0*other.denom)));
+    fraction tempf = fraction(num_dbl/den_dbl);
+    return reducefrac(tempf.num,tempf.denom);
 }
 
 int GCD(int a, int b)
@@ -123,6 +129,7 @@ istream &operator>>(istream& in, fraction &frac)
         ss << n;
         ss >> frac.num;
         ss.clear();
+        ss.str("");
         ss << d;
         ss >> frac.denom;
     }

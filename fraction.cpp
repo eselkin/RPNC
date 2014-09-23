@@ -9,6 +9,19 @@ fraction::fraction(int n, int d)
     denom = d;
 }
 
+fraction::fraction(double nd)
+{
+
+    long long int new_num=0; // just takes the whole part!
+    int i = 0;
+    while (abs(new_num) < 2110000000)
+        new_num = nd * 100 * i++;
+    long long int new_denom = --i*100;
+    fraction new_frac = reducefrac(new_num, new_denom);
+    num = new_frac.num;
+    denom = new_frac.denom;
+}
+
 fraction::~fraction()
 {
     // Nothing, because we're making copies... not pointers
@@ -115,10 +128,12 @@ istream &operator>>(istream& in, fraction &frac)
     }
     else
         if (line.find_first_of("0123456789") != -1){
-        // whole number entered into fraction object
-        ss << line;
-        ss >> frac.num;
-        frac.denom = 1;
+            double frac_num_dbl = 0;
+            // whole number entered into fraction object
+            ss << line;
+            ss >> frac_num_dbl;
+            fraction tempf = fraction(frac_num_dbl);
+            frac = tempf; // assignment
         } else {
             // has no numerical value
             throw NOT_A_FRAC;

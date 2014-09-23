@@ -84,7 +84,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
     // throw error for div by 0
     fraction frac;     // defaults to 0/1
     string line;
-    int whole  = 0;    // default to 0
+    double whole  = 0;    // default to 0
     stringstream ss;
     getline(in, line); // either w n/d or w or " " or "" or " n/d"
     int space_pos = line.find_first_of(' ');
@@ -100,7 +100,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
                 ss >> whole;
             else
                 throw BAD_MIXED_NUM; // We only have a BAD number or something else
-        frac = whole < 0? fraction(whole, 1)-frac: frac = fraction(whole, 1)+frac; // This reduces the frac value on add/sub
+        frac = whole < 0? fraction(whole)-frac: frac = fraction(whole)+frac; // This reduces the frac value on add/sub
         mixed.num = frac.num;
         mixed.denom = frac.denom;
         return in;

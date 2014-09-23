@@ -12,6 +12,7 @@ class fraction
 {
 public:
     fraction(int n = 0, int d = 1);
+    fraction(double nd);
     ~fraction();
     fraction(const fraction& other);
     fraction& operator=(const fraction& other);

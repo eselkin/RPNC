@@ -57,10 +57,7 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-    double pow1, pow2;
-    pow1 = pow(num*1.0,other.num);
-    pow2 = pow(denom*1.0,other.num);
-    return reducefrac(pow( pow1, (1.0/(1.0*other.denom))),pow(pow2, (1.0/(1.0*other.denom))));
+    return reducefrac(pow( pow(num*1.0,other.num), (1.0/(1.0*other.denom))),pow(pow(denom*1.0,other.num), (1.0/(1.0*other.denom))));
 }
 
 int GCD(int a, int b)
@@ -71,8 +68,8 @@ int GCD(int a, int b)
 fraction& fraction::reducefrac(int a, int b)
 {
     int divisor = GCD(a, b);
-    //    fraction temp = fraction(a/divisor, b/divisor);
-    //    return temp;
+    //        fraction temp = fraction(a/divisor, b/divisor);
+    //        return temp;
     fraction *tempfrac = new fraction(a/divisor, b/divisor);
     return *tempfrac;
 }

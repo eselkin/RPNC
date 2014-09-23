@@ -6,11 +6,20 @@
 class InfixtoPostfix
 {
 public:
+
     InfixtoPostfix();
+    void parse();
+
+    friend
+    ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
+
+    friend
+    istream& operator>>(istream in, InfixtoPostfix& ininfix);
 
 private:
     theStack<char> operator_stack;
     queue<DataType> output_queue;
+    string infix;
 };
 
 #endif // INFIXTOPOSTFIX_H

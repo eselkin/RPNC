@@ -3,3 +3,8 @@
 InfixtoPostfix::InfixtoPostfix()
 {
 }
+
+void InfixtoPostfix::parse()
+{
+
+}

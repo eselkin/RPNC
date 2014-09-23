@@ -20,7 +20,7 @@ public:
     fraction& operator+(const fraction& other);
     fraction& operator-(const fraction& other);
     fraction& operator^(const fraction& other);
-    // if we take a fraction and raise it to a fraction, even if it's a whole... it'll be interpreted as this
+    // If we take a fraction and raise it to a fraction, even if it's a whole... it'll be interpreted as this
     fraction& reducefrac( int a, int b );
 
     friend

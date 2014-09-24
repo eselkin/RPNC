@@ -16,9 +16,10 @@ fraction::fraction(double nd)
     {
         long long int new_num=0; // just takes the whole part!
         int i = 0;
-        while (abs(new_num) < 20000000)
-            new_num = nd * 10 * i++; // Keep it under the max limit for an int
-        long long int new_denom = --i*10;
+
+        while (abs(new_num) < 270000000)
+            new_num = nd * 100 * i++; // Keep it under the max limit for an int
+        long long int new_denom = --i*100;
         new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d
     }
     num = new_frac.num;

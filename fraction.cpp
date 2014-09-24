@@ -16,7 +16,7 @@ fraction::fraction(double nd)
     {
         long long int new_num=0; // just takes the whole part!
         int i = 0;
-        while (abs(new_num) < 40000000)
+        while (abs(new_num) < 20000000)
             new_num = nd * 10 * i++; // Keep it under the max limit for an int
         long long int new_denom = --i*10;
         new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d
@@ -75,7 +75,7 @@ fraction& fraction::operator^(const fraction &other)
     // That would go on forever
     double num_dbl = pow( pow(num*1.0,other.num),   (1.0/(1.0*other.denom)));
     double den_dbl = pow( pow(denom*1.0,other.num), (1.0/(1.0*other.denom)));
-    double new_dbl = (1.0*num_dbl) / (1.0*den_dbl);
+    double new_dbl = (1.0*num_dbl) / (1.0*den_dbl);    
     fraction* tempf = new fraction(new_dbl);
     return *tempf;
 }
@@ -88,8 +88,10 @@ int GCD(int a, int b)
 fraction& fraction::reducefrac(int a, int b)
 {
     int divisor = GCD(a, b);
-    fraction tempfrac(a/divisor, b/divisor);
-    return tempfrac;
+    //    fraction tempfrac(a/divisor, b/divisor);
+    //    return tempfrac;
+    fraction *tempfrac = new fraction(a/divisor, b/divisor);
+    return *tempfrac;
 }
 
 

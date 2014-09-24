@@ -21,9 +21,7 @@ int main()
         cin >> eli5;
         cout << "Fraction eli5: " << eli5 << endl;
         // eli = eli^5 // this is interpreted as eli^(new fraction(5,1);
-        fraction eli6(eli^eli5);
-        cout << (eli^eli5).num << endl;
-        cout << "Eli to the eli5th power=" << eli6 << endl;  // got inline ^ to work, but needs parenthesis, I guess because of odd ^ precedence
+        cout << "Eli to the eli5th power=" << (eli^eli5) << endl;  // got inline ^ to work, but needs parenthesis, I guess because of odd ^ precedence
     }
     catch (FRAC_ERROR f)
     {

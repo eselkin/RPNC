@@ -6,8 +6,15 @@
 class InfixtoPostfix
 {
 public:
+
     InfixtoPostfix();
     void parseinfix();
+
+    friend
+    ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
+
+    friend
+    istream& operator>>(istream in, InfixtoPostfix& ininfix);
 
 private:
     theStack<char> operator_stack;

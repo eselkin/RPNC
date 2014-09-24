@@ -50,3 +50,62 @@ Hello World!
 Press <RETURN> to close this window...
 // Correct
 
+eli9 is: 35166679/3575335
+Enter a fraction:-3.2
+Fraction eli: 16/-5
+Enter another fraction:-14.2
+Fraction eli5: 71/-5
+Eli to the eli5th power=0
+Enter a mixed number: -21.2
+Mixed number eli2: -21 1/5
+Enter another mixed number: -19.04
+Mixed number eli3: -19 1/25
+eli2-eli3 =-2 4/25
+eli2+eli3 =-40 6/25
+eli2/eli3 = 1 27/238
+eli2*eli3 = 403 81/125
+Enter mixed number as a power: 4
+-21 1/5 to the power of  4= 201996 196/625
+Hello World!
+Press <RETURN> to close this window...
+// Got good output with doubles inputted!
+
+eli9 is: 2800001/891268
+Enter a fraction:-3/2
+Fraction eli: -3/2
+Enter another fraction:-3.2
+Fraction eli5: 16/-5
+Eli to the eli5th power=26250001/96077425  // wolfram says r= 0.273217 which is this number...
+Enter a mixed number: 3 4/5
+Mixed number eli2:  3 4/5
+Enter another mixed number: 2.46
+Mixed number eli3:  2 23/50
+eli2-eli3 = 1 17/50
+eli2+eli3 = 6 13/50
+eli2/eli3 = 1 67/123
+eli2*eli3 = 9 87/250
+Enter mixed number as a power: 2.12
+ 3 4/5 to the power of  2 3/25= 16 11756919/12390200
+Hello World!
+Press <RETURN> to close this window...
+
+
+eli9 is: 2800001/891268
+Enter a fraction:1/4
+Fraction eli: 1/4
+Enter another fraction:1/4
+Fraction eli5: 1/4
+Eli to the eli5th power=52500009/74246225
+Enter a mixed number: 1/4
+Mixed number eli2:  1/4
+Enter another mixed number: 2/4
+Mixed number eli3:  1/2
+eli2-eli3 =-1/4
+eli2+eli3 = 3/4
+eli2/eli3 = 1/2
+eli2*eli3 = 1/8
+Enter mixed number as a power: 1/9
+ 1/4 to the power of  1/9= 210000001/244971100
+Hello World!
+Press <RETURN> to close this window...
+// better

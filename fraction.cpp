@@ -9,6 +9,22 @@ fraction::fraction(int n, int d)
     denom = d;
 }
 
+fraction::fraction(double nd)
+{
+    fraction new_frac;
+    if (nd !=0)
+    {
+        long long int new_num=0; // just takes the whole part!
+        int i = 0;
+        while (abs(new_num) < 210000000)
+            new_num = nd * 100 * i++;
+        long long int new_denom = --i*100;
+        new_frac = reducefrac(new_num, new_denom);
+    }
+    num = new_frac.num;
+    denom = new_frac.denom;
+}
+
 fraction::~fraction()
 {
     // Nothing, because we're making copies... not pointers
@@ -57,10 +73,10 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-    double pow1, pow2;
-    pow1 = pow(num*1.0,other.num);
-    pow2 = pow(denom*1.0,other.num);
-    return reducefrac(pow( pow1, (1.0/(1.0*other.denom))),pow(pow2, (1.0/(1.0*other.denom))));
+    double num_dbl = pow( pow(num*1.0,other.num),   (1.0/(1.0*other.denom)));
+    double den_dbl = pow( pow(denom*1.0,other.num), (1.0/(1.0*other.denom)));
+    fraction tempf = fraction(num_dbl/den_dbl);
+    return reducefrac(tempf.num,tempf.denom);
 }
 
 int GCD(int a, int b)
@@ -71,8 +87,8 @@ int GCD(int a, int b)
 fraction& fraction::reducefrac(int a, int b)
 {
     int divisor = GCD(a, b);
-    //    fraction temp = fraction(a/divisor, b/divisor);
-    //    return temp;
+    //        fraction temp = fraction(a/divisor, b/divisor);
+    //        return temp;
     fraction *tempfrac = new fraction(a/divisor, b/divisor);
     return *tempfrac;
 }
@@ -113,15 +129,18 @@ istream &operator>>(istream& in, fraction &frac)
         ss << n;
         ss >> frac.num;
         ss.clear();
+        ss.str("");
         ss << d;
         ss >> frac.denom;
     }
     else
         if (line.find_first_of("0123456789") != -1){
-        // whole number entered into fraction object
-        ss << line;
-        ss >> frac.num;
-        frac.denom = 1;
+            double frac_num_dbl = 0;
+            // whole number entered into fraction object
+            ss << line;
+            ss >> frac_num_dbl;
+            fraction tempf = fraction(frac_num_dbl);
+            frac = tempf; // assignment
         } else {
             // has no numerical value
             throw NOT_A_FRAC;

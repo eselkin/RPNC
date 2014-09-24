@@ -1,9 +1,8 @@
 #ifndef DATATYPE_H
 #define DATATYPE_H
 #include <string>
-#include "mixednum.h"
 #include "fraction.h"
-
+#include "mixednum.h"
 using namespace std;
 
 

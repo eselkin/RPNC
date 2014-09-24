@@ -12,16 +12,15 @@ using namespace std;
 
 enum qERRORS {qFULL, qEMPTY, qBAD_SIZE};
 
-template<typename T = DataType>
 class queue
 {
 public:
-    typedef node<T>* nodePtr;
+    typedef node* nodePtr;
 
     queue(int s = 5);
     ~queue();
-    queue(const queue<T>&other);
-    queue<T>& operator=(const queue<T>&other);
+    queue(const queue&other);
+    queue& operator=(const queue &other);
 
     bool empty() const;
     bool full();
@@ -29,56 +28,50 @@ public:
     int size();
     int capacity();
     void resize(int s);
-    const T& peek() const;
-    void enqueue(const T &data);
-    void dequeue(T &data);
-    queue<T>& operator<<(const T &data);
-    queue<T>& operator>>(T &data);
+    const DataType& peek() const;
+    void enqueue(const void &data, const char dType);
+    node dequeue();
+    queue& operator<<(const DataType &data);
+    queue& operator>>(DataType &data);
 
-    template<typename U>
     friend
-    ostream& operator<<(ostream& out, const queue<U> &que);
+    ostream& operator<<(ostream& out, const queue &que);
 
 
-    template<typename U>
     friend
-    istream& operator>>(istream& in, queue<U> &que);
+    istream& operator>>(istream& in, queue &que);
 
 private:
     nodePtr quehead, quetail; // we don't need to change the name
     int cap, mySize; // OK maybe in an array having no int with the size was a convenient way, but seriously, it's a waste of computation in nodes
     nodePtr nukem(nodePtr top);
     nodePtr bye(nodePtr top);
-    void copy(const queue<T> &other);
+    void copy(const queue &other);
 };
 
-template<typename T>
-queue<T>::queue(int s)
+queue::queue(int s)
 {
     cap = s;
-    quehead = quetail = new node<T>; // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
+    quehead = quetail = new node; // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
     mySize = -1;
 }
 
-template<typename T>
-queue<T>::~queue()
+queue::~queue()
 {
     (quehead->next) && nukem(quehead->next);
-    quehead = quetail = new node<T>;
+    quehead = quetail = new node;
     mySize = -1;
 }
 
 
-template<typename T>
-queue<T>::queue(const queue<T>&other)
+queue::queue(const queue &other)
 {
     // copy constructor only gets called when instantiating or directly calling the copy or passing a var by value
     // so should have no values to delete
     copy(other);
 }
 
-template<typename T>
-queue<T>& queue<T>::operator=(const queue<T>&other)
+queue& queue::operator=(const queue &other)
 {
     if(this != &other)
     {
@@ -88,34 +81,30 @@ queue<T>& queue<T>::operator=(const queue<T>&other)
     return *this;
 }
 
-template<typename T>
-void queue<T>::clear()
+void queue::clear()
 {
     quehead->next && nukem(quehead);
-    quehead = quetail = new node<T>;
+    quehead = quetail = new node;
     mySize = -1;
 }
 
-template<typename T>
-bool queue<T>::empty() const
+bool queue::empty() const
 {
     return mySize == -1; // Had trouble if head and tail were pointing to the same node.
 }
 
-template<typename T>
-bool queue<T>::full()
+bool queue::full()
 {
     return cap == mySize; // this is so silly... not silly anymore
 }
 
-template<typename T>
-int queue<T>::size()
+int queue::size()
 {
     return mySize+1;
     // THIS IS SO SILLY, WE SHOULD NOT COMPUTE SIZE EVERY TIME, WHAT IF IT'S A HUGE QUEUE!
     // On a large queue, the size difference of storing a int variable with the size in it is negligeable compared to CPU time to calculate
     //    int size=0;
-    //    queue<T>::nodePtr myPointer = quehead;
+    //    queue::nodePtr myPointer = quehead;
     //    while (myPointer)
     //    {
     //        size++;
@@ -127,14 +116,12 @@ int queue<T>::size()
     // return tail >= head ? (tail == head? tail-head : tail-head+1): (cap+tail-head); // this was my best line! for the array at least!
 }
 
-template<typename T>
-int queue<T>::capacity()
+int queue::capacity()
 {
     return cap;
 }
 
-template<typename T>
-void queue<T>::resize(int s)
+void queue::resize(int s)
 {
     if(s < 1)
         throw qBAD_SIZE;
@@ -144,60 +131,49 @@ void queue<T>::resize(int s)
     mySize = -1;
 }
 
-template<typename T>
-const T& queue<T>::peek() const
+const DataType& queue::peek() const
 {
     if(empty())
         throw qEMPTY;
     return *quehead->key;
 }
 
-template<typename T>
-void queue<T>::enqueue(const T &data)
+void queue::enqueue(const void &data, const char dType)
 {
     if(full())
         throw qFULL;
 
-    T* tempdata = new T(data);       // workaround for const data
-    node<T>* quepointer = quetail->next = new node<T>(tempdata); // if it's the first element, it is the head!
-    delete tempdata;
-
+    DataType* tempdata = new DataType(data);       // workaround for const data  // DEBUG, does this still work or do we need to change this
+    node* quepointer = quetail->next = new node(*tempdata, dType); // if it's the first element, it is the head!
+    delete tempdata; // because it's been deref'd with ->
     quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
-
     mySize == -1 && (quehead = quepointer); // this moves the head to the first element on that we add
-
-    //cout << "ADDR OF HEAD:" << quehead << " ADDR OF TAIL:" << quetail << endl; // DEBUG
     mySize++;
 }
 
-template<typename T>
-void queue<T>::dequeue(T &data)
+node queue::dequeue()
 {
     if(empty())
         throw qEMPTY; // head = tail = NULL
-    queue<T>::nodePtr tempholder = quehead;
+    queue::nodePtr oldhead = quehead;
     quehead = quehead->next; // could point to NULL and make the list empty
-    data = *tempholder->key;
-    delete tempholder; // deleting node
     mySize--;
+    return *oldhead; // return the node at oldhead... deref outside of dequeue
 }
 
-template<typename T>
-queue<T>& queue<T>::operator<<(const T &data)
+queue& queue::operator<<(const DataType &data)
 {
     enqueue(data);
     return *this;
 }
 
-template<typename T>
-queue<T>& queue<T>::operator>>(T &data)
+queue& queue::operator>>(DataType &data)
 {
     dequeue(data);
     return *this;
 }
 
-template<typename T>
-node<T>* queue<T>::bye(node<T>* top)
+node* queue::bye(node* top)
 {
     if (top)
         delete top;
@@ -205,8 +181,7 @@ node<T>* queue<T>::bye(node<T>* top)
     return top;
 }
 
-template<typename T>
-node<T>* queue<T>::nukem(node<T>* top)
+node* queue::nukem(node* top)
 {
     if (top->next)
         nukem(top->next);
@@ -214,18 +189,17 @@ node<T>* queue<T>::nukem(node<T>* top)
     return NULL;
 }
 
-template<typename T>
-void queue<T>::copy(const queue<T> &other)
+void queue::copy(const queue &other)
 {
     cap = other.cap;
-    node<T>* quepointer = other.quehead; // not sure I can do this
+    node* quepointer = other.quehead; // not sure I can do this
 
     quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
 
     mySize = -1;
     while (quepointer)
     {
-        quetail = new node<T>(*quepointer->key);
+        quetail = new node(*quepointer->key);
         mySize == -1 && (quehead = quetail); // this moves the head to the first element on that we add
         quetail = quetail->next;
         quepointer = quepointer->next;
@@ -235,11 +209,10 @@ void queue<T>::copy(const queue<T> &other)
 }
 
 
-template<typename U>
-istream& operator>>(istream& in, queue<U> &que)
+istream& operator>>(istream& in, queue &que)
 {
-    vector<U> list;
-    U data;
+    vector list;
+    DataType data;
     string line;
     stringstream ss;
     if (in != cin)
@@ -267,10 +240,10 @@ istream& operator>>(istream& in, queue<U> &que)
     }
     que.cap = list.size();
     que.mySize = -1;
-    que.quehead = que.quetail = new node<U>;
+    que.quehead = que.quetail = new node;
     for(int i = 0; i < list.size(); i++)
     {
-        que.quetail->next = new node<U>(&list[i]);
+        que.quetail->next = new node(&list[i]);
         que.quetail = que.quetail->next; // pointing to that node that we just made. It's next is NULL
         que.mySize == -1 && (que.quehead = que.quetail); // this moves the head to the first element that we add
         que.mySize++;
@@ -278,44 +251,9 @@ istream& operator>>(istream& in, queue<U> &que)
     return in;
 }
 
-template<>
-istream& operator>>(istream& in, queue<string> &que)
+ostream& operator<<(ostream& out, const queue &que)
 {
-    vector<string> list;
-    string line;
-    stringstream ss;
-    if (in != cin)
-    {
-        getline(in,line);
-        int pos = line.find(':');
-        line = line.substr(pos+1,string::npos); // already puts in npos
-        cout << "LINE:" << line << endl;
-        ss << line;
-        ss >> que.cap;
-        cout << "QUE CAP: " << que.cap << endl;
-    }
-    getline(in,line);
-    while(line != "")
-    {
-        list.push_back(line);
-        getline(in,line);
-    }
-    que.cap = list.size();
-    que.quehead = que.quetail = new node<string>;
-    for(int i = 0; i < list.size(); i++)
-    {
-        que.quetail->next = new node<string>(&list[i]);
-        que.quetail = que.quetail->next; // pointing to that node that we just made. It's next is NULL
-        que.mySize == -1 && (que.quehead = que.quetail); // this moves the head to the first element that we add
-        que.mySize++;
-    }
-    return in;
-}
-
-template<typename U>
-ostream& operator<<(ostream& out, const queue<U> &que)
-{
-    node<U>* quepointer = que.quehead;
+    node* quepointer = que.quehead;
     for(; quepointer->next ; quepointer = quepointer->next)
         out<<*quepointer->key<<endl;
     out << *quepointer->key<<endl;

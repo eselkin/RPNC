@@ -3,6 +3,8 @@
 #include <string>
 #include "fraction.h"
 #include "mixednum.h"
+#include "oppr.h"
+
 using namespace std;
 
 
@@ -15,6 +17,7 @@ union DataType {
     string *sptr; // I think irrelevant
     MixedNum *mPtr;
     fraction *frPtr;
+    OpPr *opPtr; // just a good way to test precedence.
 };
 
 

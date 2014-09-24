@@ -9,47 +9,41 @@
 using namespace std;
 
 // We're really making this special to DataType for the output queue or Char for the operator stack
-template<typename T = DataType>
 struct node
 {
-    T *key;   // we will really make nodes of DataType type (unions).
-    char data_type; // I, D, C, S, M, F; I think that's all the types I want nodes to be able to manage
+    DataType key;   // we will really make nodes of DataType type (unions).
+    char data_type; // M, O; I think that's all the types I want nodes to be able to manage
 
     node *next;
 
-
-    node(const T *k = NULL, const char dt = 'I', node<T> *n = NULL);
+    node(const Datatype *k = NULL, const char dt = 'I', node *n = NULL);
     ~node();
-    node(const node<T> &n);
-    node<T>& operator=(const node<T> &n);
-    void copy(const node<T> &other);
+    node(const node &n);
+    node& operator=(const node &n);
+    void copy(const node &other);
 };
 
 
-template<typename T>
-node<T>::node(const T *k, const char dt, node<T> *n)
+node::node(const Datatype *k, const char dt, node *n)
 {
-    key = k ? new T(*k) : NULL;
+    key = k ? new Datatype(*k) : NULL;
     data_type = dt;
     next = n;
 }
 
-template<typename T>
-node<T>::~node()
+node::~node()
 {
     delete key;
     next = NULL;
 }
 
-template<typename T>
-node<T>::node(const node<T> &other)
+node::node(const node &other)
 {
     copy(other);
 }
 
 
-template<typename T>
-node<T>& node<T>::operator=(const node<T> &other)
+node& node::operator=(const node &other)
 {
     if(this != &other)
     {
@@ -60,11 +54,10 @@ node<T>& node<T>::operator=(const node<T> &other)
     return *this;
 }
 
-template<typename T>
-void node<T>::copy(const node<T> &other)
+void node::copy(const node &other)
 {
     next = NULL;
-    key = new T(*other.key);
+    key = new Datatype(*other.key);
     data_type = other.data_type;
 }
 

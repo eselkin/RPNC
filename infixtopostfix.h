@@ -11,6 +11,9 @@ public:
     void parseinfix();
 
     friend
+    char getNextTokenType(string infix_list);
+
+    friend
     ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
 
     friend

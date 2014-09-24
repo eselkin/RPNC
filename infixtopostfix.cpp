@@ -6,13 +6,6 @@ InfixtoPostfix::InfixtoPostfix()
 
 void InfixtoPostfix::parseinfix()
 {
-    // string input will have tokens separated by operators or spaces, but spaces between
-    // ( ( 3 + 2 5/2 ) * 1.25 + 1 1/2 ) * 5 3/4
-    // (( will give error?
-    // 3+ will give error?
-    // )* will give error?
-    // 1/2) will give error?
-    //
     char last_token_type = ' ';
     string infix_copy = infix_input;
     string temp_token;
@@ -20,16 +13,6 @@ void InfixtoPostfix::parseinfix()
     int pos_first_space = infix_copy.find_first_of(" ");
     while (pos_first_space != -1)
     {
-        // (, ( 3 ...
-        // (, 3 + 2 5/2 )
-        // 3, + 2 5/2 )
-        // +, 2 5/2 )
-        // 2, 5/2 ) // so if last_token_type is Numeric and this token type contains / and numbers but no space
-        // then we will combine (means pop the last number back off the output stack and combine it as a mixed number)
-        // 2 5/2, ) * // and push the mixed number back on the output stack
-        // // 3 2/3 * ( 2 + 2 2/3 )
-        // we have to dequeue two tokens at a time
-
         switch(getNextTokenType(infix_copy))
         {
         case 'N':
@@ -54,26 +37,70 @@ void InfixtoPostfix::parseinfix()
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space); // erase what we took into the temp string
-            switch (temp_token[0])
+            OpPr tempOp(temp_token[0]); // create a tempOp
+            while (( !operator_stack.empty() )
+                   && (operator_stack.top()->data_type == 'O')
+                   && ((!tempOp.assoc && (tempOp < operator_stack.top()->key.opPtr || tempOp == operator_stack.top()->key.vptr))
+                       || (tempOp < operator_stack.top()->key.opPtr)))
             {
-            case '*':
-                break;
-
+                // While NOT empty
+                // pop off the operators on the stack until we meet one with lower precedence and this is left associative
+                // or pop the other off it is higher precedence no matter the associativity
+                node* otherOp = operator_stack.pop();
+                output_queue.enqueue(otherOp->key.opPtr, 'O'); // put the stack's operator onto the queue;
             }
 
-            // switch will determine what to do with this operator as well as check the operator stack
-
+            operator_stack.push(tempOp, 'O'); // put this operator onto the stack
+            temp_token.clear();
+            ss.str("");
             break;
-
+        }
+        case 'P':
+        {
+            temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
+            infix_copy.erase(0,pos_first_space); // erase what we took into the temp string
+            OpPr tempOp(temp_token[0]);
+            switch(temp_token[0])
+            {
+            case '(':
+                operator_stack.push(tempOp, 'P'); // put this operator/parenthesis onto the stack
+                break;
+            case ')':
+                while ( !operator_stack.empty() && operator_stack.top()->data_type != 'P')&&(operator_stack.top()->key.opPtr->theOp != '('))
+                {
+                    // run until we come to a (
+                    node* otherOp = operator_stack.pop();
+                    output_queue.enqueue(otherOp->key.opPtr, 'O'); // put the stack's operator onto the queue;
+                }
+                if (!operator_stack.empty() && (operator_stack.top()->key.opPtr->theOp == '('))
+                {
+                    operator_stack.pop(); // but don't save
+                }
+                else
+                {
+                    throw PAREN_MISMATCH;
+                }
+                break;
+            default:
+                // throw error?
+                break;
+            }
+            break;
         }
         case 'E':
+        {
+            // we are empty
+            break;
+        }
         default:
         {
-
+            // Not sure if E and default are the same... But I think so
             break;
         }
         }
+        // I like how this switch spells out NOPE
     }
+    pos_first_space = infix_copy.find_first_of(" ");
 }
 
 char getNextTokenType(string infix_list)
@@ -81,7 +108,8 @@ char getNextTokenType(string infix_list)
     // Get substring to first space
     // Check if substring has number
     // If has number return N
-    // Check if substring has "(),/+-*"
+    // If substr has a parenthesis return P
+    // Check if substring has ",/+-*"
     // if has operator return O
     string current_token;
     int pos = infix_list.find(" ");
@@ -89,10 +117,14 @@ char getNextTokenType(string infix_list)
         current_token = infix_list.substr(0,pos);
     else
         current_token = infix_list.substr(0,string::npos);
+
     if (current_token == " " || current_token == "")
         return 'E'; // end of line
+
     if (current_token.find("0123456789") != -1)
         return 'N';
+    if (current_token.find_first_of("()") != -1)
+        return 'P';
     return 'O';
 }
 

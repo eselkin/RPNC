@@ -9,7 +9,10 @@ class OpPr
 {
 public:
     OpPr(char newOp);
+    ~OpPr();
+
     char theOp; // holds either (,),*,/,+,-, or =
+    bool assoc; // Right associativity set by the constructor
     bool operator > ( const OpPr& otherOp );
     bool operator < ( const OpPr& otherOp );
     bool operator ==( const OpPr& otherOp );

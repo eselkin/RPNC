@@ -6,12 +6,13 @@
 #include <sstream>
 #include <cstring>
 #include <string>
+#include "oppr.h"
 
 using namespace std;
 
 enum ERRORS {sINVALID_SIZE, sEMPTY, sFULL};
 
-template<typename T = char>
+template<typename T = DataType>
 class theStack
 {
 public:
@@ -28,7 +29,7 @@ public:
     void clear(); // has to be a call to nukem because we can't leave freestore stuff lying around
     nodePtr top(); // STL usually makes copies of things you pass, so PUSH/POP/TOP POINTERS!!!
     nodePtr pop();
-    void push(const T &x); // point to x's location, don't change it, but you can also pass a literal, etc.
+    void push(const T &x, const char theType); // point to x's location, don't change it, but you can also pass a literal, etc.
     int size();
     int capacity();
     void resize(int s); // change the maxSize
@@ -154,15 +155,14 @@ typename theStack<T>::nodePtr theStack<T>::pop()
 }
 
 template<typename T>
-void theStack<T>::push(const T &x)
+void theStack<T>::push(const T &x, const char theType)
 {
     if(full())
         throw sFULL;
     tos++; // we successfully are adding something to the stack
 
     // switch here
-    node<T> *newNext = new node<T>(&x,'C', anchor->next); // make a nodepointer with a node with key *x
-
+    node<T> *newNext = new node<T>(&x, theType, anchor->next); // make a nodepointer with a node with key *x
     newNext->next = anchor->next; // put it into the head position and keep the others afterward
     anchor->next = newNext; // point anchor to it
 }

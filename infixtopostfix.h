@@ -2,7 +2,7 @@
 #define INFIXTOPOSTFIX_H
 #include "theStack.h"
 #include "queue.h"
-
+enum itopERROR { PAREN_MISMATCH };
 class InfixtoPostfix
 {
 public:
@@ -20,7 +20,7 @@ public:
     istream& operator>>(istream in, InfixtoPostfix& ininfix);
 
 private:
-    theStack<char> operator_stack;
+    theStack<OpPr> operator_stack;
     queue<DataType> output_queue;
     string infix_input;
 };

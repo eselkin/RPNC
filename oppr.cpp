@@ -2,6 +2,21 @@
 #include <cctype>
 OpPr::OpPr(char newOp)
 {
+    // Set associativity of operator!
+    switch (newOp)
+    {
+    case '^':
+        assoc = true; // right
+        break;
+    default:
+        assoc = false; // left for all other operators!
+        break;
+    }
+}
+
+OpPr::~OpPr()
+{
+    // delete nothing
 }
 
 bool OpPr::operator >(const OpPr &otherOp)

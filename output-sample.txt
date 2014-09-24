@@ -109,3 +109,22 @@ Enter mixed number as a power: 1/9
 Hello World!
 Press <RETURN> to close this window...
 // better
+
+eli9 is: 20000007/6366200
+Enter a fraction:32/5
+Fraction eli: 32/5
+Enter another fraction:3/15
+Fraction eli5: 3/15
+40000009
+Eli to the eli5th power=40000009/27594600
+Enter a mixed number: 4 6/7
+Mixed number eli2:  4 6/7
+Enter another mixed number: 6 2/3
+Mixed number eli3:  6 2/3
+eli2-eli3 =-1 17/21
+eli2+eli3 = 11 11/21
+eli2/eli3 = 51/70
+eli2*eli3 = 32 8/21
+Enter mixed number as a power: 3
+ 4 6/7 to the power of  3= 114 10279/17454
+Hello World!

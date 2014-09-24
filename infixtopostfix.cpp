@@ -99,8 +99,8 @@ void InfixtoPostfix::parseinfix()
         }
         }
         // I like how this switch spells out NOPE
+        pos_first_space = infix_copy.find_first_of(" ");
     }
-    pos_first_space = infix_copy.find_first_of(" ");
 }
 
 char getNextTokenType(string infix_list)

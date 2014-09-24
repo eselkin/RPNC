@@ -78,8 +78,7 @@ fraction& fraction::operator^(const fraction &other)
 
     double num_dbl = pow( num*1.0, ((1.0*other.num)/(other.denom*1.0)));
     double den_dbl = pow( denom*1.0, ((1.0*other.num)/(other.denom*1.0)));
-    double new_dbl = (1.0*num_dbl) / (1.0*den_dbl);    
-    fraction* tempf = new fraction(new_dbl);
+    fraction* tempf = new fraction(num_dbl/den_dbl);
     return *tempf;
 }
 

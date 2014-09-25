@@ -6,6 +6,7 @@
 #include <string>
 
 using namespace std;
+
 enum FRAC_ERROR { DIV_BY_ZERO, NOT_A_FRAC };
 
 class fraction
@@ -33,7 +34,7 @@ public:
     friend
     int GCD (int a, int b);
 
-//protected:
+    //protected:
     int num, denom;
 private:
     void nukem();

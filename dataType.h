@@ -11,10 +11,6 @@ using namespace std;
 // Token data type
 union DataType {
     void *vptr;
-    int *iptr;
-    double *dptr;
-    char *cPtr;
-    string *sptr; // I think irrelevant
     MixedNum *mPtr;
     fraction *frPtr;
     OpPr *opPtr; // just a good way to test precedence.

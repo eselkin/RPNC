@@ -2,7 +2,11 @@
 #define INFIXTOPOSTFIX_H
 #include "queue.h"
 #include "theStack.h"
+
+using namespace std;
+
 enum itopERROR { PAREN_MISMATCH };
+
 class InfixtoPostfix
 {
 public:

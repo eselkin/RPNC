@@ -29,7 +29,7 @@ public:
     int capacity();
     void resize(int s);
     const node &peek() const;
-    void enqueue(const void *data, const char dType);
+    void enqueue(void *data, const char dType);
     node dequeue();
 
     friend
@@ -50,14 +50,14 @@ private:
 queue::queue(int s)
 {
     cap = s;
-    quehead = quetail = new node; // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
+    quehead = quetail = new node(); // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
     mySize = -1;
 }
 
 queue::~queue()
 {
     (quehead->next) && nukem(quehead->next);
-    quehead = quetail = new node;
+    quehead = quetail = new node();
     mySize = -1;
 }
 
@@ -82,7 +82,7 @@ queue& queue::operator=(const queue &other)
 void queue::clear()
 {
     quehead->next && nukem(quehead);
-    quehead = quetail = new node;
+    quehead = quetail = new node();
     mySize = -1;
 }
 
@@ -136,23 +136,11 @@ const node& queue::peek() const
     return *quehead;
 }
 
-void queue::enqueue(const void *data, const char dType)
+void queue::enqueue(void *data, const char dType)
 {
     if(full())
         throw qFULL;
-    node* quepointer = quetail->next = new node(&data, dType); // if it's the first element, it is the head!
-//    switch (dType)
-//    {
-//    case 'N':
-//        break;
-//    case 'O':
-//    case 'P':
-//        node* quepointer = quetail->next = new node(&data, dType); // if it's the first element, it is the head!
-//        break;
-//    default :
-//        break;
-//    }
-
+    node* quepointer = quetail->next = new node(data, dType); // if it's the first element, it is the head!
     quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
     mySize == -1 && (quehead = quepointer); // this moves the head to the first element on that we add
     mySize++;
@@ -168,7 +156,8 @@ node queue::dequeue()
     return *oldhead; // return the node at oldhead... deref outside of dequeue
 }
 
-node* queue::bye(node* top)
+
+node *queue::bye(node *top)
 {
     if (top)
         delete top;
@@ -176,7 +165,7 @@ node* queue::bye(node* top)
     return top;
 }
 
-node* queue::nukem(node* top)
+node *queue::nukem(node *top)
 {
     if (top->next)
         nukem(top->next);

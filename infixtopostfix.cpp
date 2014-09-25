@@ -6,7 +6,6 @@ InfixtoPostfix::InfixtoPostfix()
 
 void InfixtoPostfix::parseinfix()
 {
-    char last_token_type = ' ';
     string infix_copy = infix_input;
     string temp_token;
     stringstream ss;
@@ -113,6 +112,7 @@ char InfixtoPostfix::getNextTokenType(string infix_list)
     // if has operator return O
     string current_token;
     int pos = infix_list.find(" ");
+
     if (pos != -1)
         current_token = infix_list.substr(0,pos);
     else
@@ -120,7 +120,6 @@ char InfixtoPostfix::getNextTokenType(string infix_list)
 
     if (current_token == " " || current_token == "")
         return 'E'; // end of line
-
     if (current_token.find("0123456789") != -1)
         return 'N';
     if (current_token.find_first_of("()") != -1)

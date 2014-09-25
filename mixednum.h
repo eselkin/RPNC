@@ -2,6 +2,8 @@
 #define MIXEDNUM_H
 #include "fraction.h"
 
+using namespace std;
+
 enum MIXED_NUM_ERROR { BAD_MIXED_NUM };
 
 class MixedNum : public fraction

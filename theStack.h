@@ -1,18 +1,18 @@
 #ifndef THESTACK_H
 #define THESTACK_H
 #include "node.h"
+#include "oppr.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <cstring>
 #include <string>
-#include "oppr.h"
 
 using namespace std;
 
 enum ERRORS {sINVALID_SIZE, sEMPTY, sFULL};
 
-template<typename T = DataType>
+template<typename T = OpPr>
 class theStack
 {
 public:
@@ -191,15 +191,6 @@ void theStack<T>::resize(int s)
     tos = -1;
 }
 
-template<>
-void theStack<string>::resize(int s)
-{
-    cap = s;
-    if(s < 1)
-        throw sINVALID_SIZE;
-    tos = -1;
-}
-
 
 template<typename T>
 void theStack<T>::bye(node *top)
@@ -235,10 +226,7 @@ void theStack<T>::copy(const theStack &other)
             break;
         default:
             break;
-
         }
-
-
         otherPtr = otherPtr->next;
         myPtr = myPtr->next;
     }

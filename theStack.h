@@ -1,6 +1,6 @@
 #ifndef THESTACK_H
 #define THESTACK_H
-#include <node.h>
+#include "node.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

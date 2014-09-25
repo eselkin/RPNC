@@ -1,7 +1,7 @@
 #ifndef INFIXTOPOSTFIX_H
 #define INFIXTOPOSTFIX_H
-#include "theStack.h"
 #include "queue.h"
+#include "theStack.h"
 enum itopERROR { PAREN_MISMATCH };
 class InfixtoPostfix
 {

@@ -1,6 +1,8 @@
 #include <iostream>
-#include "fraction.h"
-#include "mixednum.h"
+//#include "fraction.h"
+//#include "mixednum.h"
+#include "infixtopostfix.h"
+
 using namespace std;
 
 int main()
@@ -75,6 +77,7 @@ int main()
     }
 
     cout << "Hello World!" << endl;
+
     return 0;
 }
 

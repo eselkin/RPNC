@@ -7,6 +7,16 @@ MixedNum::MixedNum(int whole, fraction frac)
     // We are storing as a fraction, input/output will be the only thing to change
 }
 
+MixedNum::MixedNum(fraction frac)
+    : fraction(frac.num, frac.denom)
+{
+}
+
+MixedNum::MixedNum(double value)
+    : fraction( value )
+{
+}
+
 MixedNum::~MixedNum()
 {
     nukem();

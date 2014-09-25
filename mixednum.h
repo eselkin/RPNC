@@ -7,7 +7,10 @@ enum MIXED_NUM_ERROR { BAD_MIXED_NUM };
 class MixedNum : public fraction
 {
 public:
-    MixedNum(int whole = 0, fraction frac = fraction(0,1));
+    MixedNum(int whole, fraction frac = fraction(0,1));
+    MixedNum(fraction frac = fraction(0,1));
+    MixedNum(double value);
+
     ~MixedNum();
     MixedNum& operator=(const MixedNum& other);
 

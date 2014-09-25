@@ -10,7 +10,6 @@ public:
     InfixtoPostfix();
     void parseinfix();
 
-    friend
     char getNextTokenType(string infix_list);
 
     friend
@@ -21,7 +20,7 @@ public:
 
 private:
     theStack<OpPr> operator_stack;
-    queue<DataType> output_queue;
+    queue output_queue;
     string infix_input;
 };
 

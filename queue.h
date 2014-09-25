@@ -28,11 +28,9 @@ public:
     int size();
     int capacity();
     void resize(int s);
-    const DataType& peek() const;
-    void enqueue(const void &data, const char dType);
+    const node &peek() const;
+    void enqueue(const void *data, const char dType);
     node dequeue();
-    queue& operator<<(const DataType &data);
-    queue& operator>>(DataType &data);
 
     friend
     ostream& operator<<(ostream& out, const queue &que);
@@ -131,21 +129,30 @@ void queue::resize(int s)
     mySize = -1;
 }
 
-const DataType& queue::peek() const
+const node& queue::peek() const
 {
     if(empty())
         throw qEMPTY;
-    return *quehead->key;
+    return *quehead;
 }
 
-void queue::enqueue(const void &data, const char dType)
+void queue::enqueue(const void *data, const char dType)
 {
     if(full())
         throw qFULL;
+    node* quepointer = quetail->next = new node(&data, dType); // if it's the first element, it is the head!
+//    switch (dType)
+//    {
+//    case 'N':
+//        break;
+//    case 'O':
+//    case 'P':
+//        node* quepointer = quetail->next = new node(&data, dType); // if it's the first element, it is the head!
+//        break;
+//    default :
+//        break;
+//    }
 
-    DataType* tempdata = new DataType(data);       // workaround for const data  // DEBUG, does this still work or do we need to change this
-    node* quepointer = quetail->next = new node(*tempdata, dType); // if it's the first element, it is the head!
-    delete tempdata; // because it's been deref'd with ->
     quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
     mySize == -1 && (quehead = quepointer); // this moves the head to the first element on that we add
     mySize++;
@@ -159,18 +166,6 @@ node queue::dequeue()
     quehead = quehead->next; // could point to NULL and make the list empty
     mySize--;
     return *oldhead; // return the node at oldhead... deref outside of dequeue
-}
-
-queue& queue::operator<<(const DataType &data)
-{
-    enqueue(data);
-    return *this;
-}
-
-queue& queue::operator>>(DataType &data)
-{
-    dequeue(data);
-    return *this;
 }
 
 node* queue::bye(node* top)
@@ -199,7 +194,7 @@ void queue::copy(const queue &other)
     mySize = -1;
     while (quepointer)
     {
-        quetail = new node(*quepointer->key);
+        quetail = new node(&quepointer->key, quepointer->data_type);
         mySize == -1 && (quehead = quetail); // this moves the head to the first element on that we add
         quetail = quetail->next;
         quepointer = quepointer->next;
@@ -209,54 +204,34 @@ void queue::copy(const queue &other)
 }
 
 
-istream& operator>>(istream& in, queue &que)
-{
-    vector list;
-    DataType data;
-    string line;
-    stringstream ss;
-    if (in != cin)
-    {
-        getline(in,line);
-        int pos = line.find(':');
-        line = line.substr(pos); // already puts in npos
-        ss << line;
-        ss >> que.cap;
-        ss.clear();
-        ss.str("");
-    }
-    getline(in,line);
-    ss << line;
-    ss >> data; // needed for anything with spaces... not sure about '.' for double
-    ss.clear();
-    while(line != "")
-    {
-        list.push_back(data);
-        getline(in,line);
-        ss << line;
-        ss >> data;
-        ss.clear();
-        ss.str("");
-    }
-    que.cap = list.size();
-    que.mySize = -1;
-    que.quehead = que.quetail = new node;
-    for(int i = 0; i < list.size(); i++)
-    {
-        que.quetail->next = new node(&list[i]);
-        que.quetail = que.quetail->next; // pointing to that node that we just made. It's next is NULL
-        que.mySize == -1 && (que.quehead = que.quetail); // this moves the head to the first element that we add
-        que.mySize++;
-    }
-    return in;
-}
-
 ostream& operator<<(ostream& out, const queue &que)
 {
     node* quepointer = que.quehead;
     for(; quepointer->next ; quepointer = quepointer->next)
-        out<<*quepointer->key<<endl;
-    out << *quepointer->key<<endl;
+        switch(quepointer->data_type)
+        {
+        case 'N':
+            out << *(quepointer->key.mPtr) << endl;
+            break;
+        case 'O':
+        case 'P':
+            out << (quepointer->key.opPtr->theOp) << endl;
+            break;
+        default:
+            break;
+        }
+    switch(quepointer->data_type)
+    {
+    case 'N':
+        out << *(quepointer->key.mPtr) << endl;
+        break;
+    case 'O':
+    case 'P':
+        out << (quepointer->key.opPtr->theOp) << endl;
+        break;
+    default:
+        break;
+    }
     return out;
 }
 

@@ -16,25 +16,25 @@ struct node
 
     node *next;
 
-    node(const Datatype *k = NULL, const char dt = 'I', node *n = NULL);
+    node(void *k = NULL, const char dt = 'I', node *n = NULL);
     ~node();
     node(const node &n);
     node& operator=(const node &n);
     void copy(const node &other);
+    void nukem();
 };
 
 
-node::node(const Datatype *k, const char dt, node *n)
+node::node( void *k, const char dt, node *n)
 {
-    key = k ? new Datatype(*k) : NULL;
+    key.vptr = k;
     data_type = dt;
     next = n;
 }
 
 node::~node()
 {
-    delete key;
-    next = NULL;
+    nukem();
 }
 
 node::node(const node &other)
@@ -47,8 +47,7 @@ node& node::operator=(const node &other)
 {
     if(this != &other)
     {
-        delete key;
-        next = NULL;
+        nukem();
         copy(other);
     }
     return *this;
@@ -56,9 +55,45 @@ node& node::operator=(const node &other)
 
 void node::copy(const node &other)
 {
+    switch (other.data_type)
+    {
+    case 'O':
+        key.opPtr = new OpPr(other.key.opPtr->theOp);
+        data_type = 'O';
+        break;
+    case 'P':
+        key.opPtr = new OpPr(other.key.opPtr->theOp);
+        data_type = 'P';
+        break;
+    case 'N':
+        key.mPtr = new MixedNum(*other.key.mPtr);
+        break;
+    default:
+        //
+        break;
+    }
     next = NULL;
-    key = new Datatype(*other.key);
     data_type = other.data_type;
+}
+
+void node::nukem()
+{
+    switch (data_type)
+    {
+    case 'O':
+        delete key.opPtr;
+        break;
+    case 'P':
+        delete key.opPtr;
+        break;
+    case 'N':
+        delete key.mPtr;
+        break;
+    default:
+        //
+        break;
+    }
+    next = NULL;
 }
 
 

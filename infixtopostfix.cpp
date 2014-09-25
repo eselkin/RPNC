@@ -28,7 +28,7 @@ void InfixtoPostfix::parseinfix()
             MixedNum tempNumber; // Any way, even if only the first token is N we make a mixed number from it
             ss << temp_token;
             ss >> tempNumber;
-            output_queue.enqueue(tempNumber, 'N'); // mixed number
+            output_queue.enqueue(&tempNumber, 'N'); // mixed number
             temp_token.clear();
             ss.str("");
             break;
@@ -37,11 +37,11 @@ void InfixtoPostfix::parseinfix()
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space); // erase what we took into the temp string
-            OpPr tempOp(temp_token[0]); // create a tempOp
+            OpPr* tempOp = new OpPr(temp_token[0]); // create a tempOp
             while (( !operator_stack.empty() )
                    && (operator_stack.top()->data_type == 'O')
-                   && ((!tempOp.assoc && (tempOp < operator_stack.top()->key.opPtr || tempOp == operator_stack.top()->key.vptr))
-                       || (tempOp < operator_stack.top()->key.opPtr)))
+                   && ((!tempOp->assoc && (*tempOp < *operator_stack.top()->key.opPtr || *tempOp == *operator_stack.top()->key.opPtr))
+                       || (*tempOp < *operator_stack.top()->key.opPtr)))
             {
                 // While NOT empty
                 // pop off the operators on the stack until we meet one with lower precedence and this is left associative
@@ -59,14 +59,14 @@ void InfixtoPostfix::parseinfix()
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space); // erase what we took into the temp string
-            OpPr tempOp(temp_token[0]);
+            OpPr *tempOp = new OpPr(temp_token[0]);
             switch(temp_token[0])
             {
             case '(':
                 operator_stack.push(tempOp, 'P'); // put this operator/parenthesis onto the stack
                 break;
             case ')':
-                while ( !operator_stack.empty() && operator_stack.top()->data_type != 'P')&&(operator_stack.top()->key.opPtr->theOp != '('))
+                while (( !operator_stack.empty() && operator_stack.top()->data_type != 'P')&&(operator_stack.top()->key.opPtr->theOp != '('))
                 {
                     // run until we come to a (
                     node* otherOp = operator_stack.pop();
@@ -103,7 +103,7 @@ void InfixtoPostfix::parseinfix()
     }
 }
 
-char getNextTokenType(string infix_list)
+char InfixtoPostfix::getNextTokenType(string infix_list)
 {
     // Get substring to first space
     // Check if substring has number

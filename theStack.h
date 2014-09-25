@@ -30,7 +30,7 @@ public:
     nodePtr top(); // STL usually makes copies of things you pass, so PUSH/POP/TOP POINTERS!!!
     nodePtr pop();
     //void push(const T &x, const char theType); // point to x's location, don't change it, but you can also pass a literal, etc.
-    void push(const T *x, const char theType);
+    void push(T *x, const char theType);
     int size();
     int capacity();
     void resize(int s); // change the maxSize
@@ -156,7 +156,7 @@ typename theStack<T>::nodePtr theStack<T>::pop()
 }
 
 template<typename T>
-void theStack<T>::push(const T *x, const char theType)
+void theStack<T>::push(T *x, const char theType)
 {
     if(full())
         throw sFULL;
@@ -200,20 +200,6 @@ void theStack<string>::resize(int s)
     tos = -1;
 }
 
-//template<typename T>
-//theStack<T>& theStack<T>::operator<<(const T& x)
-//{
-//    // pushes a value!
-//    push(x);
-//    return *this;
-//}
-
-//template<typename T>
-//theStack<T>& theStack<T>::operator>>(T& x)
-//{
-//    x = *(pop()->key); // a node's key
-//    return *this;
-//}
 
 template<typename T>
 void theStack<T>::bye(node *top)
@@ -239,13 +225,24 @@ void theStack<T>::copy(const theStack &other)
     node* myPtr = anchor;
     while (otherPtr)
     {
+        switch(otherPtr->data_type){
+        case 'N':
+            myPtr->next=new node(otherPtr->key.mPtr,otherPtr->data_type);
+            break;
+        case 'O':
+        case 'P':
+            myPtr->next=new node(otherPtr->key.opPtr,otherPtr->data_type);
+            break;
+        default:
+            break;
 
-        myPtr->next=new node(otherPtr->key.vptr,otherPtr->data_type);
+        }
+
+
         otherPtr = otherPtr->next;
         myPtr = myPtr->next;
     }
 }
-
 
 template<typename T>
 theStack<T>& theStack<T>::operator<<(const theStack<T> &other)
@@ -304,96 +301,7 @@ ostream& operator<<(ostream &out, const theStack<U> &s)
     return out;
 }
 
-template<typename U>
-istream& operator>>(istream &in, theStack<U> &s)
-{
-    int cap, tos;
-    string line;
-    stringstream ss;
-    U data, *data2;
-    if(in == cin)
-    {
-        cout<<"What size of a stack do you want: ";
-        cin>>cap;
-        s.resize(cap);
-        cin.ignore();
-    }
-    else
-    {
-        getline(in,line);
-        line = line.substr((line.find(':')+1));
-        ss<<line;
-        ss>>cap;
-        ss.str("");
-        s.resize(cap);
-        s.tos=-1;
-        getline(in,line);
-        ss.clear();
-    }
-    getline(in,line);
-    data2 = new U();
-    ss << line;
-    ss >> *data2;
-    ss.clear();
-    while (line != "")
-    {
-        s << *data2;
-        getline(in, line);
-        data2 = new U();
-        if (line != "")
-        {
-            ss << line;
-            ss >> *data2;
-            ss.clear();
-        }
-    }
-    return in;
-}
 
-template<>
-istream& operator>>(istream &in, theStack<string> &s)
-{
-    int cap, tos;
-    string line;
-    stringstream ss;
-    string* data;
-    if(in == cin)
-    {
-        cout<<"What size of a stack do you want: ";
-        in>>cap;
-        s.resize(cap);
-        in.ignore();
-        getline(in,line);
-        data = new string(line);
-        while(*data != "")
-        {
-            s << *data;
-            getline(in,line);
-            data = new string(line);
-        }
-    }
-    else
-    {
-        getline(in,line);
-        line = line.substr(line.find(':')+1);
-        ss<<line;
-        ss>>cap;
-        ss.clear();
-        s.resize(cap);
-        getline(in,line);
-        ss.clear();
-        getline(in,line);
-        data = new string(line);
-        while (line != "")
-        {
-            s << *data;
-            getline(in, line);
-            data = new string(line);
-            ss >> *data;
-        }
-    }
-    return in;
-}
 
 
 #endif // THESTACK_H

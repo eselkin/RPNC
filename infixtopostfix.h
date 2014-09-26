@@ -156,20 +156,20 @@ void InfixtoPostfix::parseinfix()
             break;
         }
     }
-    cout << "OUTPUT QUEUE: " << endl;
-    cout << output_queue << endl;
+    cout << "OUTPUT QUEUE: " << output_queue << endl;
 }
 
 void InfixtoPostfix::doCalculate()
 {
     queue CopyQueue(output_queue); // copy constructor
-    cout << "QUEUE:" << CopyQueue << endl;
+    cout << "COPY QUEUE" <<endl <<  CopyQueue << endl;
     while (!CopyQueue.empty())
     {
         while (CopyQueue.peek().data_type == 'N')
             operand_stack.push(CopyQueue.dequeue().key.mPtr, 'N');
 
-        //cout << operand_stack << endl;
+        cout << operand_stack << endl;
+
         if ( CopyQueue.peek().key.opPtr->theOp == '^' )
             operand_stack.push(&(*(operand_stack.pop()->key.mPtr)^ *(operand_stack.pop()->key.mPtr)), 'N');
         else
@@ -186,7 +186,8 @@ void InfixtoPostfix::doCalculate()
                             operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
         CopyQueue.dequeue(); // Dequeu the operator
     }
-    answer = *operand_stack.pop()->key.mPtr; // The final answer
+    answer = *(operand_stack.pop()->key.mPtr); // The final answer
+    cout << answer << endl;
 }
 
 char InfixtoPostfix::getNextTokenType(string infix_list)

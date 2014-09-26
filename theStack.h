@@ -31,6 +31,7 @@ public:
     nodePtr pop();
     //void push(const T &x, const char theType); // point to x's location, don't change it, but you can also pass a literal, etc.
     void push(T *x, const char theType);
+    void push(node n);
     int size();
     int capacity();
     void resize(int s); // change the maxSize
@@ -168,6 +169,20 @@ void theStack<T>::push(T *x, const char theType)
     newNext->next = anchor->next; // put it into the head position and keep the others afterward
     anchor->next = newNext; // point anchor to it
 }
+
+template<typename T>
+void theStack<T>::push(node n)
+{
+    if(full())
+        throw sFULL;
+    tos++; // we successfully are adding something to the stack
+
+    // switch here
+    node *newNext = new node(n);
+    newNext->next = anchor->next;
+    anchor->next = newNext; // point anchor to it
+}
+
 
 template<typename T>
 int theStack<T>::size()

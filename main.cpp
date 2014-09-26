@@ -14,7 +14,6 @@ int main()
     try {
         eli200.parseinfix();
         eli200.doCalculate();
-        cout << endl;
         cout << "ANSWER:" << eli200.answer << endl;
     } catch (itopERROR e)
     {

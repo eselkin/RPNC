@@ -19,7 +19,7 @@ public:
 
     queue(int s = 5);
     ~queue();
-    queue(const queue&other);
+    queue(const queue &other);
     queue& operator=(const queue &other);
 
     bool empty() const;
@@ -30,6 +30,8 @@ public:
     void resize(int s);
     const node &peek() const;
     void enqueue(void *data, const char dType);
+    void enqueue(node n);
+
     node dequeue();
 
     friend
@@ -50,20 +52,22 @@ private:
 queue::queue(int s)
 {
     cap = s;
-    quehead = quetail = new node(); // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
+    quehead = quetail = NULL; // tail should always be pointing to NULL... head should only be pointing to NULL if there's nothing in the list
     mySize = -1;
 }
 
 queue::~queue()
 {
-    (quehead->next) && nukem(quehead->next);
-    quehead = quetail = new node();
+    quehead && nukem(quehead);
+    quehead = quetail = NULL;
     mySize = -1;
 }
 
 
 queue::queue(const queue &other)
 {
+    mySize = -1;
+    quetail = quehead = NULL;
     // copy constructor only gets called when instantiating or directly calling the copy or passing a var by value
     // so should have no values to delete
     copy(other);
@@ -73,7 +77,7 @@ queue& queue::operator=(const queue &other)
 {
     if(this != &other)
     {
-        quehead->next && nukem(quehead->next);
+        quehead && nukem(quehead);
         copy(other);
     }
     return *this;
@@ -81,37 +85,25 @@ queue& queue::operator=(const queue &other)
 
 void queue::clear()
 {
-    quehead->next && nukem(quehead);
-    quehead = quetail = new node();
+    quehead && nukem(quehead);
+    quehead = quetail = NULL;
     mySize = -1;
 }
 
 bool queue::empty() const
 {
-    return mySize == -1; // Had trouble if head and tail were pointing to the same node.
+    return quehead == NULL;
 }
 
 bool queue::full()
 {
-    return false;
-    return cap == mySize; // this is so silly... not silly anymore
+    return false; // we are a linked list, so this is a dumb function
+    //return cap == mySize; // this is so silly... not silly anymore
 }
 
 int queue::size()
 {
     return mySize+1;
-    // THIS IS SO SILLY, WE SHOULD NOT COMPUTE SIZE EVERY TIME, WHAT IF IT'S A HUGE QUEUE!
-    // On a large queue, the size difference of storing a int variable with the size in it is negligeable compared to CPU time to calculate
-    //    int size=0;
-    //    queue::nodePtr myPointer = quehead;
-    //    while (myPointer)
-    //    {
-    //        size++;
-    //        myPointer = myPointer->next; // WHEN NULL, stops while at next loop
-    //    }
-    //    return size;
-    // Array method that I liked!
-    // if queue is empty head==tail this is wrong! We need a three part if-like option... which this new nested ternary represents
     // return tail >= head ? (tail == head? tail-head : tail-head+1): (cap+tail-head); // this was my best line! for the array at least!
 }
 
@@ -124,7 +116,7 @@ void queue::resize(int s)
 {
     if(s < 1)
         throw qBAD_SIZE;
-    quehead->next && nukem(quehead->next);
+    quehead && nukem(quehead);
     cap = s; // changing capacity, nuked the old stuff
     quehead = quetail = NULL;
     mySize = -1;
@@ -137,13 +129,37 @@ const node& queue::peek() const
     return *quehead;
 }
 
+void queue::enqueue(node n)
+{
+    if(full())
+        throw qFULL;
+    if (quetail)
+    {
+        node* quepointer = quetail;
+        quetail = quetail->next;
+        quetail = new node(n); // if it's the first element, it is the head!
+        quepointer->next = quetail;
+    }
+    else
+    {
+        quetail = new node(n);
+        quehead = quetail;
+    }
+    mySize++;
+}
+
 void queue::enqueue(void *data, const char dType)
 {
     if(full())
         throw qFULL;
-    node* quepointer = quetail->next = new node(data, dType); // if it's the first element, it is the head!
-    quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
-    mySize == -1 && (quehead = quepointer); // this moves the head to the first element on that we add
+    if (quetail)
+    {
+        quetail->next = new node(data, dType); // if it's the first element, it is the head!
+        quetail = quetail->next;
+    }
+    else
+        quetail = new node(data, dType);
+    (mySize == -1) && (quehead = quetail); // this moves the head to the first element on that we add
     mySize++;
 }
 
@@ -168,6 +184,8 @@ node *queue::bye(node *top)
 
 node *queue::nukem(node *top)
 {
+    if (!top)
+        return NULL;
     if (top->next)
         nukem(top->next);
     bye(top); // will delete the head as well
@@ -177,31 +195,22 @@ node *queue::nukem(node *top)
 void queue::copy(const queue &other)
 {
     cap = other.cap;
-    node* quepointer = other.quehead; // not sure I can do this
-    quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
-
-    mySize = -1;
+    node* quepointer = other.quehead; // set the quepointer to the quehead of the other queue
     while (quepointer)
     {
-        if (quepointer->data_type == 'N')
-            quetail = new node(quepointer->key.mPtr, quepointer->data_type);
-        else
-            quetail = new node(quepointer->key.opPtr, quepointer->data_type);
-        (mySize == -1) && (quehead = quetail); // this moves the head to the first element on that we add
-        quetail = quetail->next;
-        cout <<"QUETAIL:" << *quetail->key.mPtr << endl;
+        // progress down the line of the other queue and enqueu into this queue dereferencing the right type
+        enqueue(*quepointer);
         quepointer = quepointer->next;
-        mySize++;
     }
 
-    //for(int i = other.head; i != tail; i = (++i)%cap)
 }
 
 
 ostream& operator<<(ostream& out, const queue &que)
 {
     node* quepointer = que.quehead;
-
+    int i = 0;
+    out << "QUEUE SIZE: " << que.mySize + 1 << endl;
     for(; quepointer->next ; quepointer = quepointer->next)
     {
         switch(quepointer->data_type)

@@ -12,14 +12,12 @@ using namespace std;
 
 enum ERRORS {sINVALID_SIZE, sEMPTY, sFULL};
 
-template<typename T = OpPr>
 class theStack
 {
 public:
     typedef node* nodePtr;
 
     theStack(int s = 5);
-    theStack(T data, int s); // giving init val? Not anymore
     theStack(const theStack &other);
     ~theStack();
     theStack& operator=(const theStack &other);
@@ -29,26 +27,23 @@ public:
     void clear(); // has to be a call to nukem because we can't leave freestore stuff lying around
     nodePtr top(); // STL usually makes copies of things you pass, so PUSH/POP/TOP POINTERS!!!
     nodePtr pop();
-    //void push(const T &x, const char theType); // point to x's location, don't change it, but you can also pass a literal, etc.
-    void push(T *x, const char theType);
-    void push(node n);
+    void push(void *x, const char theType);
+
     int size();
     int capacity();
     void resize(int s); // change the maxSize
 
-    theStack<T>& operator<<(const T& x);  // push an element onto the list
-    theStack<T>& operator>>(T &x); // pop the element off the list
+    theStack& operator<<(const void *x);  // push an element onto the list
+    theStack& operator>>(node &x); // pop the element off the list
 
-    theStack<T>& operator>>(theStack<T> &other);
-    theStack<T>& operator<<(const theStack<T> &other);
+    theStack& operator>>(theStack &other);
+    theStack& operator<<(const theStack &other);
 
-    template<typename U>
     friend
-    ostream& operator<<(ostream &out, const theStack<U> &s);
+    ostream& operator<<(ostream &out, const theStack &s);
 
-    template<typename U>
     friend
-    istream& operator>>(istream &in, theStack<U> &s);
+    istream& operator>>(istream &in, theStack &s);
 
 private:
     nodePtr anchor; // WHICH WILL AUTOMATICALLY POINT TO THE TOS!! anchor->next is the TOS
@@ -59,37 +54,22 @@ private:
     void copy(const theStack &other);
 };
 
-template<typename T>
-theStack<T>::theStack(int s)
+theStack::theStack(int s)
 {
-    cap = s;
-    anchor = new node();
-    anchor->next = NULL;
-    tos = -1;
     if(s < 1)
         throw sINVALID_SIZE;
-}
-
-template<typename T>
-theStack<T>::theStack(T data, int s)
-{
     cap = s;
     anchor = new node();
     anchor->next = NULL;
     tos = -1;
-    if(s<1)
-        throw sINVALID_SIZE;
-    push(data);
 }
 
-template<typename T>
-theStack<T>::theStack(const theStack &other)
+theStack::theStack(const theStack &other)
 {
     copy(other);
 }
 
-template<typename T>
-theStack<T>::~theStack()
+theStack::~theStack()
 {
     if (anchor->next)
         nukem(anchor->next);// anchor holds no key, so start from its next
@@ -98,8 +78,7 @@ theStack<T>::~theStack()
     tos = -1;
 }
 
-template<typename T>
-theStack<T>& theStack<T>::operator=(const theStack &other)
+theStack& theStack::operator=(const theStack &other)
 {
     if(this != &other)
     {
@@ -113,22 +92,18 @@ theStack<T>& theStack<T>::operator=(const theStack &other)
 }
 
 
-template<typename T>
-bool theStack<T>::empty()
+bool theStack::empty()
 {
     // or we could do tos == -1
     return anchor->next == NULL;
 }
 
-template<typename T>
-bool theStack<T>::full()
+bool theStack::full()
 {
     return false;
-    return tos == cap;
 }
 
-template<typename T>
-void theStack<T>::clear()
+void theStack::clear()
 {
     if (anchor->next)
         nukem(anchor->next);// anchor holds no key, so start from its next
@@ -137,28 +112,7 @@ void theStack<T>::clear()
     anchor->next = NULL;
 }
 
-template<typename T>
-node* theStack<T>::top()
-{
-    if (anchor->next)
-        return anchor->next; // we always push from the head
-    return NULL;
-}
-
-template<typename T>
-typename theStack<T>::nodePtr theStack<T>::pop()
-{
-    if(empty())
-        throw sEMPTY;
-    --tos;
-    nodePtr holder = anchor->next;
-    anchor->next = holder->next;
-    holder->next = NULL;
-    return holder;
-}
-
-template<typename T>
-void theStack<T>::push(T *x, const char theType)
+void theStack::push(void *x, const char theType)
 {
     if(full())
         throw sFULL;
@@ -170,34 +124,35 @@ void theStack<T>::push(T *x, const char theType)
     anchor->next = newNext; // point anchor to it
 }
 
-template<typename T>
-void theStack<T>::push(node n)
+node* theStack::top()
 {
-    if(full())
-        throw sFULL;
-    tos++; // we successfully are adding something to the stack
-
-    // switch here
-    node *newNext = new node(n);
-    newNext->next = anchor->next;
-    anchor->next = newNext; // point anchor to it
+    if (anchor->next)
+        return anchor->next; // we always push from the head
+    return NULL;
 }
 
+node* theStack::pop()
+{
+    if(empty())
+        throw sEMPTY;
+    --tos;
+    nodePtr holder = anchor->next;
+    anchor->next = holder->next;
+    holder->next = NULL;
+    return holder;
+}
 
-template<typename T>
-int theStack<T>::size()
+int theStack::size()
 {
     return tos + 1;
 }
 
-template<typename T>
-int theStack<T>::capacity()
+int theStack::capacity()
 {
     return cap;
 }
 
-template<typename T>
-void theStack<T>::resize(int s)
+void theStack::resize(int s)
 {
     cap = s;
     if(s < 1)
@@ -208,23 +163,20 @@ void theStack<T>::resize(int s)
 }
 
 
-template<typename T>
-void theStack<T>::bye(node *top)
+void theStack::bye(node *top)
 {
     delete top;
     top = NULL;
 }
 
-template<typename T>
-void theStack<T>::nukem(node* top)
+void theStack::nukem(node* top)
 {
     if (top->next)
         nukem(top->next);
     bye(top); // changed from !top->next
 }
 
-template<typename T>
-void theStack<T>::copy(const theStack &other)
+void theStack::copy(const theStack &other)
 {
     cap = other.cap;
     tos = other.tos;
@@ -234,11 +186,11 @@ void theStack<T>::copy(const theStack &other)
     {
         switch(otherPtr->data_type){
         case 'N':
-            myPtr->next=new node(otherPtr->key.mPtr,otherPtr->data_type);
+            myPtr->next=new node(otherPtr->key.mPtr, otherPtr->data_type);
             break;
         case 'O':
         case 'P':
-            myPtr->next=new node(otherPtr->key.opPtr,otherPtr->data_type);
+            myPtr->next=new node(otherPtr->key.opPtr, otherPtr->data_type);
             break;
         default:
             break;
@@ -248,22 +200,19 @@ void theStack<T>::copy(const theStack &other)
     }
 }
 
-template<typename T>
-theStack<T>& theStack<T>::operator<<(const theStack<T> &other)
+theStack& theStack::operator<<(const theStack &other)
 {
     copy(other);
     return *this;
 }
 
-template<typename T>
-theStack<T>& theStack<T>::operator>>(theStack<T> &other)
+theStack& theStack::operator>>(theStack &other)
 {
     other.copy(*this);
     return *this;
 }
 
-template<typename U>
-ostream& operator<<(ostream &out, const theStack<U> &s)
+ostream& operator<<(ostream &out, const theStack &s)
 {
     if (s.tos != -1)
     {
@@ -273,7 +222,7 @@ ostream& operator<<(ostream &out, const theStack<U> &s)
             out<<"Capacity:"<<s.cap<<endl
               <<"TOS:"<<s.tos<<endl;
         node* Pointer = s.anchor->next;
-        while (Pointer->next){
+        while (Pointer){
             switch(Pointer->data_type)
             {
             case 'N':
@@ -289,23 +238,7 @@ ostream& operator<<(ostream &out, const theStack<U> &s)
             Pointer = Pointer->next;
 
         }
-        switch(Pointer->data_type)
-        {
-        case 'N':
-            out << *(Pointer->key.mPtr) << endl;
-            break;
-        case 'O':
-        case 'P':
-            out << (Pointer->key.opPtr->theOp) << endl;
-            break;
-        default:
-            break;
-        }
+        return out;
     }
-    return out;
 }
-
-
-
-
 #endif // THESTACK_H

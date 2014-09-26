@@ -6,10 +6,10 @@ using namespace std;
 
 int main()
 {
-    InfixtoPostfix eli999("3 * ( 3 / ( ( 4 * 2 ) ) ) ");
-    eli999.parseinfix();
-    InfixtoPostfix eli100("3 + 4 * 2 / ( 1 − 5.1 ) ^ 2 ^ 3 ");
-    eli100.parseinfix();
+    //InfixtoPostfix eli999("3 * ( 3 / ( ( 4 * 2 ) ) ) ");
+    // eli999.parseinfix();
+    // InfixtoPostfix eli100("3 + 4 * 2 / ( 1 − 5.1 ) ^ 2 ^ 3 ");
+    //eli100.parseinfix();
     InfixtoPostfix eli200("( 2 ^ 1/2 ) ^ 2 ");
     try {
         eli200.parseinfix();

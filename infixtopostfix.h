@@ -3,6 +3,8 @@
 #include "queue.h"
 #include "theStack.h"
 
+#include "mixednum.h"
+
 using namespace std;
 
 enum itopERROR { PAREN_MISMATCH };
@@ -18,16 +20,16 @@ public:
 
     char getNextTokenType(string infix_list);
 
-    friend
-    ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
+    //friend
+    //ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
 
-    friend
-    istream& operator>>(istream in, InfixtoPostfix& ininfix);
+    //friend
+    //istream& operator>>(istream in, InfixtoPostfix& ininfix);
 
 private:
-    theStack<OpPr> operator_stack;
+    theStack operator_stack;
     queue output_queue;
-    theStack<MixedNum> operand_stack;
+    theStack operand_stack;
     string infix_input;
 };
 
@@ -166,12 +168,13 @@ void InfixtoPostfix::doCalculate()
     while (!CopyQueue.empty())
     {
         while (CopyQueue.peek().data_type == 'N')
-            operand_stack.push(CopyQueue.dequeue().key.mPtr, 'N');
-
-        cout << operand_stack << endl;
-
+        {
+            operand_stack.push(CopyQueue.dequeue()->key.mPtr, 'N');
+        }
+        //operand_stack.push(CopyQueue.dequeue()->key.mPtr, 'N');
+        cout << "operand: " << operand_stack << endl;
         if ( CopyQueue.peek().key.opPtr->theOp == '^' )
-            operand_stack.push(&(*(operand_stack.pop()->key.mPtr)^ *(operand_stack.pop()->key.mPtr)), 'N');
+            operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
         else
             if ( CopyQueue.peek().key.opPtr->theOp == '*' )
                 operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
@@ -184,7 +187,7 @@ void InfixtoPostfix::doCalculate()
                     else
                         if ( CopyQueue.peek().key.opPtr->theOp == '-' )
                             operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
-        CopyQueue.dequeue(); // Dequeu the operator
+        CopyQueue.dequeue(); // Dequeue the operator
     }
     answer = *(operand_stack.pop()->key.mPtr); // The final answer
     cout << answer << endl;

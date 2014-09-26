@@ -32,7 +32,7 @@ public:
     void enqueue(void *data, const char dType);
     void enqueue(node n);
 
-    node dequeue();
+    node* dequeue();
 
     friend
     ostream& operator<<(ostream& out, const queue &que);
@@ -163,14 +163,14 @@ void queue::enqueue(void *data, const char dType)
     mySize++;
 }
 
-node queue::dequeue()
+node *queue::dequeue()
 {
     if(empty())
         throw qEMPTY; // head = tail = NULL
     queue::nodePtr oldhead = quehead;
     quehead = quehead->next; // could point to NULL and make the list empty
     mySize--;
-    return *oldhead; // return the node at oldhead... deref outside of dequeue
+    return oldhead; // return the node at oldhead... deref outside of dequeue
 }
 
 

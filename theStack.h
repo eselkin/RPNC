@@ -122,6 +122,7 @@ bool theStack<T>::empty()
 template<typename T>
 bool theStack<T>::full()
 {
+    return false;
     return tos == cap;
 }
 

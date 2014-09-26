@@ -8,6 +8,12 @@ int main()
 {
     InfixtoPostfix eli999("3 * ( 3 / ( ( 4 * 2 ) ) ) ");
     eli999.parseinfix();
+    InfixtoPostfix eli100("3 + 4 * 2 / ( 1 − 5 ) ^ 2 ^ 3 ");
+    eli100.parseinfix();
+    cout << "Yet, it should really look like: " << endl;
+    InfixtoPostfix eli200("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3 ");
+    eli200.parseinfix();
+
     // Fraction tests
     fraction eli, eli5;
     fraction eli9(3.1415926535);//89793238462643383279502884197169399375105820974944);

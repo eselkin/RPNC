@@ -1,5 +1,7 @@
 #include "oppr.h"
 #include <cctype>
+#include <iostream>
+
 OpPr::OpPr(char newOp)
 {
     theOp = newOp;

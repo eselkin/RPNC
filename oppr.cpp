@@ -2,6 +2,7 @@
 #include <cctype>
 OpPr::OpPr(char newOp)
 {
+    theOp = newOp;
     // Set associativity of operator!
     switch (newOp)
     {

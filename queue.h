@@ -1,12 +1,12 @@
 #ifndef QUEUE_H
 #define QUEUE_H
+// SINGLE DIRECTION NODE VERSION
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include "node.h"
-// SINGLE DIRECTION NODE VERSION
 
 using namespace std;
 
@@ -93,6 +93,7 @@ bool queue::empty() const
 
 bool queue::full()
 {
+    return false;
     return cap == mySize; // this is so silly... not silly anymore
 }
 
@@ -150,7 +151,7 @@ node queue::dequeue()
 {
     if(empty())
         throw qEMPTY; // head = tail = NULL
-    node* oldhead = quehead;
+    queue::nodePtr oldhead = quehead;
     quehead = quehead->next; // could point to NULL and make the list empty
     mySize--;
     return *oldhead; // return the node at oldhead... deref outside of dequeue
@@ -196,27 +197,30 @@ void queue::copy(const queue &other)
 ostream& operator<<(ostream& out, const queue &que)
 {
     node* quepointer = que.quehead;
+
     for(; quepointer->next ; quepointer = quepointer->next)
+    {
         switch(quepointer->data_type)
         {
         case 'N':
-            out << *(quepointer->key.mPtr) << endl;
+            out << *(quepointer->key.mPtr) << " " ;
             break;
         case 'O':
         case 'P':
-            out << (quepointer->key.opPtr->theOp) << endl;
+            out << (quepointer->key.opPtr->theOp) << " ";
             break;
         default:
             break;
         }
+    }
     switch(quepointer->data_type)
     {
     case 'N':
-        out << *(quepointer->key.mPtr) << endl;
+        out << *(quepointer->key.mPtr) << " " ;
         break;
     case 'O':
     case 'P':
-        out << (quepointer->key.opPtr->theOp) << endl;
+        out << (quepointer->key.opPtr->theOp) << " ";
         break;
     default:
         break;

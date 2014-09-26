@@ -6,18 +6,17 @@ CONFIG -= qt
 SOURCES += main.cpp \
     fraction.cpp \
     mixednum.cpp \
-    infixtopostfix.cpp \
     oppr.cpp
 
 HEADERS += \
+    node.h \
+    oppr.h \
     fraction.h \
     mixednum.h \
-    infixtopostfix.h \
+    dataType.h \
     queue.h \
     theStack.h \
-    node.h \
-    dataType.h \
-    oppr.h
+    infixtopostfix.h
 
 OTHER_FILES += \
     output-sample.txt

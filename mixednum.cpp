@@ -7,15 +7,16 @@ MixedNum::MixedNum(int whole, fraction frac)
     // We are storing as a fraction, input/output will be the only thing to change
 }
 
+MixedNum::MixedNum(double value)
+    : fraction( value )
+{
+}
+
 MixedNum::MixedNum(fraction frac)
     : fraction(frac.num, frac.denom)
 {
 }
 
-MixedNum::MixedNum(double value)
-    : fraction( value )
-{
-}
 
 MixedNum::~MixedNum()
 {
@@ -153,5 +154,6 @@ istream &operator>>(istream &in, MixedNum &mixed)
     frac = whole < 0? fraction(whole, 1)-frac: frac = fraction(whole, 1)+frac; // This reduces the frac value on add/sub
     mixed.num = frac.num;
     mixed.denom = frac.denom;
+    cout << "N IS:" << mixed.num << "D IS: " << mixed.denom << endl;
     return in;
 }

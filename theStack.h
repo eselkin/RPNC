@@ -1,12 +1,12 @@
 #ifndef THESTACK_H
 #define THESTACK_H
-#include "node.h"
-#include "oppr.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <cstring>
 #include <string>
+#include "node.h"
+#include "oppr.h"
 
 using namespace std;
 
@@ -62,7 +62,7 @@ template<typename T>
 theStack<T>::theStack(int s)
 {
     cap = s;
-    anchor = new node;
+    anchor = new node();
     anchor->next = NULL;
     tos = -1;
     if(s < 1)
@@ -73,7 +73,7 @@ template<typename T>
 theStack<T>::theStack(T data, int s)
 {
     cap = s;
-    anchor = new node;
+    anchor = new node();
     anchor->next = NULL;
     tos = -1;
     if(s<1)
@@ -92,7 +92,7 @@ theStack<T>::~theStack()
 {
     if (anchor->next)
         nukem(anchor->next);// anchor holds no key, so start from its next
-    anchor = new node;
+    anchor = new node();
     anchor->next = NULL;
     tos = -1;
 }
@@ -104,7 +104,7 @@ theStack<T>& theStack<T>::operator=(const theStack &other)
     {
         if (anchor->next)
             nukem(anchor->next);// anchor holds no key, so start from its next
-        anchor = new node;
+        anchor = new node();
         anchor->next = NULL;
         copy(other);
     }
@@ -131,7 +131,7 @@ void theStack<T>::clear()
     if (anchor->next)
         nukem(anchor->next);// anchor holds no key, so start from its next
     tos = -1;
-    anchor = new node;
+    anchor = new node();
     anchor->next = NULL;
 }
 

@@ -1,6 +1,4 @@
 #include <iostream>
-//#include "fraction.h"
-//#include "mixednum.h"
 #include "infixtopostfix.h"
 
 using namespace std;

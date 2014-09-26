@@ -37,11 +37,10 @@ void InfixtoPostfix::parseinfix()
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space); // erase what we took into the temp string
             OpPr* tempOp = new OpPr(temp_token[0]); // create a tempOp
-            while (( !operator_stack.empty() )
-                   && (operator_stack.top()->data_type == 'O')
-                   && ((!tempOp->assoc && (*tempOp < *operator_stack.top()->key.opPtr || *tempOp == *operator_stack.top()->key.opPtr))
-                       || (*tempOp < *operator_stack.top()->key.opPtr)))
-            {
+            while ( ( !operator_stack.empty() )
+                    && (operator_stack.top()->data_type == 'O')
+                    && ( (!tempOp->assoc && (*tempOp < *operator_stack.top()->key.opPtr || *tempOp == *operator_stack.top()->key.opPtr))
+                         || (*tempOp < *operator_stack.top()->key.opPtr) ) ) {
                 // While NOT empty
                 // pop off the operators on the stack until we meet one with lower precedence and this is left associative
                 // or pop the other off it is higher precedence no matter the associativity
@@ -65,6 +64,7 @@ void InfixtoPostfix::parseinfix()
                 operator_stack.push(tempOp, 'P'); // put this operator/parenthesis onto the stack
                 break;
             case ')':
+            {
                 while (( !operator_stack.empty() && operator_stack.top()->data_type != 'P')&&(operator_stack.top()->key.opPtr->theOp != '('))
                 {
                     // run until we come to a (
@@ -79,7 +79,7 @@ void InfixtoPostfix::parseinfix()
                 {
                     throw PAREN_MISMATCH;
                 }
-                break;
+            }
             default:
                 // throw error?
                 break;
@@ -120,10 +120,20 @@ char InfixtoPostfix::getNextTokenType(string infix_list)
 
     if (current_token == " " || current_token == "")
         return 'E'; // end of line
-    if (current_token.find("0123456789") != -1)
+    if (int(current_token.find("0123456789")) != -1)
         return 'N';
-    if (current_token.find_first_of("()") != -1)
+    if (int(current_token.find_first_of("()")) != -1)
         return 'P';
     return 'O';
+}
+
+ostream &operator<<(ostream &out, const InfixtoPostfix &outpost)
+{
+    return out;
+}
+
+istream &operator>>(istream &in, InfixtoPostfix &ininfix)
+{
+    return in;
 }
 

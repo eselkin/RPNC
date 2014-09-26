@@ -1,7 +1,8 @@
 #ifndef INFIXTOPOSTFIX_H
 #define INFIXTOPOSTFIX_H
-#include "queue.h"
+#include "node.h"
 #include "theStack.h"
+#include "queue.h"
 
 using namespace std;
 
@@ -17,14 +18,14 @@ public:
     char getNextTokenType(string infix_list);
 
     friend
-    ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
+    ostream& operator<<(ostream& out, const InfixtoPostfix& outpost);
 
     friend
-    istream& operator>>(istream in, InfixtoPostfix& ininfix);
+    istream& operator>>(istream& in, InfixtoPostfix& ininfix);
 
 private:
-    theStack<OpPr> operator_stack;
     queue output_queue;
+    theStack<OpPr> operator_stack;
     string infix_input;
 };
 

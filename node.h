@@ -12,7 +12,6 @@ struct node
 {
     DataType key;   // we will really make nodes of DataType type (unions).
     char data_type; // N, O, P; I think that's all the types I want nodes to be able to manage
-
     node *next;
 
     node(void *k = NULL, const char dt = 'N', node *n = NULL);

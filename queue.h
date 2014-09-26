@@ -1,12 +1,12 @@
 #ifndef QUEUE_H
 #define QUEUE_H
-// SINGLE DIRECTION NODE VERSION
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include "node.h"
+// SINGLE DIRECTION NODE VERSION
 
 using namespace std;
 
@@ -150,7 +150,7 @@ node queue::dequeue()
 {
     if(empty())
         throw qEMPTY; // head = tail = NULL
-    queue::nodePtr oldhead = quehead;
+    node* oldhead = quehead;
     quehead = quehead->next; // could point to NULL and make the list empty
     mySize--;
     return *oldhead; // return the node at oldhead... deref outside of dequeue

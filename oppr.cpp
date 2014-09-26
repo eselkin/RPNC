@@ -35,6 +35,7 @@ bool OpPr::operator >(const OpPr &otherOp)
         return false;
         break;
     }
+    return false;
 }
 
 bool OpPr::operator <(const OpPr &otherOp)
@@ -53,6 +54,7 @@ bool OpPr::operator <(const OpPr &otherOp)
         return false;
         break;
     }
+    return false;
 }
 
 bool OpPr::operator ==(const OpPr &otherOp)
@@ -74,5 +76,6 @@ bool OpPr::operator ==(const OpPr &otherOp)
         // we have ()?
         break;
     }
+    return false;
 }
 

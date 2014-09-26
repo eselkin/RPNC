@@ -13,6 +13,8 @@ public:
 
     InfixtoPostfix(string inf);
     void parseinfix();
+    void doCalculate();
+    MixedNum answer;
 
     char getNextTokenType(string infix_list);
 
@@ -25,6 +27,7 @@ public:
 private:
     theStack<OpPr> operator_stack;
     queue output_queue;
+    theStack<MixedNum> operand_stack;
     string infix_input;
 };
 
@@ -41,10 +44,8 @@ void InfixtoPostfix::parseinfix()
     stringstream ss;
     int i =0;
     int pos_first_space = infix_copy.find_first_of(" ");
-    try {
-        while (pos_first_space != -1)
+    while (pos_first_space != -1)
     {
-        cout << "INFIX COPY: " << infix_copy << endl;
         switch(getNextTokenType(infix_copy))
         {
         case 'N':
@@ -58,7 +59,7 @@ void InfixtoPostfix::parseinfix()
             }
             // we should have a whole mixed number now in temp_token
             MixedNum* tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
-            temp_token.append("\n");
+            temp_token.append("\n"); // because we use getline
             ss.str(temp_token);
             ss >> *tempNumber;
             output_queue.enqueue(tempNumber, 'N'); // mixed number
@@ -68,7 +69,6 @@ void InfixtoPostfix::parseinfix()
         }
         case 'O':
         {
-
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
             OpPr* tempOp = new OpPr(temp_token[0]); // create a tempOp
@@ -141,6 +141,7 @@ void InfixtoPostfix::parseinfix()
         // I like how this switch spells out NOPE
         pos_first_space = infix_copy.find(" ");
     }
+
     while (!operator_stack.empty())
     {
         switch(operator_stack.top()->data_type)
@@ -153,19 +154,39 @@ void InfixtoPostfix::parseinfix()
         default:
             output_queue.enqueue(operator_stack.pop()->key.opPtr, 'O');
             break;
-
         }
-
     }
     cout << "OUTPUT QUEUE: " << endl;
     cout << output_queue << endl;
+}
 
-    cout << operator_stack << endl;
-    }
-    catch (qERRORS e)
+void InfixtoPostfix::doCalculate()
+{
+    queue CopyQueue(output_queue); // copy constructor
+    cout << "QUEUE:" << CopyQueue << endl;
+    while (!CopyQueue.empty())
     {
-        cout << "ERROR: " << e << endl;
+        while (CopyQueue.peek().data_type == 'N')
+            operand_stack.push(CopyQueue.dequeue().key.mPtr, 'N');
+
+        //cout << operand_stack << endl;
+        if ( CopyQueue.peek().key.opPtr->theOp == '^' )
+            operand_stack.push(&(*(operand_stack.pop()->key.mPtr)^ *(operand_stack.pop()->key.mPtr)), 'N');
+        else
+            if ( CopyQueue.peek().key.opPtr->theOp == '*' )
+                operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
+            else
+                if ( CopyQueue.peek().key.opPtr->theOp == '/' )
+                    operand_stack.push(&(*operand_stack.pop()->key.mPtr / *operand_stack.pop()->key.mPtr), 'N');
+                else
+                    if ( CopyQueue.peek().key.opPtr->theOp == '+' )
+                        operand_stack.push(&(*operand_stack.pop()->key.mPtr + *operand_stack.pop()->key.mPtr), 'N');
+                    else
+                        if ( CopyQueue.peek().key.opPtr->theOp == '-' )
+                            operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
+        CopyQueue.dequeue(); // Dequeu the operator
     }
+    answer = *operand_stack.pop()->key.mPtr; // The final answer
 }
 
 char InfixtoPostfix::getNextTokenType(string infix_list)

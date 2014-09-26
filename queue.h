@@ -178,18 +178,22 @@ void queue::copy(const queue &other)
 {
     cap = other.cap;
     node* quepointer = other.quehead; // not sure I can do this
-
     quetail = quetail->next; // otherwise, quetail will point to the element that we just added, which will be different from the head.
 
     mySize = -1;
     while (quepointer)
     {
-        quetail = new node(&quepointer->key, quepointer->data_type);
-        mySize == -1 && (quehead = quetail); // this moves the head to the first element on that we add
+        if (quepointer->data_type == 'N')
+            quetail = new node(quepointer->key.mPtr, quepointer->data_type);
+        else
+            quetail = new node(quepointer->key.opPtr, quepointer->data_type);
+        (mySize == -1) && (quehead = quetail); // this moves the head to the first element on that we add
         quetail = quetail->next;
+        cout <<"QUETAIL:" << *quetail->key.mPtr << endl;
         quepointer = quepointer->next;
         mySize++;
     }
+
     //for(int i = other.head; i != tail; i = (++i)%cap)
 }
 

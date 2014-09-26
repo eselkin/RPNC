@@ -8,20 +8,28 @@ int main()
 {
     InfixtoPostfix eli999("3 * ( 3 / ( ( 4 * 2 ) ) ) ");
     eli999.parseinfix();
-    InfixtoPostfix eli100("3 + 4 * 2 / ( 1 − 5 ) ^ 2 ^ 3 ");
+    InfixtoPostfix eli100("3 + 4 * 2 / ( 1 − 5.1 ) ^ 2 ^ 3 ");
     eli100.parseinfix();
-    cout << "Yet, it should really look like: " << endl;
-    InfixtoPostfix eli200("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3 ");
-    eli200.parseinfix();
+    InfixtoPostfix eli200("( 2 ^ 1/2 ) ^ 2 ");
+    try {
+        eli200.parseinfix();
+        eli200.doCalculate();
+        cout << endl;
+        cout << "ANSWER:" << eli200.answer << endl;
+    } catch (itopERROR e)
+    {
+        if (e == PAREN_MISMATCH)
+            cout << "Sorry Parenthesis Mismatch." <<endl;
+    }
+    catch (...)
+    {
+        cout << "HI" << endl;
+    }
 
     // Fraction tests
     fraction eli, eli5;
     fraction eli9(3.1415926535);//89793238462643383279502884197169399375105820974944);
-    //fraction eli9(1.44956);
     cout << "eli9 is: "<< eli9 << endl;
-    //    fraction eli2;
-    //    fraction eli3;
-    //    cout << "eli" << eli << endl;
     try {
         cout << "Enter a fraction:";
         cin >> eli;

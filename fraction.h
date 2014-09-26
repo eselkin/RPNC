@@ -16,6 +16,7 @@ public:
     fraction(double nd);
     ~fraction();
     fraction(const fraction& other);
+
     fraction& operator=(const fraction& other);
     fraction& operator/(const fraction& other);
     fraction& operator*(const fraction& other);

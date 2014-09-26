@@ -72,7 +72,6 @@ void node::copy(const node &other)
         key.mPtr = new MixedNum(*other.key.mPtr);
         break;
     default:
-        //
         break;
     }
     next = NULL;

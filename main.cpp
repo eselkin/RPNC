@@ -6,12 +6,16 @@ using namespace std;
 
 int main()
 {
-    //InfixtoPostfix eli999("3 * ( 3 / ( ( 4 * 2 ) ) ) ");
-    // eli999.parseinfix();
-    // InfixtoPostfix eli100("3 + 4 * 2 / ( 1 − 5.1 ) ^ 2 ^ 3 ");
-    //eli100.parseinfix();
+    InfixtoPostfix eli999("3 * ( 3 / ( ( 4 * 2 ) ) ) ");
+    eli999.parseinfix();
+    InfixtoPostfix eli100("3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3 ");
+    eli100.parseinfix();
     InfixtoPostfix eli200("( 2 ^ 1/2 ) ^ 2 ");
     try {
+        eli999.doCalculate();
+        cout << "Answer: " << eli999.answer << endl;
+        eli100.doCalculate();
+        cout << "ANSWER TO SH YARD: " << eli100.answer << endl;
         eli200.parseinfix();
         eli200.doCalculate();
         cout << "ANSWER:" << eli200.answer << endl;

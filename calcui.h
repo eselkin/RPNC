@@ -44,7 +44,7 @@ public:
     QGridLayout *Function_Buttons;
 
     // Buttons Left (Numbers)
-    QPushButton *Button_1,*Button_2,*Button_3, *Button_4, *Button_5, *Button_6, *Button_7, *Button_8, *Button_9, *Button_0;
+    QPushButton *Button_1,*Button_2,*Button_3, *Button_4, *Button_5, *Button_6, *Button_7, *Button_8, *Button_9, *Button_0, *Button_Dec;
     // Buttons Right (Functions)
     QPushButton *Button_Add, *Button_Sub, *Button_Mul, *Button_Div, *Button_Equ, *Button_Pow, *Button_LP, *Button_RP, *Button_SP;
     QPushButton *Button_CE, *Button_C, *Button_D;
@@ -62,6 +62,7 @@ public slots:
     void pressed8();
     void pressed9();
     void pressed0();
+    void pressedDec();
     void pressedMul();
     void pressedDiv();
     void pressedAdd();

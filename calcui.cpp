@@ -17,12 +17,14 @@ calcUI::calcUI()
     Function_Buttons= new QGridLayout;
     Infix_Input     = new QLineEdit;
     Infix_Input->setFont(QFont("ARIAL", 14));
+    Infix_Input->setStyleSheet("color: 'red'; font-weight: 900");
     Infix_Input->setReadOnly(1);
     Postfix_Output  = new QLineEdit;
     Postfix_Output->setReadOnly(1);
     Answer_Output   = new QLineEdit;
     Answer_Output->setReadOnly(1);
     InfixLabel      = new QLabel("Infix:");
+    InfixLabel->setStyleSheet("color: #FF0000");
     PostfixLabel    = new QLabel("RPN:");
     AnswerLabel     = new QLabel("Answer:");
     VSpacer1 = new QSpacerItem(1.0,this->height()/20.0);
@@ -58,6 +60,7 @@ calcUI::calcUI()
     Button_8 = new QPushButton("8");
     Button_9 = new QPushButton("9");
     Button_0 = new QPushButton("0");
+    Button_Dec = new QPushButton(".");
     Number_Buttons->addWidget(Button_1,0,0,1,1);
     Number_Buttons->addWidget(Button_2,0,1,1,1);
     Number_Buttons->addWidget(Button_3,0,2,1,1);
@@ -67,7 +70,8 @@ calcUI::calcUI()
     Number_Buttons->addWidget(Button_7,2,0,1,1);
     Number_Buttons->addWidget(Button_8,2,1,1,1);
     Number_Buttons->addWidget(Button_9,2,2,1,1);
-    Number_Buttons->addWidget(Button_0,3,1,1,1);
+    Number_Buttons->addWidget(Button_0,3,0,1,1);
+    Number_Buttons->addWidget(Button_Dec,3,2,1,1);
     Number_Buttons->setAlignment(Qt::AlignTop);
     Button_Layout->addItem(HSpacer2);
     Button_Layout->addLayout(Number_Buttons);
@@ -114,6 +118,7 @@ calcUI::calcUI()
     connect(Button_7,SIGNAL(clicked()),this,SLOT(pressed7()));
     connect(Button_8,SIGNAL(clicked()),this,SLOT(pressed8()));
     connect(Button_9,SIGNAL(clicked()),this,SLOT(pressed9()));
+    connect(Button_Dec,SIGNAL(clicked()),this,SLOT(pressedDec()));
     connect(Button_Add,SIGNAL(clicked()),this,SLOT(pressedAdd()));
     connect(Button_Sub,SIGNAL(clicked()),this,SLOT(pressedSub()));
     connect(Button_Mul,SIGNAL(clicked()),this,SLOT(pressedMul()));
@@ -127,6 +132,9 @@ calcUI::calcUI()
     connect(Button_CE,SIGNAL(clicked()),this,SLOT(pressedCE()));
     connect(Button_D,SIGNAL(clicked()),this,SLOT(pressedD()));
 
+    QString AboutText = "This calculator allows you to input infix notation by buttons \n and convert it to Reverse Polish Notation.\n\n Please remember to space your equation correctly!";
+    QString AboutTitle = "Nicole and Eli's RPN Calculator";
+    QMessageBox::information(this, AboutTitle, AboutText, QMessageBox::Close);
 }
 
 void calcUI::pressed1()
@@ -179,9 +187,14 @@ void calcUI::pressed0()
     pressedchar("0");
 }
 
+void calcUI::pressedDec()
+{
+    pressedchar(".");
+}
+
 void calcUI::pressedMul()
 {
-    pressedfchar("*");
+    pressedfchar(" * ");
 }
 
 void calcUI::pressedDiv()
@@ -191,17 +204,17 @@ void calcUI::pressedDiv()
 
 void calcUI::pressedAdd()
 {
-    pressedfchar("+");
+    pressedfchar(" + ");
 }
 
 void calcUI::pressedSub()
 {
-    pressedfchar("-");
+    pressedfchar(" - ");
 }
 
 void calcUI::pressedPow()
 {
-    pressedfchar("^");
+    pressedfchar(" ^ ");
 }
 #include "calcui.h"
 
@@ -245,12 +258,12 @@ void calcUI::pressedEqu()
 
 void calcUI::pressedLP()
 {
-    pressedfchar("(");
+    pressedfchar(" ( ");
 }
 
 void calcUI::pressedRP()
 {
-    pressedchar(")");
+    pressedchar(" ) ");
 }
 
 void calcUI::pressedSP()

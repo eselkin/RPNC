@@ -15,7 +15,7 @@ fraction::fraction(double nd)
         long long int new_num=0; // just takes the whole part!
         int i = 0;
 
-        while (abs(new_num) < 2700000000)
+        while (abs(new_num) < 271000000)
             new_num = floor(nd * 100 * i++); // Keep it under the max limit for an int
         long long int new_denom = --i*100;
         new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d

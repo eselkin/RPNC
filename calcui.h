@@ -2,6 +2,7 @@
 #define CALCUI_H
 #include <iostream>
 #include <QString>
+#include <QKeyEvent>
 #include <QWidget>
 #include <QPushButton>
 #include <QLayout>
@@ -15,6 +16,8 @@
 #include "infixtopostfix.h"
 
 using namespace std;
+
+typedef void (*fptr) ();
 
 class calcUI : public QWidget
 {
@@ -52,6 +55,7 @@ public:
 signals:
 
 public slots:
+    void keyPressEvent(QKeyEvent *e);
     void pressed1();
     void pressed2();
     void pressed3();
@@ -81,5 +85,7 @@ public slots:
 private:
     QString infixstring, lastinfix, result;
     InfixtoPostfix myinfix;
+    void initialize(fptr list[], int size);
+    void nothing();
 };
 #endif // CALCUI_H

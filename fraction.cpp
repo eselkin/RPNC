@@ -72,7 +72,6 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-
     long double num_dbl = pow( num*1.0, ((1.0*other.num)/(other.denom*1.0)));
     long double den_dbl = pow( denom*1.0, ((1.0*other.num)/(other.denom*1.0)));
     fraction* tempf = new fraction(double(num_dbl/den_dbl));

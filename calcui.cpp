@@ -6,7 +6,7 @@
 using namespace std;
 
 calcUI::calcUI()
-{
+{    
     Main_Calculator = new QVBoxLayout;
     Input_Dialogs   = new QVBoxLayout;
     Infix_Layout    = new QHBoxLayout;
@@ -19,6 +19,8 @@ calcUI::calcUI()
     Infix_Input->setFont(QFont("ARIAL", 14));
     Infix_Input->setStyleSheet("color: 'red'; font-weight: 900");
     Infix_Input->setReadOnly(1);
+    Infix_Input->setFocus();
+    Infix_Input->setFocusPolicy(Qt::StrongFocus);
     Postfix_Output  = new QLineEdit;
     Postfix_Output->setReadOnly(1);
     Answer_Output   = new QLineEdit;
@@ -135,6 +137,79 @@ calcUI::calcUI()
     QString AboutText = "This calculator allows you to input infix notation by buttons \n and convert it to Reverse Polish Notation.\n\n Please remember to space your equation correctly!";
     QString AboutTitle = "Nicole and Eli's RPN Calculator";
     QMessageBox::information(this, AboutTitle, AboutText, QMessageBox::Close);
+
+//    fptr list[128];
+//    initialize(list, 128); Silly, use key event press
+
+}
+
+void calcUI::keyPressEvent(QKeyEvent *e)
+{
+ switch(e->key())
+ {
+ case Qt::Key_0:
+     Button_0->animateClick();
+     break;
+ case Qt::Key_1:
+     Button_1->animateClick();
+     break;
+ case Qt::Key_2:
+     Button_2->animateClick();
+     break;
+ case Qt::Key_3:
+     Button_3->animateClick();
+     break;
+ case Qt::Key_4:
+     Button_4->animateClick();
+     break;
+ case Qt::Key_5:
+     Button_5->animateClick();
+     break;
+ case Qt::Key_6:
+     Button_6->animateClick();
+     break;
+ case Qt::Key_7:
+     Button_7->animateClick();
+     break;
+ case Qt::Key_8:
+     Button_8->animateClick();
+     break;
+ case Qt::Key_9:
+     Button_9->animateClick();
+     break;
+ case Qt::Key_Period:
+     Button_Dec->animateClick();
+     break;
+ case Qt::Key_Plus:
+     Button_Add->animateClick();
+     break;
+ case Qt::Key_Minus:
+     Button_Sub ->animateClick();
+     break;
+ case Qt::Key_Slash:
+     Button_Div->animateClick();
+     break;
+ case Qt::Key_Multi_key:
+     Button_Mul->animateClick();
+     break;
+ case Qt::Key_Backspace:
+ case Qt::Key_Delete:
+ case Qt::Key_Backslash:
+     Button_D->hasFocus();
+     Button_D->animateClick();
+     break;
+ case Qt::Key_Space:
+     Button_SP->hasFocus();
+     Button_SP->animateClick();
+     break;
+ case Qt::Key_AsciiCircum:
+     Button_Pow->hasFocus();
+     Button_Pow->animateClick();
+     break;
+ case Qt::Key_Equal:
+     Button_Equ->hasFocus();
+     Button_Equ->animateClick();
+ }
 }
 
 void calcUI::pressed1()
@@ -322,3 +397,4 @@ void calcUI::pressedfchar(QString pressed)
 
     update();
 }
+

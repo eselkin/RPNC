@@ -1,9 +1,7 @@
 #ifndef INFIXTOPOSTFIX_H
 #define INFIXTOPOSTFIX_H
-#include "queue.h"
 #include "theStack.h"
-
-#include "mixednum.h"
+#include "queue.h"
 
 using namespace std;
 
@@ -12,7 +10,7 @@ enum itopERROR { PAREN_MISMATCH };
 class InfixtoPostfix
 {
 public:
-
+    InfixtoPostfix();
     InfixtoPostfix(string inf);
     void parseinfix();
     void doCalculate();
@@ -33,6 +31,9 @@ private:
     string infix_input;
 };
 
+InfixtoPostfix::InfixtoPostfix( )
+{
+}
 
 InfixtoPostfix::InfixtoPostfix( string inf )
 {
@@ -45,7 +46,6 @@ void InfixtoPostfix::parseinfix()
     string infix_copy = infix_input;
     string temp_token;
     stringstream ss;
-    int i =0;
     int pos_first_space = infix_copy.find_first_of(" ");
     while (pos_first_space != -1)
     {
@@ -163,7 +163,6 @@ void InfixtoPostfix::parseinfix()
     }
     if (openparen != closeparen)
         throw PAREN_MISMATCH;
-    cout << "OUTPUT QUEUE: " << output_queue << endl;
 }
 
 void InfixtoPostfix::doCalculate()
@@ -172,27 +171,25 @@ void InfixtoPostfix::doCalculate()
     while (!CopyQueue.empty())
     {
         while (CopyQueue.peek().data_type == 'N')
-        {
             operand_stack.push(CopyQueue.dequeue()->key.mPtr, 'N');
+        switch(CopyQueue.peek().key.opPtr->theOp)
+        {
+        case '^': operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
+            break;
+        case '*': operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
+            break;
+        case '/': operand_stack.push(&(*operand_stack.pop()->key.mPtr / *operand_stack.pop()->key.mPtr), 'N');
+            break;
+        case '+': operand_stack.push(&(*operand_stack.pop()->key.mPtr + *operand_stack.pop()->key.mPtr), 'N');
+            break;
+        case '-': operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
+            break;
+        default: // do nothing with unknown operator
+            break;
         }
-        if ( CopyQueue.peek().key.opPtr->theOp == '^' )
-            operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
-        else
-            if ( CopyQueue.peek().key.opPtr->theOp == '*' )
-                operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
-            else
-                if ( CopyQueue.peek().key.opPtr->theOp == '/' )
-                    operand_stack.push(&(*operand_stack.pop()->key.mPtr / *operand_stack.pop()->key.mPtr), 'N');
-                else
-                    if ( CopyQueue.peek().key.opPtr->theOp == '+' )
-                        operand_stack.push(&(*operand_stack.pop()->key.mPtr + *operand_stack.pop()->key.mPtr), 'N');
-                    else
-                        if ( CopyQueue.peek().key.opPtr->theOp == '-' )
-                            operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
         CopyQueue.dequeue(); // Dequeue the operator
     }
     answer = *(operand_stack.pop()->key.mPtr); // The final answer
-    cout << answer << endl;
 }
 
 char InfixtoPostfix::getNextTokenType(string infix_list)
@@ -210,12 +207,11 @@ char InfixtoPostfix::getNextTokenType(string infix_list)
         current_token = infix_list.substr(0,pos);
     else
         current_token = infix_list.substr(0,string::npos);
-
     if (current_token == " " || current_token == "")
         return 'E'; // end of line
-    if (current_token.find_first_of("0123456789") != -1)
+    if (int(current_token.find_first_of("0123456789")) != -1)
         return 'N';
-    if (current_token.find_first_of("()") != -1)
+    if (int(current_token.find_first_of("()")) != -1)
         return 'P';
     return 'O';
 }

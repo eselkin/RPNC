@@ -209,7 +209,6 @@ void queue::copy(const queue &other)
 ostream& operator<<(ostream& out, const queue &que)
 {
     node* quepointer = que.quehead;
-    int i = 0;
     out << "QUEUE SIZE: " << que.mySize + 1 << endl;
     for(; quepointer->next ; quepointer = quepointer->next)
     {

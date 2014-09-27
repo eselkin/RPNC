@@ -6,7 +6,6 @@
 #include <cstring>
 #include <string>
 #include "node.h"
-#include "oppr.h"
 
 using namespace std;
 
@@ -236,9 +235,8 @@ ostream& operator<<(ostream &out, const theStack &s)
                 break;
             }
             Pointer = Pointer->next;
-
         }
-        return out;
     }
+    return out;
 }
 #endif // THESTACK_H

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-fraction::fraction(int n, int d)
+fraction::fraction(long long int n, long long int d)
 {
     num = n;
     denom = d;
@@ -19,8 +19,8 @@ fraction::fraction(double nd)
         int i = 0;
 
         while (abs(new_num) < 271000000)
-            new_num = floor(nd * 10 * i++); // Keep it under the max limit for an int
-        long long int new_denom = --i*10;
+            new_num = floor(nd * 100 * i++); // Keep it under the max limit for an int
+        long long int new_denom = --i*100;
         new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d
     }
     num = new_frac.num;
@@ -76,20 +76,20 @@ fraction& fraction::operator^(const fraction &other)
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
 
-    double num_dbl = pow( num*1.0, ((1.0*other.num)/(other.denom*1.0)));
-    double den_dbl = pow( denom*1.0, ((1.0*other.num)/(other.denom*1.0)));
-    fraction* tempf = new fraction(num_dbl/den_dbl);
+    long double num_dbl = pow( num*1.0, ((1.0*other.num)/(other.denom*1.0)));
+    long double den_dbl = pow( denom*1.0, ((1.0*other.num)/(other.denom*1.0)));
+    fraction* tempf = new fraction(double(num_dbl/den_dbl));
     return *tempf;
 }
 
-int GCD(int a, int b)
+int GCD(long long int a, long long int b)
 {
     return b == 0? a : GCD(b, a%b);
 }
 
-fraction& fraction::reducefrac(int a, int b)
+fraction& fraction::reducefrac(long long int a, long long int b)
 {
-    int divisor = GCD(a, b);
+    long long int divisor = GCD(a, b);
     fraction *tempfrac = new fraction(a/divisor, b/divisor);
     return *tempfrac;
 }

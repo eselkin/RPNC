@@ -41,6 +41,7 @@ InfixtoPostfix::InfixtoPostfix( string inf )
 
 void InfixtoPostfix::parseinfix()
 {
+    int openparen = 0, closeparen = 0;
     string infix_copy = infix_input;
     string temp_token;
     stringstream ss;
@@ -99,11 +100,13 @@ void InfixtoPostfix::parseinfix()
             switch(temp_token[0])
             {
             case '(':
+                openparen++;
                 operator_stack.push(tempOp, 'P'); // put this operator/parenthesis onto the stack
                 //cout << "( PAREN HERE, top of stack is? :" << operator_stack.top()->key.opPtr->theOp << endl;
                 break;
             case ')':
             {
+                closeparen++;
                 //cout << ") PAREN HERE:" <<operator_stack.top()->key.opPtr->theOp << endl;
                 while (( !operator_stack.empty() && operator_stack.top()->data_type != 'P')&&(operator_stack.top()->key.opPtr->theOp != '('))
                 {
@@ -158,21 +161,20 @@ void InfixtoPostfix::parseinfix()
             break;
         }
     }
+    if (openparen != closeparen)
+        throw PAREN_MISMATCH;
     cout << "OUTPUT QUEUE: " << output_queue << endl;
 }
 
 void InfixtoPostfix::doCalculate()
 {
     queue CopyQueue(output_queue); // copy constructor
-    cout << "COPY QUEUE" <<endl <<  CopyQueue << endl;
     while (!CopyQueue.empty())
     {
         while (CopyQueue.peek().data_type == 'N')
         {
             operand_stack.push(CopyQueue.dequeue()->key.mPtr, 'N');
         }
-        //operand_stack.push(CopyQueue.dequeue()->key.mPtr, 'N');
-        cout << "operand: " << operand_stack << endl;
         if ( CopyQueue.peek().key.opPtr->theOp == '^' )
             operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
         else

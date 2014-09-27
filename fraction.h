@@ -12,7 +12,7 @@ enum FRAC_ERROR { DIV_BY_ZERO, NOT_A_FRAC };
 class fraction
 {
 public:
-    fraction(int n = 0, int d = 1);
+    fraction(long long int n = 0, long long int d = 1);
     fraction(double nd);
     ~fraction();
     fraction(const fraction& other);
@@ -24,7 +24,7 @@ public:
     fraction& operator-(const fraction& other);
     fraction& operator^(const fraction& other);
     // If we take a fraction and raise it to a fraction, even if it's a whole... it'll be interpreted as this
-    fraction& reducefrac( int a, int b );
+    fraction& reducefrac( long long int a, long long int b );
 
     friend
     ostream& operator<<(ostream& out, const fraction &frac);
@@ -33,10 +33,10 @@ public:
     istream& operator>>(istream& in, fraction &frac);
 
     friend
-    int GCD (int a, int b);
+    long long int GCD (int a, int b);
 
     //protected:
-    int num, denom;
+    long long int num, denom;
 private:
     void nukem();
     void copy(const fraction& other);

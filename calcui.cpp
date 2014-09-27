@@ -27,8 +27,8 @@ calcUI::calcUI()
     InfixLabel->setStyleSheet("color: #FF0000");
     PostfixLabel    = new QLabel("RPN:");
     AnswerLabel     = new QLabel("Answer:");
-    VSpacer1 = new QSpacerItem(1.0,this->height()/20.0);
-    VSpacer2 = new QSpacerItem(1.0,this->height()/20.0);
+    VSpacer1 = new QSpacerItem(1.0,this->height()/15.0);
+    VSpacer2 = new QSpacerItem(1.0,this->height()/15.0);
     VSpacer3 = new QSpacerItem(1.0,this->height()/20.0);
     Answer_Layout->addWidget(AnswerLabel,0,Qt::AlignRight);
     Answer_Layout->addWidget(Answer_Output);
@@ -235,14 +235,16 @@ void calcUI::pressedEqu()
         {
             cout << "itop error" << endl;
         }
-
+        catch (qERRORS f)
+        {
+            cout << "QUEUE ERROR" << endl;
+        }
         catch (...)
         {
             cout << "ERROR" << endl;
         }
     } else
     {
-        QMessageBox::StandardButton reply;
         switch(QMessageBox::question(this,
                                      tr("RPN Calc"),
                                      tr("You must include spaces in your input."),
@@ -251,6 +253,7 @@ void calcUI::pressedEqu()
         case QMessageBox::Ok:
         default:
             newInput.clear();
+            break;
         }
     }
     myinfix.resetcalc();

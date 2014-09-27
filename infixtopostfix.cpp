@@ -117,7 +117,6 @@ void InfixtoPostfix::parseinfix()
         // I like how this switch spells out NOPE
         pos_first_space = infix_copy.find(" ");
     }
-
     while (!operator_stack.empty())
     {
         switch(operator_stack.top()->data_type)
@@ -141,24 +140,30 @@ void InfixtoPostfix::doCalculate()
     queue CopyQueue(output_queue); // copy constructor
     while (!CopyQueue.empty())
     {
-        while (CopyQueue.peek().data_type == 'N')
-            operand_stack.push(CopyQueue.dequeue()->key.mPtr, 'N');
-        switch(CopyQueue.peek().key.opPtr->theOp)
+        while (!CopyQueue.empty() && CopyQueue.peek().data_type == 'N')
+            operand_stack.push((CopyQueue.dequeue())->key.mPtr, 'N');
+
+        // Our actual calculations using fraction operators
+
+        if (!CopyQueue.empty())
         {
-        case '^': operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
-            break;
-        case '*': operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
-            break;
-        case '/': operand_stack.push(&(*operand_stack.pop()->key.mPtr / *operand_stack.pop()->key.mPtr), 'N');
-            break;
-        case '+': operand_stack.push(&(*operand_stack.pop()->key.mPtr + *operand_stack.pop()->key.mPtr), 'N');
-            break;
-        case '-': operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
-            break;
-        default: // do nothing with unknown operator
-            break;
+            switch(CopyQueue.peek().key.opPtr->theOp)
+            {
+            case '^': operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
+                break;
+            case '*': operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
+                break;
+            case '/': operand_stack.push(&(*operand_stack.pop()->key.mPtr / *operand_stack.pop()->key.mPtr), 'N');
+                break;
+            case '+': operand_stack.push(&(*operand_stack.pop()->key.mPtr + *operand_stack.pop()->key.mPtr), 'N');
+                break;
+            case '-': operand_stack.push(&(*operand_stack.pop()->key.mPtr - *operand_stack.pop()->key.mPtr), 'N');
+                break;
+            default: // do nothing with unknown operator
+                break;
+            }
+            CopyQueue.dequeue(); // Dequeue the operator
         }
-        CopyQueue.dequeue(); // Dequeue the operator
     }
     answer = *(operand_stack.pop()->key.mPtr); // The final answer
 }

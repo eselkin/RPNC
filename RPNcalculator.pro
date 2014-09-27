@@ -4,22 +4,22 @@ CONFIG -= app_bundle
 
 QT += core gui opengl
 
-SOURCES += calcui.cpp \
-    main.cpp \
+SOURCES += main.cpp \
+    calcui.cpp \
     fraction.cpp \
     mixednum.cpp \
     oppr.cpp
 
 HEADERS += \
-    dataType.h \
+    node.h \
     oppr.h \
-    queue.h \
-    theStack.h \
     fraction.h \
     mixednum.h \
+    dataType.h \
+    queue.h \
+    theStack.h \
     calcui.h \
-    infixtopostfix.h \
-    node.h
+    infixtopostfix.h
 
 OTHER_FILES += \
     output-sample.txt

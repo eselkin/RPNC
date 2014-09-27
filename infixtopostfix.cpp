@@ -33,7 +33,6 @@ void InfixtoPostfix::parseinfix()
             }
             // we should have a whole mixed number now in temp_token
             MixedNum* tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
-            cout << "TEMP: " << temp_token << endl;
             temp_token.append("\n"); // because we use getline
             ss.str(temp_token);
             ss >> *tempNumber;
@@ -200,7 +199,6 @@ string InfixtoPostfix::getPostfixOutput()
 void InfixtoPostfix::setInfixInput( string input )
 {
     infix_input = input;
-    cout << "infix:" << infix_input << endl;
 }
 
 string InfixtoPostfix::getInfixInput()
@@ -213,6 +211,13 @@ string InfixtoPostfix::getAnswer()
     stringstream ss;
     ss << answer;
     return ss.str();
+}
+
+void InfixtoPostfix::resetcalc()
+{
+    operator_stack.clear();
+    operand_stack.clear();
+    output_queue.clear();
 }
 
 istream &operator>>(istream in, InfixtoPostfix &infix)

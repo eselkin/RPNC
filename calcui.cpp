@@ -181,27 +181,27 @@ void calcUI::pressed0()
 
 void calcUI::pressedMul()
 {
-    pressedchar("*");
+    pressedfchar("*");
 }
 
 void calcUI::pressedDiv()
 {
-    pressedchar("/");
+    pressedfchar("/");
 }
 
 void calcUI::pressedAdd()
 {
-    pressedchar("+");
+    pressedfchar("+");
 }
 
 void calcUI::pressedSub()
 {
-    pressedchar("-");
+    pressedfchar("-");
 }
 
 void calcUI::pressedPow()
 {
-    pressedchar("^");
+    pressedfchar("^");
 }
 #include "calcui.h"
 
@@ -212,13 +212,17 @@ void calcUI::pressedEqu()
     {
         newInput.append(" \n");
         myinfix.setInfixInput(newInput);
-        cout << "HERE" << myinfix.getInfixInput() <<endl;
         try {
             myinfix.parseinfix();
             myinfix.doCalculate();
             Postfix_Output->setText(QString(myinfix.getPostfixOutput().c_str()));
             Answer_Output->setText(myinfix.getAnswer().c_str());
         }
+        catch (itopERROR e)
+        {
+            cout << "itop error" << endl;
+        }
+
         catch (...)
         {
             cout << "ERROR" << endl;
@@ -236,13 +240,12 @@ void calcUI::pressedEqu()
             newInput.clear();
         }
     }
-    //Postfix_Output->setText(QString(myinfix.getPostfixOutput().c_str()));
-    // Run completed infix
+    myinfix.resetcalc();
 }
 
 void calcUI::pressedLP()
 {
-    pressedchar("(");
+    pressedfchar("(");
 }
 
 void calcUI::pressedRP()
@@ -267,6 +270,7 @@ void calcUI::pressedC()
     infixstring.clear();
     result.clear();
     lastinfix.clear();
+    myinfix.resetcalc();
     Infix_Input->setText(infixstring);
     Postfix_Output->setText(infixstring);
     Answer_Output->setText(result);
@@ -284,5 +288,21 @@ void calcUI::pressedchar(QString pressed)
 {
     infixstring.append(pressed);
     Infix_Input->setText(infixstring);
+    update();
+}
+
+void calcUI::pressedfchar(QString pressed)
+{
+    if (Infix_Input->text() == QString() )
+    {
+        infixstring.append(Answer_Output->text());
+        infixstring.append(" ");
+        Infix_Input->setText(infixstring);
+        update();
+    }
+    infixstring.append(pressed);
+    //infixstring.append(" "); // adds space for your functions :-) so you don't forget!
+    Infix_Input->setText(infixstring);
+
     update();
 }

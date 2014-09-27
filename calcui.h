@@ -75,6 +75,7 @@ public slots:
     void pressedC();
     void pressedD();
     void pressedchar(QString pressed);
+    void pressedfchar(QString pressed); // just for usability...
 
 private:
     QString infixstring, lastinfix, result;

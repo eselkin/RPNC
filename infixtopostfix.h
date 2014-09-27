@@ -21,6 +21,7 @@ public:
     void setInfixInput(string input);
     string getInfixInput();
     string getAnswer();
+    void resetcalc();
     //friend
     //ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
 

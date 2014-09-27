@@ -17,8 +17,7 @@
 #include <QWidget>
 #include <QInputDialog>
 #include <QLineEdit>
-#include "calcwidget.h"
-//#include "node.h"
+#include <infixtopostfix.h>
 
 class calcUI : public QWidget
 {

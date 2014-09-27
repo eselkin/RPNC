@@ -5,8 +5,8 @@
 #include <sstream>
 #include <cstring>
 #include <string>
-#include "node.h"
 #include "oppr.h"
+#include "node.h"
 
 using namespace std;
 

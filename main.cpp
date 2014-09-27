@@ -1,19 +1,16 @@
 #include <iostream>
-#include "fraction.h"
-#include "mixednum.h"
-#include "infixtopostfix.h"
-#include "calcui.h"
 #include <QApplication>
+#include "calcui.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
-// counts the program name in argc as argv[0]
 {
     srand(time(NULL));
     QApplication ThisApp(argc, argv);
     calcUI GUI;
     GUI.show();
+    GUI.setStyleSheet("background-color: lightblue;}");
     GUI.setGeometry(250,50,800,600);
     return ThisApp.exec(); // enters a loop // done running
 }

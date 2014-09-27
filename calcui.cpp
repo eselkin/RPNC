@@ -12,23 +12,29 @@ calcUI::calcUI()
     Number_Buttons  = new QGridLayout;
     Function_Buttons= new QGridLayout;
     Infix_Input     = new QLineEdit;
+    Infix_Input->setFont(QFont("ARIAL", 14));
     Postfix_Output  = new QLineEdit;
+    Postfix_Output->setReadOnly(1);
     Answer_Output   = new QLineEdit;
+    Answer_Output->setReadOnly(1);
     //Answer_Output->setFixedWidth(this->width());
     InfixLabel      = new QLabel("Infix:");
     PostfixLabel    = new QLabel("RPN:");
     AnswerLabel     = new QLabel("Answer:");
-
+    VSpacer1 = new QSpacerItem(1.0,this->height()/20.0);
+    VSpacer2 = new QSpacerItem(1.0,this->height()/20.0);
+    VSpacer3 = new QSpacerItem(1.0,this->height()/20.0);
     Answer_Layout->addWidget(AnswerLabel,0,Qt::AlignRight);
     Answer_Layout->addWidget(Answer_Output);
-    //Answer_Layout->setContentsMargins(0,0,this->width()/2.0,0);
     Infix_Layout->addWidget(InfixLabel);
     Infix_Layout->addWidget(Infix_Input);
     Postfix_Layout->addWidget(PostfixLabel);
     Postfix_Layout->addWidget(Postfix_Output);
+    Input_Dialogs->addItem(VSpacer1);
     Input_Dialogs->addLayout(Infix_Layout);
     Input_Dialogs->addLayout(Postfix_Layout);
     Input_Dialogs->addLayout(Answer_Layout);
+    Input_Dialogs->addItem(VSpacer2);
     Input_Dialogs->setAlignment(Qt::AlignTop);
     Input_Dialogs->setAlignment(Qt::AlignRight);
     Main_Calculator->addLayout(Input_Dialogs);
@@ -92,4 +98,145 @@ calcUI::calcUI()
     Button_Layout->addItem(HSpacer3);
     Button_Layout->setAlignment(Qt::AlignTop);
     setLayout(Main_Calculator);
+    connect(Button_0,SIGNAL(clicked()),this,SLOT(pressed0()));
+    connect(Button_1,SIGNAL(clicked()),this,SLOT(pressed1()));
+    connect(Button_2,SIGNAL(clicked()),this,SLOT(pressed2()));
+    connect(Button_3,SIGNAL(clicked()),this,SLOT(pressed3()));
+    connect(Button_4,SIGNAL(clicked()),this,SLOT(pressed4()));
+    connect(Button_5,SIGNAL(clicked()),this,SLOT(pressed5()));
+    connect(Button_6,SIGNAL(clicked()),this,SLOT(pressed6()));
+    connect(Button_7,SIGNAL(clicked()),this,SLOT(pressed7()));
+    connect(Button_8,SIGNAL(clicked()),this,SLOT(pressed8()));
+    connect(Button_9,SIGNAL(clicked()),this,SLOT(pressed9()));
+    connect(Button_Add,SIGNAL(clicked()),this,SLOT(pressedAdd()));
+    connect(Button_Sub,SIGNAL(clicked()),this,SLOT(pressedSub()));
+    connect(Button_Mul,SIGNAL(clicked()),this,SLOT(pressedMul()));
+    connect(Button_Div,SIGNAL(clicked()),this,SLOT(pressedDiv()));
+    connect(Button_Pow,SIGNAL(clicked()),this,SLOT(pressedPow()));
+    connect(Button_Equ,SIGNAL(clicked()),this,SLOT(pressedEqu()));
+    connect(Button_LP,SIGNAL(clicked()),this,SLOT(pressedLP()));
+    connect(Button_RP,SIGNAL(clicked()),this,SLOT(pressedRP()));
+    connect(Button_SP,SIGNAL(clicked()),this,SLOT(pressedSP()));
+    connect(Button_C,SIGNAL(clicked()),this,SLOT(pressedC()));
+    connect(Button_CE,SIGNAL(clicked()),this,SLOT(pressedCE()));
+
 }
+
+void calcUI::pressed1()
+{
+    pressedchar("1");
+}
+
+void calcUI::pressed2()
+{
+    pressedchar("2");
+}
+
+void calcUI::pressed3()
+{
+    pressedchar("3");
+}
+
+void calcUI::pressed4()
+{
+    pressedchar("4");
+}
+
+void calcUI::pressed5()
+{
+    pressedchar("5");
+}
+
+void calcUI::pressed6()
+{
+    pressedchar("6");
+}
+
+void calcUI::pressed7()
+{
+    pressedchar("7");
+}
+
+void calcUI::pressed8()
+{
+    pressedchar("8");
+}
+
+void calcUI::pressed9()
+{
+    pressedchar("9");
+}
+
+void calcUI::pressed0()
+{
+    pressedchar("0");
+}
+
+void calcUI::pressedMul()
+{
+    pressedchar("*");
+}
+
+void calcUI::pressedDiv()
+{
+    pressedchar("/");
+}
+
+void calcUI::pressedAdd()
+{
+    pressedchar("+");
+}
+
+void calcUI::pressedSub()
+{
+    pressedchar("-");
+}
+
+void calcUI::pressedPow()
+{
+    pressedchar("^");
+}
+
+void calcUI::pressedEqu()
+{
+// Run completed infix
+}
+
+void calcUI::pressedLP()
+{
+    pressedchar("(");
+}
+
+void calcUI::pressedRP()
+{
+    pressedchar(")");
+}
+
+void calcUI::pressedSP()
+{
+    pressedchar(" ");
+}
+
+void calcUI::pressedCE()
+{
+    infixstring.clear();
+    Infix_Input->setText(infixstring);
+    update();
+}
+
+void calcUI::pressedC()
+{
+    infixstring.clear();
+    result.clear();
+    lastinfix.clear();
+    Infix_Input->setText(infixstring);
+    update();
+}
+
+void calcUI::pressedchar(QString pressed)
+{
+    infixstring.append(pressed);
+    Infix_Input->setText(infixstring);
+    update();
+}
+

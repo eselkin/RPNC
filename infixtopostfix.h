@@ -1,9 +1,8 @@
 #ifndef INFIXTOPOSTFIX_H
 #define INFIXTOPOSTFIX_H
+#include "mixednum.h"
 #include "queue.h"
 #include "theStack.h"
-
-#include "mixednum.h"
 
 using namespace std;
 
@@ -12,13 +11,15 @@ enum itopERROR { PAREN_MISMATCH };
 class InfixtoPostfix
 {
 public:
-
+    InfixtoPostfix();
     InfixtoPostfix(string inf);
     void parseinfix();
     void doCalculate();
     MixedNum answer;
 
     char getNextTokenType(string infix_list);
+
+    InfixtoPostfix& operator << (string newinfix);
 
     //friend
     //ostream& operator<<(ostream out, const InfixtoPostfix& outpost);
@@ -33,6 +34,10 @@ private:
     string infix_input;
 };
 
+
+InfixtoPostfix::InfixtoPostfix()
+{
+}
 
 InfixtoPostfix::InfixtoPostfix( string inf )
 {
@@ -218,6 +223,12 @@ char InfixtoPostfix::getNextTokenType(string infix_list)
     if (current_token.find_first_of("()") != -1)
         return 'P';
     return 'O';
+}
+
+InfixtoPostfix &InfixtoPostfix::operator<<(string newinfix)
+{
+    infix_input = newinfix;
+    answer = 0;
 }
 
 #endif // INFIXTOPOSTFIX_H

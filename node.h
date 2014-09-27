@@ -97,4 +97,5 @@ void node::nukem()
     }
     next = NULL;
 }
+
 #endif // NODE_H

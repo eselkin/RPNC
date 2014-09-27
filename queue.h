@@ -1,6 +1,5 @@
 #ifndef QUEUE_H
 #define QUEUE_H
-// SINGLE DIRECTION NODE VERSION
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -8,6 +7,7 @@
 #include <vector>
 #include "node.h"
 
+// SINGLE DIRECTION NODE VERSION
 using namespace std;
 
 enum qERRORS {qFULL, qEMPTY, qBAD_SIZE};

@@ -1,7 +1,6 @@
 #ifndef CALCUI_H
 #define CALCUI_H
 #include <iostream>
-
 #include <QPushButton>
 #include <QSlider>
 #include <QLCDNumber>
@@ -19,6 +18,7 @@
 #include <QInputDialog>
 #include <QLineEdit>
 #include "calcwidget.h"
+//#include "node.h"
 
 class calcUI : public QWidget
 {
@@ -26,7 +26,7 @@ class calcUI : public QWidget
 public:
     explicit calcUI();
     //calcwidget *cwidget; // No GL Painting, unless we want to make it a game!
-
+    void paintEvent();
     QVBoxLayout *Main_Calculator; // Including the Input Dialogs, the two QGridLayouts for numbers and functions
 
     // Line Edit Layouts to be put in Input Dialogs
@@ -40,7 +40,8 @@ public:
     QLabel      *InfixLabel;
     QLabel      *PostfixLabel;
     QLabel      *AnswerLabel;
-    QSpacerItem *HSpacer1,*HSpacer2,*HSpacer3;
+    QSpacerItem *HSpacer1,*HSpacer2,*HSpacer3, *VSpacer1, *VSpacer2, *VSpacer3;
+
 
     // Button Layouts
     QHBoxLayout *Button_Layout;  // Two grids
@@ -56,7 +57,32 @@ public:
 signals:
 
 public slots:
+    void pressed1();
+    void pressed2();
+    void pressed3();
+    void pressed4();
+    void pressed5();
+    void pressed6();
+    void pressed7();
+    void pressed8();
+    void pressed9();
+    void pressed0();
+    void pressedMul();
+    void pressedDiv();
+    void pressedAdd();
+    void pressedSub();
+    void pressedPow();
+    void pressedEqu();
+    void pressedLP();
+    void pressedRP();
+    void pressedSP();
+    void pressedCE();
+    void pressedC();
+    void pressedchar(QString pressed);
 
+private:
+    QString infixstring, lastinfix, result;
+    //InfixtoPostfix precondition();
 };
 
 #endif // CALCUI_H

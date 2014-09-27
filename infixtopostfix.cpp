@@ -23,14 +23,17 @@ void InfixtoPostfix::parseinfix()
         case 'N':
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
-            infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
+            infix_copy.erase(0,pos_first_space + 1); // erase what we took into the temp string
             if (getNextTokenType(infix_copy) == 'N')
             {
+                pos_first_space = infix_copy.find(" ");
+                temp_token.append(" "); // space in mixed number
                 temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
-                infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
+                infix_copy.erase(0,pos_first_space + 1); // erase what we took into the temp string
             }
             // we should have a whole mixed number now in temp_token
             MixedNum* tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
+            cout << "TEMP: " << temp_token << endl;
             temp_token.append("\n"); // because we use getline
             ss.str(temp_token);
             ss >> *tempNumber;

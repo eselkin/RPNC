@@ -1,12 +1,16 @@
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG -= qt
+
+QT += core gui opengl
+
 
 SOURCES += main.cpp \
     fraction.cpp \
     mixednum.cpp \
-    oppr.cpp
+    oppr.cpp \
+    calcwidget.cpp \
+    calcui.cpp
 
 HEADERS += \
     node.h \
@@ -16,7 +20,9 @@ HEADERS += \
     dataType.h \
     queue.h \
     theStack.h \
-    infixtopostfix.h
+    infixtopostfix.h \
+    calcwidget.h \
+    calcui.h
 
 OTHER_FILES += \
     output-sample.txt

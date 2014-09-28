@@ -1,5 +1,6 @@
 #include <QApplication>
 #include "calcui.h"
+#include <ctime>
 
 using namespace std;
 

@@ -4,7 +4,15 @@ CONFIG -= app_bundle
 
 QT += gui opengl core
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    calcui.cpp \
+    fraction.cpp \
+    infixtopostfix.cpp \
+    mixednum.cpp \
+    node.cpp \
+    oppr.cpp \
+    queue.cpp \
+    theStack.cpp
 
 HEADERS += \
     oppr.h \

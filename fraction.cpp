@@ -1,6 +1,9 @@
 #include "fraction.h"
+#include <stdint.h>
+#include <cmath>
 
-fraction::fraction(long long int n, long long int d)
+#define int64_t long
+fraction::fraction(long int64_t n, long  int64_t d)
 {
     num = n;
     denom = d;
@@ -10,14 +13,14 @@ fraction::fraction(double nd)
 {
 
     fraction new_frac;
-    if (nd !=0)
+    if ( nd != 0 )
     {
-        long long int new_num=0; // just takes the whole part!
-        int i = 0;
+        long  int64_t new_num=0; // just takes the whole part!
+        int64_t i = 0;
 
-        while (abs(new_num) < 271000000)
-            new_num = floor(nd * 100 * i++); // Keep it under the max limit for an int
-        long long int new_denom = --i*100;
+        while (abs(new_num) <= 999999999)
+            new_num = floor(nd * 10 * i++); // Keep it under the max limit for an int
+        long  int64_t new_denom = --i*10;
         new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d
     }
     num = new_frac.num;
@@ -67,25 +70,26 @@ fraction& fraction::operator-(const fraction &other)
 fraction& fraction::operator^(const fraction &other)
 {
     // (3^3)^1/4 = 2.279507 when passed will become 2
-    // (4^3)^1/4 = 2.828427 when passed to int will become 2
+    // (4^3)^1/4 = 2.828427 when passed to int64_twill become 2
     // Giving a result of 1 when truly it is 0.805927...
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-    long double num_dbl = pow( num*1.0, ((1.0*other.num)/(other.denom*1.0)));
-    long double den_dbl = pow( denom*1.0, ((1.0*other.num)/(other.denom*1.0)));
+
+    long double num_dbl = pow( num*1.0, ((long double)(other.num)/(long double)(other.denom)) );
+    long double den_dbl = pow( denom*1.0, ((long double)(other.num)/(long double)(other.denom)) );
     fraction* tempf = new fraction(double(num_dbl/den_dbl));
     return *tempf;
 }
 
-long long int GCD(long long int a, long long int b)
+long  int64_t GCD(long  int64_t a, long  int64_t b)
 {
     return b == 0? a : GCD(b, a%b);
 }
 
-fraction& fraction::reducefrac(long long int a, long long int b)
+fraction& fraction::reducefrac(long  int64_t a, long  int64_t b)
 {
-    long long int divisor = GCD(a, b);
+    long  int64_t divisor = GCD(a, b);
     fraction *tempfrac = new fraction(a/divisor, b/divisor);
     return *tempfrac;
 }
@@ -119,7 +123,7 @@ istream &operator>>(istream& in, fraction &frac)
     string line, n, d;
     stringstream ss;
     getline(in,line);
-    int pos = line.find('/');
+    int64_t pos = line.find('/');
     if (pos != -1)
     {
         n = line.substr(0,pos);

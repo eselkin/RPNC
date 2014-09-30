@@ -11,6 +11,6 @@ int main(int argc, char** argv)
     calcUI GUI;
     GUI.show();
     GUI.setStyleSheet("background-color: lightblue;");
-    GUI.setGeometry(250,50,800,600);
+    GUI.setGeometry(250,50,600,400);
     return ThisApp.exec(); // enters a loop // done running
 }

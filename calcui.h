@@ -87,5 +87,6 @@ private:
     InfixtoPostfix myinfix;
     void initialize(fptr list[], int size);
     void nothing();
+    int count;
 };
 #endif // CALCUI_H

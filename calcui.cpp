@@ -7,6 +7,7 @@ using namespace std;
 
 calcUI::calcUI()
 {    
+    count = 0;
     Main_Calculator = new QVBoxLayout;
     Input_Dialogs   = new QVBoxLayout;
     Infix_Layout    = new QHBoxLayout;
@@ -190,6 +191,7 @@ void calcUI::keyPressEvent(QKeyEvent *e)
      Button_Div->animateClick();
      break;
  case Qt::Key_Multi_key:
+ case Qt::Key_Asterisk:
      Button_Mul->animateClick();
      break;
  case Qt::Key_Backspace:
@@ -209,6 +211,14 @@ void calcUI::keyPressEvent(QKeyEvent *e)
  case Qt::Key_Equal:
      Button_Equ->hasFocus();
      Button_Equ->animateClick();
+ case Qt::Key_C:
+     count++;
+     Button_CE->animateClick(); // one C
+     if (count == 2)
+     {
+         Button_C->animateClick(); // Two Cs
+         count = 0;
+     }
  }
 }
 
@@ -332,6 +342,7 @@ void calcUI::pressedEqu()
         }
     }
     myinfix.resetcalc();
+    count = 0;
 }
 
 void calcUI::pressedLP()
@@ -354,6 +365,7 @@ void calcUI::pressedCE()
     infixstring.clear();
     Infix_Input->setText(infixstring);
     update();
+    count = 1;
 }
 
 void calcUI::pressedC()
@@ -366,6 +378,7 @@ void calcUI::pressedC()
     Postfix_Output->setText(infixstring);
     Answer_Output->setText(result);
     update();
+    count = 0;
 }
 
 void calcUI::pressedD()
@@ -373,12 +386,14 @@ void calcUI::pressedD()
     infixstring.chop(1);
     Infix_Input->setText(infixstring);
     update();
+    count = 0;
 }
 
 void calcUI::pressedchar(QString pressed)
 {
     infixstring.append(pressed);
     Infix_Input->setText(infixstring);
+    count = 0;
     update();
 }
 
@@ -394,7 +409,7 @@ void calcUI::pressedfchar(QString pressed)
     infixstring.append(pressed);
     //infixstring.append(" "); // adds space for your functions :-) so you don't forget!
     Infix_Input->setText(infixstring);
-
+    count = 0;
     update();
 }
 

@@ -23,7 +23,6 @@ void InfixtoPostfix::parseinfix()
         {
         case 'N':
         {
-            cout << "CAUGHT AN N " << endl;
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space + 1); // erase what we took into the temp string
             if (getNextTokenType(infix_copy) == 'N')
@@ -33,15 +32,17 @@ void InfixtoPostfix::parseinfix()
                 temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
                 infix_copy.erase(0,pos_first_space + 1); // erase what we took into the temp string
             }
+            ss.clear();
+            ss.str("");
             // we should have a whole mixed number now in temp_token
-            MixedNum* tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
+            MixedNum *tempNumber = new MixedNum(); // Any way, even if only the first token is N we make a mixed number from it
             temp_token.append("\n"); // because we use getline
-            ss.str(temp_token);
+            ss << temp_token.c_str();
             ss >> *tempNumber;
-            node *mixedholder = new node(tempNumber, 'N', NULL);
-            output_queue.enqueue(*mixedholder); // mixed number
+            node mixedholder(tempNumber, 'N');
+            output_queue.enqueue(mixedholder); // mixed number
             temp_token = "";
-            cout << output_queue << endl;
+            //cout << output_queue << endl;
             // MIXED NUMBER IN FREESTORE GETS DELETED BY THE DESTRUCTOR OF THE QUE...
             break;
         }
@@ -123,7 +124,6 @@ void InfixtoPostfix::parseinfix()
             node *doubleholder = new node(&temp_double, 'D', NULL);
             output_queue.enqueue(*doubleholder);
             temp_token = "";
-            cout << output_queue << endl;
             break;
         }
         default:
@@ -154,12 +154,10 @@ void InfixtoPostfix::parseinfix()
     }
     if (openparen != closeparen)
         throw PAREN_MISMATCH;
-    cout << "FINISHED ENQUEUING" << endl;
 }
 
 void InfixtoPostfix::doCalculate()
 {
-    cout << " IN DO CALCULATE " << endl;
     queue CopyQueue(output_queue); // copy constructor
     while (!CopyQueue.empty())
     {

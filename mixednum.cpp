@@ -101,7 +101,9 @@ istream &operator>>(istream &in, MixedNum &mixed)
     {
         // No space in line
         // We either only have a fraction, or we only have a whole number component, or a bad mixed number
-        ss << line;
+        ss.clear();
+        ss.str("");
+        ss << line.c_str();
         if ( int(line.find('/')) != -1 )
         {
             ss >> frac; // We only have a fraction
@@ -119,7 +121,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
     // We have a space in the line
     ss.str("");
     ss.clear();
-    ss << line.substr(0, space_pos); // find first not space
+    ss << line.substr(0, space_pos).c_str(); // find first not space
     if (ss.str() == "" || ss.str() == " ")
     {
         ss.str("");

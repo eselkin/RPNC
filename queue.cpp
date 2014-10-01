@@ -83,7 +83,6 @@ const node& queue::peek() const
 
 void queue::enqueue(node n)
 {
-    cout << "ENQUEUING: " << n.data_type << endl;
     if(full())
         throw qFULL;
     if (quetail)
@@ -99,7 +98,7 @@ void queue::enqueue(node n)
         quehead = quetail;
     }
     mySize++;
-    cout << "WE ENQUEUED" << quetail->data_type << " and n's type was" << n.data_type << endl;
+    //cout << "WE ENQUEUED" << quetail->data_type << " and n's type was" << n.data_type << endl;
 }
 
 void queue::enqueue(void *data, const char dType)

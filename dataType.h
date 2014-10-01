@@ -11,7 +11,8 @@ using namespace std;
 union DataType {
     void *vptr;
     MixedNum *mPtr;
-    OpPr *opPtr; // just a good way to test precedence.
+    double *dPtr;
+    OpPr *opPtr; // just a good way to test precedence and associativity.
 };
 
 #endif // DATATYPE_H

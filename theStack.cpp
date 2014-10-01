@@ -134,6 +134,9 @@ void theStack::copy(const theStack &other)
         case 'N':
             myPtr->next=new node(otherPtr->key.mPtr, otherPtr->data_type);
             break;
+        case 'D':
+            myPtr->next=new node(otherPtr->key.dPtr, otherPtr->data_type);
+            break;
         case 'O':
         case 'P':
             myPtr->next=new node(otherPtr->key.opPtr, otherPtr->data_type);
@@ -173,6 +176,9 @@ ostream& operator<<(ostream &out, const theStack &s)
             {
             case 'N':
                 out << *(Pointer->key.mPtr) << endl;
+                break;
+            case 'D':
+                out << *(Pointer->key.dPtr) << endl;
                 break;
             case 'O':
             case 'P':

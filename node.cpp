@@ -42,12 +42,16 @@ void node::copy(const node &other)
         break;
     case 'N':
         key.mPtr = new MixedNum(*other.key.mPtr);
+        data_type = 'N';
+        break;
+    case 'D':
+        key.dPtr = new double(*other.key.dPtr);
+        data_type = 'D';
         break;
     default:
         break;
     }
     next = NULL;
-    data_type = other.data_type;
 }
 
 void node::nukem()
@@ -62,6 +66,9 @@ void node::nukem()
         break;
     case 'N':
         delete key.mPtr;
+        break;
+    case 'D':
+        delete key.dPtr;
         break;
     default:
         //

@@ -315,7 +315,6 @@ void calcUI::pressedEqu()
         try {
             myinfix.parseinfix();
             myinfix.doCalculate();
-            qDebug()<< "WE ARE DOING CALCULATE!";
             Postfix_Output->setText(QString(myinfix.getPostfixOutput().c_str()));
             Answer_Output->setText(myinfix.getAnswer().c_str());
         }

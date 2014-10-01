@@ -23,6 +23,7 @@ void InfixtoPostfix::parseinfix()
         {
         case 'N':
         {
+            cout << "CAUGHT AN N " << endl;
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space + 1); // erase what we took into the temp string
             if (getNextTokenType(infix_copy) == 'N')
@@ -37,8 +38,10 @@ void InfixtoPostfix::parseinfix()
             temp_token.append("\n"); // because we use getline
             ss.str(temp_token);
             ss >> *tempNumber;
-            output_queue.enqueue(tempNumber, 'N'); // mixed number
+            node *mixedholder = new node(tempNumber, 'N', NULL);
+            output_queue.enqueue(*mixedholder); // mixed number
             temp_token = "";
+            cout << output_queue << endl;
             // MIXED NUMBER IN FREESTORE GETS DELETED BY THE DESTRUCTOR OF THE QUE...
             break;
         }
@@ -109,6 +112,20 @@ void InfixtoPostfix::parseinfix()
             // we are empty
             break;
         }
+        case 'D':
+        {
+            temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
+            infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
+            double temp_double;
+            ss.str("");
+            ss << temp_token;
+            ss >> temp_double;
+            node *doubleholder = new node(&temp_double, 'D', NULL);
+            output_queue.enqueue(*doubleholder);
+            temp_token = "";
+            cout << output_queue << endl;
+            break;
+        }
         default:
         {
             // Not sure if E and default are the same... But I think so
@@ -122,9 +139,12 @@ void InfixtoPostfix::parseinfix()
     {
         switch(operator_stack.top()->data_type)
         {
-        case 'N':
-            output_queue.enqueue(operator_stack.pop()->key.mPtr, 'N');
-            break;
+        //        case 'N':
+        //            output_queue.enqueue(operator_stack.pop()->key.mPtr, 'N');
+        //            break;
+        //        case 'D':
+        //            output_queue.enqueue(operator_stack.pop()->key.dPtr, 'D');
+        //            break;
         case 'O':
         case 'P':
         default:
@@ -134,15 +154,27 @@ void InfixtoPostfix::parseinfix()
     }
     if (openparen != closeparen)
         throw PAREN_MISMATCH;
+    cout << "FINISHED ENQUEUING" << endl;
 }
 
 void InfixtoPostfix::doCalculate()
 {
+    cout << " IN DO CALCULATE " << endl;
     queue CopyQueue(output_queue); // copy constructor
     while (!CopyQueue.empty())
     {
-        while (!CopyQueue.empty() && CopyQueue.peek().data_type == 'N')
-            operand_stack.push((CopyQueue.dequeue())->key.mPtr, 'N');
+        while (!CopyQueue.empty() && (CopyQueue.peek().data_type != 'O'))
+        {
+            node* deQueued = CopyQueue.dequeue();
+            if (deQueued->data_type == 'D')
+            {
+                double data_holder = *deQueued->key.dPtr;
+                MixedNum* temp_mixed = new MixedNum(data_holder);
+                delete deQueued->key.dPtr;
+                deQueued->key.vptr = temp_mixed; // associate mixed version of double
+            }
+            operand_stack.push(deQueued->key.mPtr, 'N');
+        }
         if (!CopyQueue.empty())
         {
             switch(CopyQueue.peek().key.opPtr->theOp)
@@ -182,8 +214,11 @@ char InfixtoPostfix::getNextTokenType(string infix_list)
         current_token = infix_list.substr(0,pos);
     else
         current_token = infix_list.substr(0,string::npos);
+
     if (current_token == " " || current_token == "")
         return 'E'; // end of line
+    if (int(current_token.find(".")) != -1)
+        return 'D';
     if (int(current_token.find_first_of("0123456789")) != -1)
         return 'N';
     if (int(current_token.find_first_of("()")) != -1)

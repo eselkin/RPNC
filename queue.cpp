@@ -119,10 +119,10 @@ node *queue::dequeue()
 {
     if(empty())
         throw qEMPTY; // head = tail = NULL
-    queue::nodePtr oldhead = quehead;
-    oldhead->next = NULL; // REMOVE ABILITY TO GET DATA FROM THE REST OF THE NODES
+    node* oldhead = quehead;
     quehead = quehead->next; // could point to NULL and make the list empty
     mySize--;
+    oldhead->next = NULL; // REMOVE ABILITY TO GET DATA FROM THE REST OF THE NODES
     return oldhead; // return the node at oldhead... deref outside of dequeue
 }
 

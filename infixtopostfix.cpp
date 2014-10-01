@@ -1,4 +1,5 @@
 #include "infixtopostfix.h"
+#include <QDebug>
 
 InfixtoPostfix::InfixtoPostfix( )
 {
@@ -142,14 +143,12 @@ void InfixtoPostfix::doCalculate()
     {
         while (!CopyQueue.empty() && CopyQueue.peek().data_type == 'N')
             operand_stack.push((CopyQueue.dequeue())->key.mPtr, 'N');
-
-        // Our actual calculations using fraction operators
-
         if (!CopyQueue.empty())
         {
             switch(CopyQueue.peek().key.opPtr->theOp)
             {
-            case '^': operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
+            case '^':
+                operand_stack.push(&(*operand_stack.pop()->key.mPtr ^ *operand_stack.pop()->key.mPtr), 'N');
                 break;
             case '*': operand_stack.push(&(*operand_stack.pop()->key.mPtr * *operand_stack.pop()->key.mPtr), 'N');
                 break;

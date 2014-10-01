@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <QMessageBox>
+#include <QDebug>
 
 using namespace std;
 
@@ -305,6 +306,7 @@ void calcUI::pressedPow()
 
 void calcUI::pressedEqu()
 {
+    qDebug()<<"PRESSED EQU";
     string newInput = string(infixstring.toLocal8Bit().constData());
     if (int(newInput.find(" ")) != - 1)
     {
@@ -313,6 +315,7 @@ void calcUI::pressedEqu()
         try {
             myinfix.parseinfix();
             myinfix.doCalculate();
+            qDebug()<< "WE ARE DOING CALCULATE!";
             Postfix_Output->setText(QString(myinfix.getPostfixOutput().c_str()));
             Answer_Output->setText(myinfix.getAnswer().c_str());
         }

@@ -10,8 +10,7 @@ int main(int argc, char** argv)
     QApplication ThisApp(argc, argv);
     calcUI GUI;
     GUI.show();
-    GUI.setStyleSheet("background-color: lightblue;");
-    GUI.setStyleSheet("background-image: './bg.png'");
-    GUI.setGeometry(250,50,600,400);
+    GUI.setStyleSheet("background-color: #CCCCFF;");
+    GUI.setGeometry(250,50,500,300);
     return ThisApp.exec(); // enters a loop // done running
 }

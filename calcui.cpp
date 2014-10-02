@@ -33,9 +33,11 @@ calcUI::calcUI(QWidget *parent)
     Answer_Output   = new QLineEdit(theWidget);
     Answer_Output->setReadOnly(1);
     InfixLabel      = new QLabel("Infix:",theWidget);
-    InfixLabel->setStyleSheet("color: #FF0000");
+    InfixLabel->setStyleSheet("color: #FF0000; font-weight: 900");
     PostfixLabel    = new QLabel("RPN:", theWidget);
+    PostfixLabel->setStyleSheet("color: #000000; font-weight: 900");
     AnswerLabel     = new QLabel("Answer:", theWidget);
+    AnswerLabel->setStyleSheet("color: #000000; font-weight: 900");
     VSpacer1 = new QSpacerItem(1.0,this->height()/15.0);
     VSpacer2 = new QSpacerItem(1.0,this->height()/15.0);
     VSpacer3 = new QSpacerItem(1.0,this->height()/20.0);

@@ -13,20 +13,22 @@
 #include <QLabel>
 #include <QInputDialog>
 #include <QLineEdit>
+#include <QMainWindow>
 #include "infixtopostfix.h"
 
 using namespace std;
 
 typedef void (*fptr) ();
 
-class calcUI : public QWidget
+class calcUI : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit calcUI();
+    explicit calcUI(QWidget *parent=0);
     void paintEvent();
-    QVBoxLayout *Main_Calculator; // Including the Input Dialogs, the two QGridLayouts for numbers and functions
 
+    QWidget* theWidget;
+    QVBoxLayout *Main_Calculator; // Including the Input Dialogs, the two QGridLayouts for numbers and functions
     // Line Edit Layouts to be put in Input Dialogs
     QVBoxLayout *Input_Dialogs; // Three Line Edits with Three Labels
     QHBoxLayout *Infix_Layout;

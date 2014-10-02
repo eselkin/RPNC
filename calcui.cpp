@@ -6,31 +6,36 @@
 
 using namespace std;
 
-calcUI::calcUI()
+calcUI::calcUI(QWidget *parent)
+    : QMainWindow(parent)
 {    
-    count = 0;
-    Main_Calculator = new QVBoxLayout;
-    Input_Dialogs   = new QVBoxLayout;
+    this->resize(600,400);
+    theWidget = new QWidget(this); // this is parent
+    theWidget->setObjectName(QString::fromUtf8("theWidget")); // The only Qwidget.
+
+    count = 0; // for the C vs CE clicking when you type "C"
+    Main_Calculator = new QVBoxLayout(theWidget); // Now everything relates to theWidget because we place the Widget in this object window
+    Input_Dialogs   = new QVBoxLayout(theWidget);
     Infix_Layout    = new QHBoxLayout;
     Postfix_Layout  = new QHBoxLayout;
     Answer_Layout   = new QHBoxLayout;
     Button_Layout   = new QHBoxLayout;
     Number_Buttons  = new QGridLayout;
     Function_Buttons= new QGridLayout;
-    Infix_Input     = new QLineEdit;
+    Infix_Input     = new QLineEdit(theWidget);
     Infix_Input->setFont(QFont("ARIAL", 14));
     Infix_Input->setStyleSheet("color: 'red'; font-weight: 900");
     Infix_Input->setReadOnly(1);
     Infix_Input->setFocus();
     Infix_Input->setFocusPolicy(Qt::StrongFocus);
-    Postfix_Output  = new QLineEdit;
+    Postfix_Output  = new QLineEdit(theWidget);
     Postfix_Output->setReadOnly(1);
-    Answer_Output   = new QLineEdit;
+    Answer_Output   = new QLineEdit(theWidget);
     Answer_Output->setReadOnly(1);
-    InfixLabel      = new QLabel("Infix:");
+    InfixLabel      = new QLabel("Infix:",theWidget);
     InfixLabel->setStyleSheet("color: #FF0000");
-    PostfixLabel    = new QLabel("RPN:");
-    AnswerLabel     = new QLabel("Answer:");
+    PostfixLabel    = new QLabel("RPN:", theWidget);
+    AnswerLabel     = new QLabel("Answer:", theWidget);
     VSpacer1 = new QSpacerItem(1.0,this->height()/15.0);
     VSpacer2 = new QSpacerItem(1.0,this->height()/15.0);
     VSpacer3 = new QSpacerItem(1.0,this->height()/20.0);
@@ -54,17 +59,17 @@ calcUI::calcUI()
     HSpacer3 = new QSpacerItem(this->width()/20.0,1);
 
     // Buttons Left (Numbers)
-    Button_1 = new QPushButton("1");
-    Button_2 = new QPushButton("2");
-    Button_3 = new QPushButton("3");
-    Button_4 = new QPushButton("4");
-    Button_5 = new QPushButton("5");
-    Button_6 = new QPushButton("6");
-    Button_7 = new QPushButton("7");
-    Button_8 = new QPushButton("8");
-    Button_9 = new QPushButton("9");
-    Button_0 = new QPushButton("0");
-    Button_Dec = new QPushButton(".");
+    Button_1 = new QPushButton("1", theWidget);
+    Button_2 = new QPushButton("2", theWidget);
+    Button_3 = new QPushButton("3", theWidget);
+    Button_4 = new QPushButton("4", theWidget);
+    Button_5 = new QPushButton("5", theWidget);
+    Button_6 = new QPushButton("6", theWidget);
+    Button_7 = new QPushButton("7", theWidget);
+    Button_8 = new QPushButton("8", theWidget);
+    Button_9 = new QPushButton("9", theWidget);
+    Button_0 = new QPushButton("0", theWidget);
+    Button_Dec = new QPushButton(".", theWidget);
     Number_Buttons->addWidget(Button_1,0,0,1,1);
     Number_Buttons->addWidget(Button_2,0,1,1,1);
     Number_Buttons->addWidget(Button_3,0,2,1,1);
@@ -82,18 +87,18 @@ calcUI::calcUI()
     Button_Layout->addItem(HSpacer1);
 
     // Buttons Right (Functions)
-    Button_Add = new QPushButton("+");
-    Button_Sub = new QPushButton("-");
-    Button_Mul = new QPushButton("*");
-    Button_Div = new QPushButton("/");
-    Button_Equ = new QPushButton("=");
-    Button_Pow = new QPushButton("^");
-    Button_LP  = new QPushButton("(");
-    Button_RP  = new QPushButton(")");
-    Button_SP  = new QPushButton("SPACE");
-    Button_CE  = new QPushButton("CE");
-    Button_C   = new QPushButton("C");
-    Button_D   = new QPushButton("<-");
+    Button_Add = new QPushButton("+", theWidget);
+    Button_Sub = new QPushButton("-", theWidget);
+    Button_Mul = new QPushButton("*", theWidget);
+    Button_Div = new QPushButton("/", theWidget);
+    Button_Equ = new QPushButton("=", theWidget);
+    Button_Pow = new QPushButton("^", theWidget);
+    Button_LP  = new QPushButton("(", theWidget);
+    Button_RP  = new QPushButton(")", theWidget);
+    Button_SP  = new QPushButton("SPACE", theWidget);
+    Button_CE  = new QPushButton("CE", theWidget);
+    Button_C   = new QPushButton("C", theWidget);
+    Button_D   = new QPushButton("<-", theWidget);
     Function_Buttons->addWidget(Button_Div,0,0,1,1);
     Function_Buttons->addWidget(Button_Mul,0,1,1,1);
     Function_Buttons->addWidget(Button_Add,0,2,1,1);
@@ -111,7 +116,11 @@ calcUI::calcUI()
     Main_Calculator->addLayout(Button_Layout);
     Button_Layout->addItem(HSpacer3);
     Button_Layout->setAlignment(Qt::AlignTop);
-    setLayout(Main_Calculator);
+
+    theWidget->setLayout(Main_Calculator);
+    setCentralWidget(theWidget);
+
+    // SOCKETS AND SLOTS COME TOGETHER
     connect(Button_0,SIGNAL(clicked()),this,SLOT(pressed0()));
     connect(Button_1,SIGNAL(clicked()),this,SLOT(pressed1()));
     connect(Button_2,SIGNAL(clicked()),this,SLOT(pressed2()));
@@ -136,13 +145,12 @@ calcUI::calcUI()
     connect(Button_CE,SIGNAL(clicked()),this,SLOT(pressedCE()));
     connect(Button_D,SIGNAL(clicked()),this,SLOT(pressedD()));
 
-    QString AboutText = "This calculator allows you to input infix notation by buttons \n and convert it to Reverse Polish Notation.\n\n Please remember to space your equation correctly!";
+    QString AboutText = "<html>This calculator allows you to input infix notation by buttons<br/> and convert it to Reverse Polish Notation.<br/><br/> ";
+    AboutText.append("<b><font color='red'>Please remember to space your equation correctly!</font></b>");
+    AboutText.append("<ul><li>Whenever you insert an operator other than <b>/</b> the system will put a space for you.<br>");
+    AboutText.append("<li>So if you want a negative number, remember to hit <b>&lt;-</b> to delete the trailing space after <b>-</b>.<br></ul></html>");
     QString AboutTitle = "Nicole and Eli's RPN Calculator";
-    QMessageBox::information(this, AboutTitle, AboutText, QMessageBox::Close);
-
-//    fptr list[128];
-//    initialize(list, 128); Silly, use key event press
-
+    QMessageBox::information(this, AboutTitle, AboutText, QMessageBox::Ok);
 }
 
 void calcUI::keyPressEvent(QKeyEvent *e)
@@ -212,6 +220,7 @@ void calcUI::keyPressEvent(QKeyEvent *e)
  case Qt::Key_Equal:
      Button_Equ->hasFocus();
      Button_Equ->animateClick();
+     break;
  case Qt::Key_C:
      count++;
      Button_CE->animateClick(); // one C
@@ -220,6 +229,17 @@ void calcUI::keyPressEvent(QKeyEvent *e)
          Button_C->animateClick(); // Two Cs
          count = 0;
      }
+     break;
+ case Qt::Key_ParenLeft:
+     Button_LP->hasFocus();
+     Button_LP->animateClick();
+     break;
+ case Qt::Key_ParenRight:
+     Button_RP->hasFocus();
+     Button_RP->animateClick();
+     break;
+ default:
+     break;
  }
 }
 
@@ -306,7 +326,6 @@ void calcUI::pressedPow()
 
 void calcUI::pressedEqu()
 {
-    qDebug()<<"PRESSED EQU";
     string newInput = string(infixstring.toLocal8Bit().constData());
     if (int(newInput.find(" ")) != - 1)
     {
@@ -320,21 +339,21 @@ void calcUI::pressedEqu()
         }
         catch (itopERROR e)
         {
-            cout << "itop error" << endl;
+            qDebug() << "itop error" << endl;
         }
         catch (qERRORS f)
         {
-            cout << "QUEUE ERROR" << endl;
+            qDebug() << "QUEUE ERROR" << endl;
         }
         catch (...)
         {
-            cout << "ERROR" << endl;
+            qDebug() << "ERROR" << endl;
         }
     } else
     {
         switch(QMessageBox::question(this,
                                      tr("RPN Calc"),
-                                     tr("You must include spaces in your input."),
+                                     tr("<html><b><font color='blue'>You must include spaces in your input!</font></b></html>"),
                                      QMessageBox::Ok))
         {
         case QMessageBox::Ok:
@@ -349,7 +368,7 @@ void calcUI::pressedEqu()
 
 void calcUI::pressedLP()
 {
-    pressedfchar(" ( ");
+    pressedchar(" ( ");
 }
 
 void calcUI::pressedRP()
@@ -401,7 +420,7 @@ void calcUI::pressedchar(QString pressed)
 
 void calcUI::pressedfchar(QString pressed)
 {
-    if (Infix_Input->text() == QString() )
+    if (Infix_Input->text() == QString() && pressed != "(")
     {
         infixstring.append(Answer_Output->text());
         infixstring.append(" ");

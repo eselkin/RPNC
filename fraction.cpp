@@ -5,22 +5,23 @@
 #define int64_t long
 fraction::fraction(long int64_t n, long  int64_t d)
 {
+    if (d == 0)
+        throw DIV_BY_ZERO;
     num = n;
     denom = d;
 }
 
 fraction::fraction(double nd)
 {
-
     fraction new_frac;
     if ( nd != 0 )
     {
         long  int64_t new_num=0; // just takes the whole part!
         int64_t i = 0;
 
-        while (abs(new_num) <= 99999999) // under the 2710000000
-            new_num = floor(nd * 10 * i++); // Keep it under the max limit for an int
-        long  int64_t new_denom = --i*10;
+        while (abs(new_num) < 2710000000) // under the 2710000000
+            new_num = floor(nd * 100 * i++); // Keep it under the max limit for an int
+        long  int64_t new_denom = --i*100;
         new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d
     }
     num = new_frac.num;
@@ -75,10 +76,19 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-
+    cout << "NUM: " << num << " DEN: " << denom << "and O NUM: " << other.num << "O DEN: "<<other.denom << endl;
+    fraction* tempf;
+    if (((num*denom) <= 0) && (other.num % other.denom != 0))
+        throw IMAGINARY;
     long double num_dbl = pow( num*1.0, ((long double)(other.num)/(long double)(other.denom)) );
     long double den_dbl = pow( denom*1.0, ((long double)(other.num)/(long double)(other.denom)) );
-    fraction* tempf = new fraction(double(num_dbl/den_dbl));
+    if (abs(num_dbl) < 1 || abs(den_dbl) < 1)
+    {
+        tempf = new fraction(10000000*(num_dbl/den_dbl), 10000000);
+    }
+    else {
+        tempf = new fraction(num_dbl, den_dbl);
+    }
     return *tempf;
 }
 
@@ -89,7 +99,11 @@ long  int64_t GCD(long  int64_t a, long  int64_t b)
 
 fraction& fraction::reducefrac(long  int64_t a, long  int64_t b)
 {
+    if (b == 0)
+        throw DIV_BY_ZERO;
     long  int64_t divisor = GCD(a, b);
+    if (divisor == 0)
+        throw DIV_BY_ZERO;
     fraction *tempfrac = new fraction(a/divisor, b/divisor);
     return *tempfrac;
 }

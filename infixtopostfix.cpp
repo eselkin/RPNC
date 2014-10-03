@@ -123,9 +123,13 @@ void InfixtoPostfix::parseinfix()
             ss.str("");
             ss.clear();
             ss << temp_token.c_str();
+            cout << "SS: " << ss.str().c_str() << endl;
             ss >> *temp_double;
+            cout << "TEMP: "<< *temp_double << endl;
             node *doubleholder = new node(temp_double, 'D', NULL);
+            cout << "NODE DOUBLE: " << *doubleholder->key.dPtr << endl;
             output_queue.enqueue(*doubleholder);
+            cout << "DONE";
             temp_token = "";
             break;
         }

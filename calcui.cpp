@@ -341,11 +341,31 @@ void calcUI::pressedEqu()
         }
         catch (itopERROR e)
         {
-            qDebug() << "itop error" << endl;
+            QString paren_title= "Parenthesis Mismatch";
+            QString paren_msg = "<html><b><font color='red'>Your Parentheses did not match!</b></html>";
+            if (e == PAREN_MISMATCH)
+            {
+                QMessageBox::warning(this, paren_title, paren_msg, QMessageBox::Ok);
+            }
         }
         catch (qERRORS f)
         {
             qDebug() << "QUEUE ERROR" << endl;
+        }
+        catch (FRAC_ERROR r)
+        {
+            if (r == DIV_BY_ZERO)
+            {
+                QString divbyz_title = "Divide by Zero";
+                QString divbyz_message = "<html><b><fot color='red'>You have divided by 0.</b></html>";
+                QMessageBox::warning(this, divbyz_title, divbyz_message, QMessageBox::Ok);
+            }
+            if (r == IMAGINARY)
+            {
+                QString imaginary_title = "Imaginary...... oooooo";
+                QString imaginary_message = "<html><b><fot color='red'>Imaginary numbers are not handled.</b></html>";
+                QMessageBox::warning(this, imaginary_title, imaginary_message, QMessageBox::Ok);
+            }
         }
         catch (...)
         {

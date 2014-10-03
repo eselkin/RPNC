@@ -8,7 +8,7 @@
 
 using namespace std;
 
-enum FRAC_ERROR { DIV_BY_ZERO, NOT_A_FRAC };
+enum FRAC_ERROR { DIV_BY_ZERO, NOT_A_FRAC, IMAGINARY };
 
 class fraction
 {

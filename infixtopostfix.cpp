@@ -40,13 +40,10 @@ void InfixtoPostfix::parseinfix()
             MixedNum *tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
             temp_token.append(" \n"); // because we use getline
             ss << temp_token.c_str();
-            cout << "TOKEN: "<< ss.str().c_str() <<endl;
             ss >> *tempNumber;
-            cout << "NEW NUM FROM TOKEN: " << *tempNumber <<endl;
             node mixedholder(tempNumber, 'N');
             output_queue.enqueue(mixedholder); // mixed number
             temp_token = "";
-            //cout << output_queue << endl;
             // MIXED NUMBER IN FREESTORE GETS DELETED BY THE DESTRUCTOR OF THE QUE...
             break;
         }
@@ -82,12 +79,10 @@ void InfixtoPostfix::parseinfix()
             case '(':
                 openparen++;
                 operator_stack.push(tempOp, 'P'); // put this operator/parenthesis onto the stack
-                //cout << "( PAREN HERE, top of stack is? :" << operator_stack.top()->key.opPtr->theOp << endl;
                 break;
             case ')':
             {
                 closeparen++;
-                //cout << ") PAREN HERE:" <<operator_stack.top()->key.opPtr->theOp << endl;
                 while (( !operator_stack.empty() && operator_stack.top()->data_type != 'P')&&(operator_stack.top()->key.opPtr->theOp != '('))
                 {
                     // run until we come to a (
@@ -125,13 +120,9 @@ void InfixtoPostfix::parseinfix()
             ss.str("");
             ss.clear();
             ss << temp_token.c_str();
-            cout << "SS: " << ss.str().c_str() << endl;
             ss >> *temp_double;
-            cout << "TEMP: "<< *temp_double << endl;
             node *doubleholder = new node(temp_double, 'D', NULL);
-            cout << "NODE DOUBLE: " << *doubleholder->key.dPtr << endl;
             output_queue.enqueue(*doubleholder);
-            cout << "DONE" << endl;
             temp_token = "";
             break;
         }
@@ -169,10 +160,8 @@ void InfixtoPostfix::doCalculate()
             node* deQueued = CopyQueue.dequeue();
             if (deQueued->data_type == 'D')
             {
-                cout << "dequeued d" << endl;
                 long double data_holder = *deQueued->key.dPtr;
                 delete deQueued->key.dPtr;
-                cout << "NEW MIXED FROM DOUBLE: " <<endl;
                 MixedNum* temp_mixed = new MixedNum(data_holder);
                 deQueued->key.mPtr = temp_mixed;
             }
@@ -180,7 +169,6 @@ void InfixtoPostfix::doCalculate()
         }
         if (!CopyQueue.empty())
         {
-            cout << "GOT PAST DEQUEUE AND PUSH" << endl;
             switch(CopyQueue.peek().key.opPtr->theOp)
             {
             case '^':

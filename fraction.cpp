@@ -30,7 +30,6 @@ fraction::fraction(long double nd)
     fraction* new_frac;
     if ( nd != 0 )
         new_frac = convtoFrac(nd);
-    cout << "new frac: " << new_frac << endl;
     num = new_frac->num;
     denom = new_frac->denom;
 }
@@ -83,17 +82,14 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-    cout << "NUM: " << num << " DEN: " << denom << "and O NUM: " << other.num << " O DEN: "<<other.denom << endl;
     fraction *tempf;
     if (((num*denom) <= 0) && (other.num % other.denom != 0))
         throw IMAGINARY;
-    long double num_dbl = pow( num*1.0, (other.num*1.0)/(1.0*other.denom) );
-    long double den_dbl = pow( denom*1.0, (1.0*other.num)/(1.0*other.denom) );
+    long double num_dbl = pow( num*1.0, (1.*other.num)/(1.*other.denom) );
+    long double den_dbl = pow( denom*1.0, (1.*other.num)/(1.*other.denom) );
     if (num_dbl == 0 || den_dbl == 0 || abs(den_dbl) > 200000000000 )
         throw UNDERFLO;
-    cout << std::setprecision(20) << "NUM DBL: " << num_dbl << "  DEN DBL: " << den_dbl << " PASSING: " << num_dbl*1.0/den_dbl*1.0 << endl;
     tempf = convtoFrac(num_dbl/den_dbl);
-    cout << "TEMPFN: "<< tempf->num << " TEMPFD: "<< tempf->denom << endl;
     return *tempf;
 }
 

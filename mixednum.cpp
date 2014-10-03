@@ -10,13 +10,11 @@ MixedNum::MixedNum(int whole, fraction frac)
 MixedNum::MixedNum(long double value)
     : fraction( value )
 {
-    cout << setprecision(20) << "bvalue: " << value << endl;
 }
 
 MixedNum::MixedNum(fraction frac)
     : fraction(frac.num, frac.denom)
 {
-    cout << "MAKING FRAC" << endl;
 }
 
 
@@ -100,10 +98,8 @@ istream &operator>>(istream &in, MixedNum &mixed)
     stringstream ss;
     getline(in, line); // either w n/d or w or " " or "" or " n/d"
     int space_pos = line.find(' ');
-    cout << "LINE CSTRING: " << line.c_str() <<endl;
     if (space_pos == line.length()-1 || space_pos == -1)
     {
-        cout << "here" << endl;
         // No space in line
         // We either only have a fraction, or we only have a whole number component, or a bad mixed number
         ss.clear();

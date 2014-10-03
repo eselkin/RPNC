@@ -10,6 +10,7 @@ InfixtoPostfix::InfixtoPostfix( string inf )
     infix_input = inf;
 }
 
+
 void InfixtoPostfix::parseinfix()
 {
     int openparen = 0, closeparen = 0;
@@ -36,7 +37,7 @@ void InfixtoPostfix::parseinfix()
             ss.clear();
             ss.str("");
             // we should have a whole mixed number now in temp_token
-            MixedNum *tempNumber = new MixedNum(); // Any way, even if only the first token is N we make a mixed number from it
+            MixedNum *tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
             temp_token.append("\n"); // because we use getline
             ss << temp_token.c_str();
             ss >> *tempNumber;
@@ -118,11 +119,12 @@ void InfixtoPostfix::parseinfix()
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
-            double temp_double;
+            double *temp_double = new double;
             ss.str("");
-            ss << temp_token;
-            ss >> temp_double;
-            node *doubleholder = new node(&temp_double, 'D', NULL);
+            ss.clear();
+            ss << temp_token.c_str();
+            ss >> *temp_double;
+            node *doubleholder = new node(temp_double, 'D', NULL);
             output_queue.enqueue(*doubleholder);
             temp_token = "";
             break;

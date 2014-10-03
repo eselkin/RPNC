@@ -94,8 +94,7 @@ void queue::enqueue(node n)
     }
     else
     {
-        quetail = new node(n);
-        quehead = quetail;
+        quehead = quetail = new node(n);
     }
     mySize++;
     //cout << "WE ENQUEUED" << quetail->data_type << " and n's type was" << n.data_type << endl;
@@ -107,12 +106,13 @@ void queue::enqueue(void *data, const char dType)
         throw qFULL;
     if (quetail)
     {
-        quetail->next = new node(data, dType); // if it's the first element, it is the head!
+        node* quepointer = quetail;
         quetail = quetail->next;
+        quetail = new node(data, dType); // if it's the first element, it is the head!
+        quepointer->next = quetail;
     }
     else
-        quetail = new node(data, dType);
-    (mySize == -1) && (quehead = quetail); // this moves the head to the first element on that we add
+        quehead = quetail = new node(data, dType);
     mySize++;
 }
 

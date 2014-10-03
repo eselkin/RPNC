@@ -6,7 +6,7 @@ MixedNum::MixedNum(int whole, fraction frac)
     // We are storing as a fraction, input/output will be the only thing to change
 }
 
-MixedNum::MixedNum(double value)
+MixedNum::MixedNum(long double value)
     : fraction( value )
 {
 }
@@ -113,7 +113,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
                 ss >> whole;
             else
                 throw BAD_MIXED_NUM; // We only have a BAD number or something else
-        frac = (whole < 0)? fraction(whole)-frac: fraction(whole)+frac; // This reduces the frac value on add/sub
+        frac = (whole < 0)? fraction((long double) whole)-frac: fraction((long double)whole)+frac; // This reduces the frac value on add/sub
         mixed.num = frac.num;
         mixed.denom = frac.denom;
         return in;

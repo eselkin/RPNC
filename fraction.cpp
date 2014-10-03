@@ -11,18 +11,20 @@ fraction::fraction(long int64_t n, long  int64_t d)
     denom = d;
 }
 
-fraction::fraction(double nd)
+fraction::fraction(long double nd)
 {
     fraction new_frac;
     if ( nd != 0 )
     {
-        long  int64_t new_num=0; // just takes the whole part!
-        int64_t i = 0;
-
-        while (abs(new_num) < 2710000000) // under the 2710000000
-            new_num = floor(nd * 100 * i++); // Keep it under the max limit for an int
-        long  int64_t new_denom = --i*100;
-        new_frac = reducefrac(new_num, new_denom); // reduce should bring down the size but retain the relationship n/d
+        long int64_t new_num=0; // just takes the whole part!
+        long int64_t multiplier;
+        long int64_t new_whole = nd; // integer component
+        nd -= new_whole; // just the decimal component
+        multiplier = (abs(nd) <= 1e-9)? 1000000000000 : 1000000000;
+        long int64_t new_dec = nd * multiplier; // whole component of decimal ^ 12th power
+        new_frac = reducefrac(new_dec, multiplier); // make a fraction from the decimal component ^12 / 10^12
+        cout << "new frac: " << new_frac << endl;
+        new_frac = new_frac + new_whole; // makes a fraction from new_whole;
     }
     num = new_frac.num;
     denom = new_frac.denom;
@@ -82,13 +84,10 @@ fraction& fraction::operator^(const fraction &other)
         throw IMAGINARY;
     long double num_dbl = pow( num*1.0, ((long double)(other.num)/(long double)(other.denom)) );
     long double den_dbl = pow( denom*1.0, ((long double)(other.num)/(long double)(other.denom)) );
-    if (abs(num_dbl) < 1 || abs(den_dbl) < 1)
-    {
-        tempf = new fraction(10000000*(num_dbl/den_dbl), 10000000);
-    }
-    else {
-        tempf = new fraction(num_dbl, den_dbl);
-    }
+    tempf = new fraction(num_dbl/den_dbl);
+    *tempf = reducefrac(tempf->num, tempf->denom);
+
+    cout << "TEMPFN: "<< tempf->num << " TEMPFD: "<< tempf->denom << endl;
     return *tempf;
 }
 
@@ -152,7 +151,7 @@ istream &operator>>(istream& in, fraction &frac)
     else
         if (int(line.find_first_of("0123456789")) != -1)
         {
-            double frac_num_dbl = 0;
+            long double frac_num_dbl = 0;
             // whole number entered into fraction object
             ss << line;
             ss >> frac_num_dbl;

@@ -14,7 +14,7 @@ class fraction
 {
 public:
     fraction(long long int n = 0, long long int d = 1);
-    fraction(double nd);
+    fraction(long double nd);
     ~fraction();
     fraction(const fraction& other);
 

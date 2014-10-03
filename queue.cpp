@@ -97,7 +97,6 @@ void queue::enqueue(node n)
         quehead = quetail = new node(n);
     }
     mySize++;
-    //cout << "WE ENQUEUED" << quetail->data_type << " and n's type was" << n.data_type << endl;
 }
 
 void queue::enqueue(void *data, const char dType)

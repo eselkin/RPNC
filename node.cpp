@@ -49,6 +49,7 @@ void node::copy(const node &other)
         data_type = 'D';
         break;
     default:
+        data_type = ' ';
         break;
     }
     next = NULL;
@@ -74,5 +75,6 @@ void node::nukem()
         //
         break;
     }
+    data_type = ' ';
     next = NULL;
 }

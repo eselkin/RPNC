@@ -12,7 +12,7 @@ class MixedNum : public fraction
 public:
     MixedNum(int whole, fraction frac = fraction(0,1));
     MixedNum(fraction frac = fraction(0,1));
-    MixedNum(double value);
+    MixedNum(long double value);
 
     ~MixedNum();
     MixedNum& operator=(const MixedNum& other);

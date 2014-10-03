@@ -19,6 +19,7 @@ void InfixtoPostfix::parseinfix()
     int pos_first_space = infix_copy.find_first_of(" ");
     while (pos_first_space != -1)
     {
+
         switch(getNextTokenType(infix_copy))
         {
         case 'N':

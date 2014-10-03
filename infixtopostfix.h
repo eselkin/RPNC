@@ -14,6 +14,7 @@ public:
     InfixtoPostfix(string inf);
     void parseinfix();
     void doCalculate();
+    void readNum(string &infix_copy);
 
 
     char getNextTokenType(string infix_list);

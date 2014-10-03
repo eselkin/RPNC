@@ -45,7 +45,7 @@ void node::copy(const node &other)
         data_type = 'N';
         break;
     case 'D':
-        key.dPtr = new double(*other.key.dPtr);
+        key.dPtr = new long double(*other.key.dPtr);
         data_type = 'D';
         break;
     default:

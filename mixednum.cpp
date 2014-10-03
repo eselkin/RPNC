@@ -1,4 +1,5 @@
 #include "mixednum.h"
+#include <iomanip>
 
 MixedNum::MixedNum(int whole, fraction frac)
     : fraction(frac.num+whole*frac.denom, frac.denom)
@@ -9,11 +10,13 @@ MixedNum::MixedNum(int whole, fraction frac)
 MixedNum::MixedNum(long double value)
     : fraction( value )
 {
+    cout << setprecision(20) << "bvalue: " << value << endl;
 }
 
 MixedNum::MixedNum(fraction frac)
     : fraction(frac.num, frac.denom)
 {
+    cout << "MAKING FRAC" << endl;
 }
 
 
@@ -96,9 +99,11 @@ istream &operator>>(istream &in, MixedNum &mixed)
     double whole  = 0;    // default to 0
     stringstream ss;
     getline(in, line); // either w n/d or w or " " or "" or " n/d"
-    int space_pos = line.find_first_of(' ');
-    if (space_pos == -1)
+    int space_pos = line.find(' ');
+    cout << "LINE CSTRING: " << line.c_str() <<endl;
+    if (space_pos == line.length()-1 || space_pos == -1)
     {
+        cout << "here" << endl;
         // No space in line
         // We either only have a fraction, or we only have a whole number component, or a bad mixed number
         ss.clear();
@@ -106,6 +111,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
         ss << line.c_str();
         if ( int(line.find('/')) != -1 )
         {
+
             ss >> frac; // We only have a fraction
         }
         else
@@ -113,7 +119,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
                 ss >> whole;
             else
                 throw BAD_MIXED_NUM; // We only have a BAD number or something else
-        frac = (whole < 0)? fraction((long double) whole)-frac: fraction((long double)whole)+frac; // This reduces the frac value on add/sub
+        frac = (whole < 0)? fraction(int(whole),1)-frac: fraction(int(whole),1)+frac; // This reduces the frac value on add/sub
         mixed.num = frac.num;
         mixed.denom = frac.denom;
         return in;
@@ -122,6 +128,7 @@ istream &operator>>(istream &in, MixedNum &mixed)
     ss.str("");
     ss.clear();
     ss << line.substr(0, space_pos).c_str(); // find first not space
+
     if (ss.str() == "" || ss.str() == " ")
     {
         ss.str("");

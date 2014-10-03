@@ -11,7 +11,7 @@ using namespace std;
 union DataType {
     void *vptr;
     MixedNum *mPtr;
-    double *dPtr;
+    long double *dPtr;
     OpPr *opPtr; // just a good way to test precedence and associativity.
 };
 

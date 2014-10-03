@@ -13,6 +13,7 @@ fraction::fraction(long int64_t n, long  int64_t d)
 
 fraction::fraction(long double nd)
 {
+    cout << "DOUBLE COMING IN: " << nd;
     fraction new_frac;
     if ( nd != 0 )
     {
@@ -20,8 +21,10 @@ fraction::fraction(long double nd)
         long int64_t multiplier;
         long int64_t new_whole = nd; // integer component
         nd -= new_whole; // just the decimal component
-        multiplier = (abs(nd) <= 1e-9)? 1000000000000 : 1000000000;
+        multiplier = 1000000000000;
+        cout << "new whole: "<< new_whole;
         long int64_t new_dec = nd * multiplier; // whole component of decimal ^ 12th power
+        cout << " new_dec: " << new_dec << endl;
         new_frac = reducefrac(new_dec, multiplier); // make a fraction from the decimal component ^12 / 10^12
         cout << "new frac: " << new_frac << endl;
         new_frac = new_frac + new_whole; // makes a fraction from new_whole;
@@ -82,10 +85,10 @@ fraction& fraction::operator^(const fraction &other)
     fraction* tempf;
     if (((num*denom) <= 0) && (other.num % other.denom != 0))
         throw IMAGINARY;
-    long double num_dbl = pow( num*1.0, ((long double)(other.num)/(long double)(other.denom)) );
-    long double den_dbl = pow( denom*1.0, ((long double)(other.num)/(long double)(other.denom)) );
-    tempf = new fraction(num_dbl/den_dbl);
-    *tempf = reducefrac(tempf->num, tempf->denom);
+    long double num_dbl = pow( num*1.0, (long double)((other.num)/(other.denom))) ;
+    long double den_dbl = pow( denom*1.0, (long double)((other.num)/(other.denom)));
+    tempf = new fraction(num_dbl, den_dbl);
+    //*tempf = reducefrac(tempf->num, tempf->denom);
 
     cout << "TEMPFN: "<< tempf->num << " TEMPFD: "<< tempf->denom << endl;
     return *tempf;

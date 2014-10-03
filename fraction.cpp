@@ -1,6 +1,7 @@
 #include "fraction.h"
 #include <stdint.h>
 #include <cmath>
+#include <iomanip>
 
 #define int64_t long
 fraction::fraction(long int64_t n, long  int64_t d)
@@ -11,26 +12,27 @@ fraction::fraction(long int64_t n, long  int64_t d)
     denom = d;
 }
 
+fraction* fraction::convtoFrac(long double nd)
+{
+    fraction *new_frac = new fraction;
+    long int64_t new_num=0; // just takes the whole part!
+    long int64_t new_whole = nd; // integer component
+    nd -= new_whole; // just the decimal component
+    long int64_t multiplier = 100000000; // use a variable, easier to manage
+    long int64_t new_dec = nd * multiplier; // whole component of decimal ^ 12th power
+    *new_frac = reducefrac(new_dec, multiplier) + new_whole; // make a fraction from the decimal component ^12 / 10^12
+    *new_frac = reducefrac(new_frac->num, new_frac->denom);
+    return new_frac;
+}
+
 fraction::fraction(long double nd)
 {
-    cout << "DOUBLE COMING IN: " << nd;
-    fraction new_frac;
+    fraction* new_frac;
     if ( nd != 0 )
-    {
-        long int64_t new_num=0; // just takes the whole part!
-        long int64_t multiplier;
-        long int64_t new_whole = nd; // integer component
-        nd -= new_whole; // just the decimal component
-        multiplier = 1000000000000;
-        cout << "new whole: "<< new_whole;
-        long int64_t new_dec = nd * multiplier; // whole component of decimal ^ 12th power
-        cout << " new_dec: " << new_dec << endl;
-        new_frac = reducefrac(new_dec, multiplier); // make a fraction from the decimal component ^12 / 10^12
-        cout << "new frac: " << new_frac << endl;
-        new_frac = new_frac + new_whole; // makes a fraction from new_whole;
-    }
-    num = new_frac.num;
-    denom = new_frac.denom;
+        new_frac = convtoFrac(nd);
+    cout << "new frac: " << new_frac << endl;
+    num = new_frac->num;
+    denom = new_frac->denom;
 }
 
 fraction::~fraction()
@@ -81,15 +83,16 @@ fraction& fraction::operator^(const fraction &other)
     // So you can only do fractional powers that will result in whole number numerator and denominators!
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
-    cout << "NUM: " << num << " DEN: " << denom << "and O NUM: " << other.num << "O DEN: "<<other.denom << endl;
-    fraction* tempf;
+    cout << "NUM: " << num << " DEN: " << denom << "and O NUM: " << other.num << " O DEN: "<<other.denom << endl;
+    fraction *tempf;
     if (((num*denom) <= 0) && (other.num % other.denom != 0))
         throw IMAGINARY;
-    long double num_dbl = pow( num*1.0, (long double)((other.num)/(other.denom))) ;
-    long double den_dbl = pow( denom*1.0, (long double)((other.num)/(other.denom)));
-    tempf = new fraction(num_dbl, den_dbl);
-    //*tempf = reducefrac(tempf->num, tempf->denom);
-
+    long double num_dbl = pow( num*1.0, (other.num*1.0)/(1.0*other.denom) );
+    long double den_dbl = pow( denom*1.0, (1.0*other.num)/(1.0*other.denom) );
+    if (num_dbl == 0 || den_dbl == 0 || abs(den_dbl) > 200000000000 )
+        throw UNDERFLO;
+    cout << std::setprecision(20) << "NUM DBL: " << num_dbl << "  DEN DBL: " << den_dbl << " PASSING: " << num_dbl*1.0/den_dbl*1.0 << endl;
+    tempf = convtoFrac(num_dbl/den_dbl);
     cout << "TEMPFN: "<< tempf->num << " TEMPFD: "<< tempf->denom << endl;
     return *tempf;
 }

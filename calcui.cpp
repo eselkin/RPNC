@@ -354,18 +354,26 @@ void calcUI::pressedEqu()
         }
         catch (FRAC_ERROR r)
         {
+            QString error_title, error_message;
             if (r == DIV_BY_ZERO)
             {
-                QString divbyz_title = "Divide by Zero";
-                QString divbyz_message = "<html><b><fot color='red'>You have divided by 0.</b></html>";
-                QMessageBox::warning(this, divbyz_title, divbyz_message, QMessageBox::Ok);
+                error_title = "Divide by Zero";
+                error_message = "<html><b><fot color='red'>You have divided by 0.</b></html>";
             }
             if (r == IMAGINARY)
             {
-                QString imaginary_title = "Imaginary...... oooooo";
-                QString imaginary_message = "<html><b><fot color='red'>Imaginary numbers are not handled.</b></html>";
-                QMessageBox::warning(this, imaginary_title, imaginary_message, QMessageBox::Ok);
+                error_title = "Imaginary...... oooooo";
+                error_message = "<html><b><fot color='red'>Imaginary numbers are not handled.</b></html>";
             }
+            if (r == UNDERFLO)
+            {
+                error_title = "Underflow error";
+                error_message = "<html><b><fot color='red'>Sorry, numbers with that precision are not handled.</b></html>";
+            }
+            if (QMessageBox::warning(this, error_title, error_message, QMessageBox::Ok) == QMessageBox::Ok)
+                Answer_Output->clear();
+            update();
+
         }
         catch (...)
         {

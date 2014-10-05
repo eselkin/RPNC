@@ -20,13 +20,15 @@ fraction* fraction::convtoFrac(long double nd)
     nd -= new_whole; // just the decimal component
     long long int multiplier;
     if (abs(nd) < 1e-9)
-        multiplier = 10000000000000; // use a variable, easier to manage
+        multiplier = 10000000000; // use a variable, easier to manage
     else
-        multiplier = 1000000000;
+        multiplier = 10000000;
+    if (abs(nd) > 1e9)
+        multiplier = 1;
     long int64_t new_dec = nd * multiplier; // whole component of decimal ^ 12th power
     *new_frac = reducefrac(new_dec, multiplier) + new_whole; // make a fraction from the decimal component ^12 / 10^12
     *new_frac = reducefrac(new_frac->num, new_frac->denom);
-    while (new_frac->denom >= 10000000)
+    while (new_frac->denom >= 100000000)
     {
         (new_frac->num)--;
         *new_frac = reducefrac(new_frac->num, new_frac->denom);
@@ -97,8 +99,10 @@ fraction& fraction::operator^(const fraction &other)
     long double num_dbl = pow( (long double)(num*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
     long double den_dbl = pow( (long double)(denom*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
     cout << "NUM: " << num_dbl << " DEN: " << den_dbl << " PASSING: " << (long double)(num_dbl/den_dbl) << endl;
-    if (den_dbl == 0 || abs(den_dbl) > 5e20 || (long double)(num_dbl/den_dbl) < 1e-8)
+    if (den_dbl == 0 || abs((long double)(num_dbl/den_dbl)) < 9e-8)
         throw UNDERFLO;
+    if ( abs((long double)(num_dbl/den_dbl)) > 1e15 || abs(num_dbl) > 1e100 )
+        throw OVERFLO;
     tempf = convtoFrac((long double)(num_dbl/den_dbl));
     return *tempf;
 }

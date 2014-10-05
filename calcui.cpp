@@ -370,6 +370,11 @@ void calcUI::pressedEqu()
                 error_title = "Underflow error";
                 error_message = "<html><b><fot color='red'>Sorry, numbers with that precision are not handled.</b></html>";
             }
+            if (r == OVERFLO)
+            {
+                error_title = "Overflow error";
+                error_message = "<html><b><fot color='red'>Sorry, numbers with that size are not handled.</b></html>";
+            }
             if (QMessageBox::warning(this, error_title, error_message, QMessageBox::Ok) == QMessageBox::Ok)
                 Answer_Output->clear();
             update();

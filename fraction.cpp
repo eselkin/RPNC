@@ -100,11 +100,26 @@ fraction& fraction::operator^(const fraction &other)
     // Unless we can recursively hold fractions in the numerator and fractions in the denominator!
     // That would go on forever
     fraction *tempf;
+    long double num_dbl;
+    long double den_dbl;
     if (((num*denom) <= 0) && (other.num % other.denom != 0))
-        throw IMAGINARY;
-    long double num_dbl = pow( (long double)(num*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
-    long double den_dbl = pow( (long double)(denom*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
-    cout << "NUM: " << num_dbl << " DEN: " << den_dbl << " PASSING: " << (long double)(num_dbl/den_dbl) << endl;    
+    {
+        if (other.num %2 == 0)
+        {
+            num_dbl = pow( (long double)(num*1.0), (long double)(1.*other.num));
+            den_dbl = pow( (long double)(denom*1.0), (long double)((1.*other.num)));
+            num_dbl = pow((long double)(num_dbl), (long double)(1.0/other.denom));
+            den_dbl = pow((long double)(den_dbl), (long double)(1.0/other.denom));
+        }
+        else
+            throw IMAGINARY;
+    }
+    else
+    {
+        num_dbl = pow( (long double)(num*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
+        den_dbl = pow( (long double)(denom*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
+    }
+    cout << "NUM: " << num_dbl << " DEN: " << den_dbl << " PASSING: " << (long double)(num_dbl/den_dbl) << endl;
     if (den_dbl == 0 || abs((long double)(num_dbl/den_dbl)) <= 2e-8)
         throw UNDERFLO;
     if ( abs((long double)(num_dbl/den_dbl)) > 2.7e9 )

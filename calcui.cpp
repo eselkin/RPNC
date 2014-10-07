@@ -341,12 +341,31 @@ void calcUI::pressedEqu()
         }
         catch (itopERROR e)
         {
-            QString paren_title= "Parenthesis Mismatch";
-            QString paren_msg = "<html><b><font color='red'>Your Parentheses did not match!</b></html>";
+            QString error_title;
+            QString error_msg;
             if (e == PAREN_MISMATCH)
             {
-                QMessageBox::warning(this, paren_title, paren_msg, QMessageBox::Ok);
+                error_title= "Parenthesis Mismatch";
+                error_msg = "<html><b><font color='red'>Your Parentheses did not match!</b></html>";
             }
+            if (e == NO_OPERANDS)
+            {
+                error_title= "No Operands";
+                error_msg = "<html><b><font color='red'>Please put in some operands.</b></html>";
+            }
+            if (e == IMPROPER_DECIMAL)
+            {
+                error_title = "Improper Decimal";
+                error_msg = "<html><b><font color='red'>Decimals take form &lt;number optional&gt;.&lt;number component&gt;</b></html>";
+            }
+            if (e == DOUBLE_OPERATOR)
+            {
+                error_title = "Improper Operators";
+                error_msg = "<html><b><font color='red'>More than one operator in a row is not allowed.</b></html>";
+            }
+
+                QMessageBox::warning(this, error_title, error_msg, QMessageBox::Ok);
+
         }
         catch (qERRORS f)
         {

@@ -52,6 +52,8 @@ void InfixtoPostfix::parseinfix()
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
             OpPr* tempOp = new OpPr(temp_token[0]); // create a tempOp
+            if ( getNextTokenType(infix_copy) == 'O' )
+                throw DOUBLE_OPERATOR;
             while (( !operator_stack.empty() )
                    && (operator_stack.top()->data_type == 'O')
                    && ((!tempOp->assoc && (*tempOp < *operator_stack.top()->key.opPtr || *tempOp == *operator_stack.top()->key.opPtr))
@@ -116,6 +118,9 @@ void InfixtoPostfix::parseinfix()
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
+            cout << "TEMP TOKEN: " << temp_token.substr(2,temp_token.find(" ")) << endl;
+            if (temp_token.substr(2,temp_token.find(" ")).find_first_not_of("0123456789") != -1)
+                throw IMPROPER_DECIMAL;
             long double *temp_double = new (long double);
             ss.str("");
             ss.clear();
@@ -135,6 +140,8 @@ void InfixtoPostfix::parseinfix()
         // I like how this switch spells out NOPE
         pos_first_space = infix_copy.find(" ");
     }
+    if (output_queue.empty())
+        throw NO_OPERANDS;
     while (!operator_stack.empty())
     {
         switch(operator_stack.top()->data_type)

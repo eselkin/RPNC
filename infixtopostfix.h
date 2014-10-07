@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum itopERROR { PAREN_MISMATCH };
+enum itopERROR { PAREN_MISMATCH , NO_OPERANDS, IMPROPER_DECIMAL, DOUBLE_OPERATOR};
 
 class InfixtoPostfix
 {

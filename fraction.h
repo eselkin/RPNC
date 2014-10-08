@@ -29,6 +29,8 @@ public:
     fraction* convtoFrac(long double nd);
 
     friend
+    bool operator >= (const fraction &f1, const fraction &f2);
+    friend
     ostream& operator<<(ostream& out, const fraction &frac);
 
     friend

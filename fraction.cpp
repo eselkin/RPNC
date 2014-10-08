@@ -20,10 +20,10 @@ fraction* fraction::convtoFrac(long double nd)
     nd -= new_whole; // just the decimal component
     long long int multiplier;
     if (abs(nd) <= 1e-9)
-        multiplier = 100000000000000; // use a variable, easier to manage
+        multiplier = 10000000000000; // use a variable, easier to manage
     else
         if (abs(nd) < 1e2)
-            multiplier = 1000000000;
+            multiplier = 100000000;
         else if (abs(nd) < 1e4)
             multiplier = 1000000;
         else if(abs(nd) < 1e8)
@@ -34,13 +34,14 @@ fraction* fraction::convtoFrac(long double nd)
             multiplier = 1e-4;
     long int64_t new_dec = nd * multiplier;
     *new_frac = reducefrac(new_dec, multiplier) + new_whole; // make a fraction from the decimal component ^12 / 10^12
-    while (new_frac->denom >= 1000000000)
+    while (new_frac->denom >= 100000000)
     {
         (new_frac->num)--;
         *new_frac = reducefrac(new_frac->num, new_frac->denom);
     }
     return new_frac;
 }
+
 
 fraction::fraction(long double nd)
 {
@@ -102,9 +103,9 @@ fraction& fraction::operator^(const fraction &other)
     fraction *tempf;
     long double num_dbl;
     long double den_dbl;
-    if (((num*denom) <= 0) && (other.num % other.denom != 0))
+    if (((num*denom) < 0) && (other.num % other.denom != 0))
     {
-        if (other.num %2 == 0)
+        if (other.num %2 == 0 )
         {
             num_dbl = pow( (long double)(num*1.0), (long double)(1.*other.num));
             den_dbl = pow( (long double)(denom*1.0), (long double)((1.*other.num)));
@@ -119,10 +120,12 @@ fraction& fraction::operator^(const fraction &other)
         num_dbl = pow( (long double)(num*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
         den_dbl = pow( (long double)(denom*1.0), (long double)((1.*other.num)/(1.*other.denom)) );
     }
-    cout << "NUM: " << num_dbl << " DEN: " << den_dbl << " PASSING: " << (long double)(num_dbl/den_dbl) << endl;
-    if (den_dbl == 0 || abs((long double)(num_dbl/den_dbl)) <= 2e-8)
+    //DEBUG // cout << "NUM: " << num_dbl << " DEN: " << den_dbl << " PASSING: " << (long double)(num_dbl/den_dbl) << endl;
+    if (num_dbl == 0)
+        den_dbl = 1; // MAKE OUR FRACTION BE 0/1 Because, if the numerator is 0/-1 we'll get -0
+    if (den_dbl == 0 || (num_dbl != 0 && abs((long double)(num_dbl/den_dbl)) <= 2e-8))
         throw UNDERFLO;
-    if ( abs((long double)(num_dbl/den_dbl)) > 2.7e9 )
+    if ( abs(num_dbl) >= 2.7e9 || abs((long double)(num_dbl/den_dbl)) > 2.7e9 )
         throw OVERFLO;
     tempf = convtoFrac((long double)(num_dbl/den_dbl));
     return *tempf;
@@ -154,6 +157,14 @@ void fraction::copy(const fraction &other)
 {
     num = other.num;
     denom = other.denom; // straight copy, since they are simple types
+}
+
+bool operator >=(const fraction &f1, const fraction &f2)
+{
+    long double d1, d2;
+    d1 = (1.0*f1.num)/(1.0*f1.denom);
+    d2 = (1.0*f2.num)/(1.0*f2.denom);
+    return d1 >= d2;
 }
 
 ostream &operator<<(ostream &out, const fraction &frac)

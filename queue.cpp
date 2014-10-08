@@ -80,6 +80,12 @@ const node& queue::peek() const
         throw qEMPTY;
     return *quehead;
 }
+const node& queue::peekattail() const
+{
+    if(empty())
+        throw qEMPTY;
+    return *quetail;
+}
 
 void queue::enqueue(node n)
 {

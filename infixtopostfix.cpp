@@ -37,10 +37,21 @@ void InfixtoPostfix::parseinfix()
             ss.clear();
             ss.str("");
             // we should have a whole mixed number now in temp_token
+            cout << "WE ARE HERE" << endl;
+            int slash_pos = temp_token.find("/");
+            cout << "slash: "<< slash_pos << endl;
+            if (slash_pos != -1)
+            {
+                cout << "AGAIN HERE" << endl;
+                if ( temp_token.substr(slash_pos+1, temp_token.size()).find_first_not_of("0123456789") != -1 )
+                    throw BAD_MIXED_NUM;
+            }
             MixedNum *tempNumber = new MixedNum; // Any way, even if only the first token is N we make a mixed number from it
             temp_token.append(" \n"); // because we use getline
             ss << temp_token.c_str();
             ss >> *tempNumber;
+            if (abs(tempNumber->num) >= 2.14e9 || abs(tempNumber->denom) >= 2.14e9)
+                throw OVERFLO;
             node mixedholder(tempNumber, 'N');
             output_queue.enqueue(mixedholder); // mixed number
             temp_token = "";
@@ -54,19 +65,18 @@ void InfixtoPostfix::parseinfix()
             OpPr* tempOp = new OpPr(temp_token[0]); // create a tempOp
             if ( getNextTokenType(infix_copy) == 'O' )
                 throw DOUBLE_OPERATOR;
-            while (( !operator_stack.empty() )
-                   && (operator_stack.top()->data_type == 'O')
-                   && ((!tempOp->assoc && (*tempOp < *operator_stack.top()->key.opPtr || *tempOp == *operator_stack.top()->key.opPtr))
-                       || (*tempOp < *operator_stack.top()->key.opPtr)))
-            {
-                // While NOT empty
-                // pop off the operators on the stack until we meet one with lower precedence and this is left associative
-                // or pop the other off it is higher precedence no matter the associativity
-                node* otherOp = operator_stack.pop();
-                output_queue.enqueue(otherOp->key.opPtr, 'O'); // put the stack's operator onto the queue;
-            }
-
-            operator_stack.push(tempOp, 'O'); // put this operator onto the stack
+                while (( !operator_stack.empty() )
+                       && (operator_stack.top()->data_type == 'O')
+                       && ((!tempOp->assoc && (*tempOp < *operator_stack.top()->key.opPtr || *tempOp == *operator_stack.top()->key.opPtr))
+                           || (*tempOp < *operator_stack.top()->key.opPtr)))
+                {
+                    // While NOT empty
+                    // pop off the operators on the stack until we meet one with lower precedence and this is left associative
+                    // or pop the other off it is higher precedence no matter the associativity
+                    node* otherOp = operator_stack.pop();
+                    output_queue.enqueue(otherOp->key.opPtr, 'O'); // put the stack's operator onto the queue;
+                }
+                operator_stack.push(tempOp, 'O'); // put this operator onto the stack
             temp_token = "";
             ss.str("");
             break;
@@ -79,6 +89,12 @@ void InfixtoPostfix::parseinfix()
             switch(temp_token[0])
             {
             case '(':
+                if (!operator_stack.empty() && operator_stack.top()->key.opPtr->theOp == '-')
+                {
+                    MixedNum* fraczero = new MixedNum(0);
+                    node* newZero = new node(fraczero, 'N', NULL);
+                    output_queue.enqueue(*newZero);
+                }
                 openparen++;
                 operator_stack.push(tempOp, 'P'); // put this operator/parenthesis onto the stack
                 break;
@@ -118,8 +134,8 @@ void InfixtoPostfix::parseinfix()
         {
             temp_token.append(infix_copy.substr(0,pos_first_space).c_str()); // append the characters to the temp_token string
             infix_copy.erase(0,pos_first_space+1); // erase what we took into the temp string
-            cout << "TEMP TOKEN: " << temp_token.substr(2,temp_token.find(" ")) << endl;
-            if (temp_token.substr(2,temp_token.find(" ")).find_first_not_of("0123456789") != -1)
+            int dec_pos = temp_token.find(".");
+            if (temp_token.find_first_not_of(".0123456789") != -1)
                 throw IMPROPER_DECIMAL;
             long double *temp_double = new (long double);
             ss.str("");
@@ -159,6 +175,8 @@ void InfixtoPostfix::parseinfix()
 
 void InfixtoPostfix::doCalculate()
 {
+    cout << "CALC: STACK: " << operand_stack << endl;
+    cout << "CALC: QUEUE: " << output_queue << endl;
     queue CopyQueue(output_queue); // copy constructor
     while (!CopyQueue.empty())
     {
@@ -167,9 +185,9 @@ void InfixtoPostfix::doCalculate()
             node* deQueued = CopyQueue.dequeue();
             if (deQueued->data_type == 'D')
             {
-                long double data_holder = *deQueued->key.dPtr;
+                long double *data_holder = new long double(*deQueued->key.dPtr);
                 delete deQueued->key.dPtr;
-                MixedNum* temp_mixed = new MixedNum(data_holder);
+                MixedNum* temp_mixed = new MixedNum(*data_holder);
                 deQueued->key.mPtr = temp_mixed;
             }
             operand_stack.push(deQueued->key.mPtr, 'N');

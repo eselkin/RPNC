@@ -371,6 +371,11 @@ void calcUI::pressedEqu()
         {
             qDebug() << "QUEUE ERROR" << endl;
         }
+        catch ( ERRORS s )
+        {
+            cout << "STACK ERROR" << endl;
+        }
+
         catch (FRAC_ERROR r)
         {
             QString error_title, error_message;
@@ -399,6 +404,19 @@ void calcUI::pressedEqu()
             update();
 
         }
+        catch (MIXED_NUM_ERROR m)
+        {
+            QString error_title, error_message;
+            if (m == BAD_MIXED_NUM)
+            {
+                error_title = "Improper Fraction";
+                error_message = "<html><b><fot color='red'>That is an improper fraction.</b></html>";
+            }
+            if (QMessageBox::warning(this, error_title, error_message, QMessageBox::Ok) == QMessageBox::Ok)
+                Answer_Output->clear();
+            update();
+        }
+
         catch (...)
         {
             qDebug() << "ERROR" << endl;

@@ -29,6 +29,7 @@ public:
     int capacity();
     void resize(int s);
     const node &peek() const;
+    const node &peekattail() const;
     void enqueue(void *data, const char dType);
     void enqueue(node n);
 
